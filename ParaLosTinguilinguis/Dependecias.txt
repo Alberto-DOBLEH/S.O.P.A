@@ -1,0 +1,66 @@
+Dependecias requeridas para la compilacion exitosa del proyecto
+
+Instalar Node.js
+React: Dado que hay archivos como App.js y index.js, es probable que el proyecto esté utilizando React.
+
+React Router: Si hay múltiples páginas (como Login.jfx), es posible que necesites React Router para manejar la navegación.
+
+Tailwind CSS: La presencia de tailwind.config.js sugiere que el proyecto utiliza Tailwind CSS para estilos.
+
+PostCSS: El archivo postcss.config.js indica que se está utilizando PostCSS, probablemente para procesar CSS. (Desde las extenciones de Visual)
+
+Live server para compilacion automatica (Desde las extenciones de Visual)
+
+Si algo no les funciona los comandos para instlar cada cosa son(Algunos son desde powershell(Se me olvidaron cuales son
+si les sale errr en cmd ahi le calan en pawershell)):
+
+Instalar React y React DOM:
+npm install react react-dom
+
+Instalar React Router DOM (si es necesario para la navegación):
+npm install react-router-dom
+
+Instalar Tailwind CSS:
+npm install tailwindcss postcss autoprefixer
+Inicializar Tailwind CSS (si aún no está configurado):
+npx tailwindcss init
+
+
+Instalar PostCSS (si no se instaló con Tailwind):
+npm install postcss
+
+Instalar dependencias de desarrollo (si es necesario, como eslint, prettier, etc.):
+npm install nombre-de-la-dependencia
+
+Instalar todas las dependencias listadas en package.json:
+npm install
+
+
+Insrtuciones de cracion de proyecto React
+
+verificar si ya los tienes instalados
+node -v
+npm -v
+
+Crear un nuevo proyecto React
+npx create-react-app nombre-del-proyecto
+
+Navegar al directorio del proyecto
+cd nombre-del-proyecto
+
+Iniciar el servidor de desarrollo
+npm start
+
+Para que te lleve directo a donde sete creo el proyecto solo pon:
+. code
+te abira visaul code justo en tu proyecto
+
+Les deberia de mandar al navegador si no meterse aqui: "http://localhost:3000/#"
+
+En la imagen de carpetas esta como deberia de estar acomodado
+
+
+
+
+f8f6eb
+COLOR DE FONDOO

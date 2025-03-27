@@ -3,22 +3,32 @@ import Button from "../components/UI/Button";
 import Input from "../components/UI/input";
 import Card from "../components/Layout/Card";
 import backgroundImage from "../assets/imagenes/logo-completo.png";
+import Registro from "./Registro";
+import ContraNueva from "./ContraNueva";
 
 const Login = ({ onClose }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showRegistro, setShowRegistro] = useState(false);
+  const [showContraNueva, setShowContraNueva] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Intento de login con:", { username, password });
-    // Aquí agregarías la lógica de autenticación tingui
   };
+
+  if (showRegistro) {
+    return <Registro onClose={() => setShowRegistro(false)} />;
+  }
+
+  if (showContraNueva) {
+    return <ContraNueva onClose={() => setShowContraNueva(false)} />;
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <Card
-        className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#f8f8eb]
- relative"
+        className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#f8f8eb] relative"
       >
         <button
           onClick={onClose}
@@ -57,12 +67,20 @@ const Login = ({ onClose }) => {
             />
 
             <div className="flex justify-between mb-6 text-sm">
-              <a href="/" className="text-blue-600 hover:underline">
+              <button
+                type="button"
+                className="text-blue-600 hover:underline"
+                onClick={() => setShowRegistro(true)}
+              >
                 ¿No tienes una cuenta?
-              </a>
-              <a href="/" className="text-purple-600 hover:underline">
-                Olvide mi contraseña
-              </a>
+              </button>
+              <button
+                type="button"
+                className="text-purple-600 hover:underline"
+                onClick={() => setShowContraNueva(true)}
+              >
+                Olvidé mi contraseña
+              </button>
             </div>
 
             <div className="flex justify-center">
@@ -74,6 +92,7 @@ const Login = ({ onClose }) => {
     </div>
   );
 };
+
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -90,4 +109,5 @@ const App = () => {
     </div>
   );
 };
+
 export default Login;

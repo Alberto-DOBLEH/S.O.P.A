@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../components/UI/Button";
 import logoCompleto from "../assets/imagenes/logo-completo.png";
 import backgroundImage from "../assets/imagenes/Flor-Fondo.png";
-import Engranaje from "../assets/imagenes/icons/Engranaje.png";
+// import Engranaje from "../assets/imagenes/icons/Engranaje.png";
 
 import Login from "./Login";
 
@@ -42,7 +42,7 @@ const MainPage = () => {
         <div className="flex space-x-4 text-[#484d45]">
           <Button onClick={() => setShowLogin(true)}>Login</Button>
           {/* <Button onClick={handleExit}>Exit</Button> */}
-          <Button endIcon={<Engranaje />}> </Button>
+          {/* <Button endIcon={<Engranaje />}> </Button> */}
         </div>
       </header>
       {/* Fondo  */}

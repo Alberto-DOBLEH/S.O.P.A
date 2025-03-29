@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../components/UI/Button";
 import Input from "../components/UI/input";
 import Card from "../components/Layout/Card";
-import backgroundImage from "../assets/imagenes/logo-completo.png";
+import backgroundImage from "../assets/imagenes/Logo-Completo.png";
 import Registro from "./Registro";
 import ContraNueva from "./ContraNueva";
 
@@ -27,9 +27,7 @@ const Login = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <Card
-        className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#f8f8eb] relative"
-      >
+      <Card className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#f2f5fd] relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 z-50"

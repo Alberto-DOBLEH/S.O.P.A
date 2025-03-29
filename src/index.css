@@ -12,8 +12,80 @@ body {
 
 h1 {
   color: #484d45;
+  text-align: center;
 }
+
+.icono-categoria {
+  width: 50px;
+  height: 40px;
+}
+
 /* 
 * {
   background-color: #f5f1e8;
+} */
+/* 
+/* Variables de colores para modo claro */
+/* :root {
+  /* Colores de texto */
+--color-text-primary: #484d45;
+--color-text-secondary: #666666;
+
+/* Colores de fondo */
+--color-background-primary: #f8f6eb;
+--color-background-secondary: #ffffff;
+
+/* Colores de accent */
+--color-accent-primary: #007bff;
+--color-accent-secondary: #0056b3;
+
+/* Colores de bordes */
+--color-border-primary: #e0e0e0;
+
+/* Colores de sombras */
+/* --color-shadow: rgba(0, 0, 0, 0.1); */
+/* }  */
+
+/* Variables de colores para modo oscuro */
+/* .dark {
+  /* Colores de texto */
+--color-text-primary: #e0e0e0;
+--color-text-secondary: #a0a0a0;
+
+/* Colores de fondo */
+--color-background-primary: #121212;
+--color-background-secondary: #1e1e1e;
+
+/* Colores de accent */
+--color-accent-primary: #3b82f6;
+--color-accent-secondary: #2563eb;
+
+/* Colores de bordes */
+--color-border-primary: #333333;
+
+/* Colores de sombras */
+--color-shadow: rgba(255, 255, 255, 0.1);
+/* } */
+
+/* body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Usar variables de color */
+background-color: var(--color-background-primary);
+color: var(--color-text-primary);
+transition: background-color 0.3s, color 0.3s;
+/* }  */
+
+/* h1 {
+  color: var(--color-text-primary);
+  text-align: center;
+} */
+
+/* Clases de utilidad para transiciones de modo oscuro */
+/* .dark-mode-transition {
+  transition: background-color 0.3s, color 0.3s;
 } */

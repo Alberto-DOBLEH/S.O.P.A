@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../components/UI/Button";
 import Input from "../components/UI/input";
 import Card from "../components/Layout/Card";
-import backgroundImage from "../assets/imagenes/logo-completo.png";
+import backgroundImage from "../assets/imagenes/Logo-Completo.png";
 
 const ContraNueva = ({ onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -21,7 +21,8 @@ const ContraNueva = ({ onClose }) => {
   };
 
   const handleVerifyCode = () => {
-    if (code !== "123456") { // Simulación de código correcto
+    if (code !== "123456") {
+      // Simulación de código correcto
       alert("Código incorrecto");
       return;
     }
@@ -40,7 +41,7 @@ const ContraNueva = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <Card className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#f8f8eb] relative">
+      <Card className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#f2f5fd] relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 z-50"
@@ -53,16 +54,21 @@ const ContraNueva = ({ onClose }) => {
         </div>
 
         <div className="relative z-10 p-8">
-          <h1 className="text-3xl font-bold text-center mb-6">Recuperar Contraseña</h1>
+          <h1 className="text-3xl font-bold text-center mb-6">
+            Recuperar Contraseña
+          </h1>
 
           {step === 1 && (
             <>
-              <p className="text-center mb-4">Ingresa tu número de teléfono para recibir un código de verificación.</p>
+              <p className="text-center mb-4">
+                Ingresa tu número de teléfono para recibir un código de
+                verificación.
+              </p>
               <Input
                 placeholder="Número de teléfono"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                className="w-full p-4 border border-gray-300 rounded-md"
+                className="w-full p-4 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-75"
               />
               <div className="flex justify-center mt-6">
                 <Button onClick={handleSendCode}>Enviar Código</Button>
@@ -72,7 +78,9 @@ const ContraNueva = ({ onClose }) => {
 
           {step === 2 && (
             <>
-              <p className="text-center mb-4">Ingresa el código que recibiste por SMS.</p>
+              <p className="text-center mb-4">
+                Ingresa el código que recibiste por SMS.
+              </p>
               <Input
                 placeholder="Código de verificación"
                 value={code}
@@ -103,7 +111,9 @@ const ContraNueva = ({ onClose }) => {
                 className="w-full p-4 border border-gray-300 rounded-md mt-2"
               />
               <div className="flex justify-center mt-6">
-                <Button onClick={handleResetPassword}>Guardar Contraseña</Button>
+                <Button onClick={handleResetPassword}>
+                  Guardar Contraseña
+                </Button>
               </div>
             </>
           )}

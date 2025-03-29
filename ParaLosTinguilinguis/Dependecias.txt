@@ -60,7 +60,12 @@ Les deberia de mandar al navegador si no meterse aqui: "http://localhost:3000/#"
 En la imagen de carpetas esta como deberia de estar acomodado
 
 
+Iconos Bootstrap
+npm i bootstrap-icons
 
 
-f8f6eb
 COLOR DE FONDOO
+f8f6eb
+
+Libreria para los slyders de las imagenes
+npm install lucide-react react-slick slick-carousel

@@ -33,4 +33,5 @@ export const icons = {
   vehiculo: vehiculoIcon,
   videojuego: videojuegosIcon,
   juegomesa: juegosmesaIcon,
+  ajustes: ajustesIcon,
 };

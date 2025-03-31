@@ -20,6 +20,40 @@ h1 {
   height: 40px;
 }
 
+.anuncio {
+  width: 500px;
+  height: 40px;
+  object-fit: cover; /* Asegura que la imagen se ajuste sin distorsionarse */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra ligera */
+  transition: transform 0.3s ease-in-out; /* Suaviza transformaciones */
+}
+
+/* Transición suave para el menú */
+.MenuOpciones {
+  transition: all 0.3s ease;
+  transform-origin: top right;
+}
+
+/* Animación de aparición */
+.MenuOpciones-enter {
+  opacity: 0;
+  transform: scale(0.95);
+}
+.MenuOpciones-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.2s ease;
+}
+.MenuOpciones-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+.MenuOpciones-exit-active {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.2s ease;
+}
 /* 
 * {
   background-color: #f5f1e8;

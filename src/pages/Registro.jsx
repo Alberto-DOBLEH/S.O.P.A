@@ -11,18 +11,33 @@ const Registro = ({ onClose }) => {
   const [countryCode, setCountryCode] = useState("+52");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Las contraseñas no coinciden");
       return;
     }
-    console.log("Registro con:", {
-      username,
-      password,
-      countryCode,
-      phoneNumber,
-    });
+
+    try {
+      const response = await fetch("http://localhost:3001/api/registro", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre: username,
+          telefono: countryCode + phoneNumber,
+          contraseña: password,
+        }),
+      });
+
+      const data = await response.text();
+      alert(data);
+      onClose();
+    } catch (error) {
+      console.error("Error al registrar:", error);
+      alert("Hubo un error al registrar al usuario");
+    }
   };
 
   return (

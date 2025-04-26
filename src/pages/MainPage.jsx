@@ -641,6 +641,7 @@ import {
   FaEnvelope,
   FaCog,
   FaSignOutAlt,
+  FaBars,
 } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { IoMdHelp } from "react-icons/io";
@@ -891,7 +892,7 @@ const MainPage = ({ onLoginClick }) => {
     <button
       className={`w-full text-left px-4 py-3 text-sm ${
         highlight ? "text-red-600" : "text-gray-700"
-      } hover:bg-gray-100 rounded flex items-center transition-colors duration-200`}
+      } hover:bg-gray-100 hover:text-blue-600 rounded flex items-center transition-colors duration-200 hover:scale-95`}
       onClick={onClick}
     >
       <span className="text-lg mr-3">{icon}</span>
@@ -937,7 +938,7 @@ const MainPage = ({ onLoginClick }) => {
 
         <div className="flex space-x-2 md:space-x-4">
           <Button
-            className="bg-[#123e9d] p-2 hover:scale-90 hover:bg-[#edf6f9] transition-transform duration-200 group"
+            className="bg-[#123e9d] p-2 hover:scale-90 hover:bg-[#edf6f9] transition-all duration-200 group"
             onClick={handleCarritoClick}
             aria-label="Carrito de compras"
           >
@@ -946,7 +947,7 @@ const MainPage = ({ onLoginClick }) => {
 
           <Button
             onClick={handleLoginClick}
-            className="hover:bg-[#edf6f9] hover:text-black hover:scale-90 transition-transform duration-200 bg-[#123e9d] text-white"
+            className="hover:bg-[#edf6f9] hover:text-black hover:scale-90 transition-all duration-200 bg-[#123e9d] text-white"
           >
             Login
           </Button>
@@ -958,11 +959,11 @@ const MainPage = ({ onLoginClick }) => {
           >
             <Button
               onClick={toggleMenu}
-              className="hover:bg-[#edf6f9] transition-colors relative z-10 p-2 bg-[#123e9d]"
+              className="hover:bg-[#edf6f9] transition-all relative z-10 p-2 bg-[#123e9d] group"
               aria-label="Menú de opciones"
               aria-expanded={showOpciones}
             >
-              <FaUser className="text-white w-6 h-6" />
+              <FaBars className="text-white w-6 h-6 group-hover:text-black transition-colors duration-200" />
             </Button>
 
             {showOpciones && (

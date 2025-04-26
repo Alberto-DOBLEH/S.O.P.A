@@ -69,3 +69,5 @@ f8f6eb
 
 Libreria para los slyders de las imagenes
 npm install lucide-react react-slick slick-carousel
+
+eso brat

@@ -1,37 +1,63 @@
-// Todas las importaciones deben ser relativas a la ubicación de iconos.js
-import opcionesIcon from "./opciones.svg";
-import carritoIcon from "./carrito.svg";
-import ajustesIcon from "./ajustes.svg";
-import cameraIcon from "./camera.svg";
-import deportesIcon from "./deportes.png";
-import herramientasIcon from "./herramientas.svg";
-import houseIcon from "./house.svg";
-import laptopIcon from "./laptop.svg";
-import perfilIcon from "./perfil.svg";
-import perifericosIcon from "./audifonos.svg"; // Nota: el archivo es audifonos.svg
-import tarjetaIcon from "./tarjeta.svg";
-import telefonoIcon from "./telefono.svg";
-import tvIcon from "./tv.svg";
-import vehiculoIcon from "./vehiculo.svg";
-import videojuegosIcon from "./videojuegos.svg";
-import juegosmesaIcon from "./juegosmesa.svg";
+import {
+  FaSearch,
+  FaShoppingCart,
+  FaUser,
+  FaHeart,
+  FaBell,
+  FaHistory,
+  FaStore,
+  FaCreditCard,
+  FaList,
+  FaLock,
+  FaEnvelope,
+  FaCog,
+  FaSignOutAlt,
+  FaPhone,
+  FaLaptop,
+  FaTv,
+  FaCamera,
+  FaHome,
+  FaCar,
+  FaGamepad,
+  FaTools,
+} from "react-icons/fa";
+import { BiCategory } from "react-icons/bi";
+import { IoMdHelp } from "react-icons/io";
+import { RiCouponLine } from "react-icons/ri";
+import { GiClothes, GiRunningShoe } from "react-icons/gi";
+import { MdToys, MdSportsBaseball, MdHealthAndSafety } from "react-icons/md";
 
-export const icons = {
-  opciones: opcionesIcon,
-  carrito: carritoIcon,
-  ajustes: ajustesIcon,
-  camara: cameraIcon,
-  deportes: deportesIcon,
-  herramientas: herramientasIcon,
-  hogar: houseIcon,
-  laptop: laptopIcon,
-  perfil: perfilIcon,
-  perifericos: perifericosIcon,
-  tarjeta: tarjetaIcon,
-  tv: tvIcon,
-  telefono: telefonoIcon,
-  vehiculo: vehiculoIcon,
-  videojuego: videojuegosIcon,
-  juegomesa: juegosmesaIcon,
-  ajustes: ajustesIcon,
+export const ICONS = {
+  // Iconos de UI
+  buscar: <FaSearch size={20} />,
+  carrito: <FaShoppingCart size={20} />,
+  usuario: <FaUser size={20} />,
+  favoritos: <FaHeart size={20} />,
+  notificaciones: <FaBell size={20} />,
+  historial: <FaHistory size={20} />,
+  tienda: <FaStore size={20} />,
+  tarjeta: <FaCreditCard size={20} />,
+  lista: <FaList size={20} />,
+  seguridad: <FaLock size={20} />,
+  correo: <FaEnvelope size={20} />,
+  configuracion: <FaCog size={20} />,
+  salir: <FaSignOutAlt size={20} />,
+  ayuda: <IoMdHelp size={20} />,
+  cupones: <RiCouponLine size={20} />,
+
+  // Iconos de categorías
+  smartphones: <FaPhone size={24} />,
+  perifericos: <BiCategory size={24} />,
+  laptops: <FaLaptop size={24} />,
+  camaras: <FaCamera size={24} />,
+  televisores: <FaTv size={24} />,
+  hogar: <FaHome size={24} />,
+  deportes: <MdSportsBaseball size={24} />,
+  vehiculos: <FaCar size={24} />,
+  videojuegos: <FaGamepad size={24} />,
+  herramientas: <FaTools size={24} />,
+  ropa: <GiClothes size={24} />,
+  zapatos: <GiRunningShoe size={24} />,
+  juguetes: <MdToys size={24} />,
+  salud: <MdHealthAndSafety size={24} />,
 };

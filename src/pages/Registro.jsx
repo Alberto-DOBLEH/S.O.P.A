@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../components/UI/Button";
 import Input from "../components/UI/input";
 import Card from "../components/Layout/Card";
-import backgroundImage from "../assets/imagenes/Logo-Completo.png";
+import backgroundImage from "../assets/imagenes/logo-completo.png";
 
 const Registro = ({ onClose }) => {
   const [username, setUsername] = useState("");

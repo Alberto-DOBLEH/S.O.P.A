@@ -52,6 +52,9 @@ import Ayuda from "./pages/Ayuda";
 import Configuracion from "./pages/Configuracion";
 import ContraNueva from "./pages/ContraNueva";
 import Tarjeta from "./pages/Tarjeta";
+import Venta from "./pages/Venta";
+import VentaArticulo from "./pages/VentaArticulo";
+import VentaCarro from "./pages/VentaCarro";
 
 // Comenta temporalmente estas importaciones si no existen aún
 // import Notificaciones from "./pages/Notificaciones";
@@ -77,7 +80,9 @@ function App() {
         <Route path="/lista-compras" element={<ListaCompras />} />
         <Route path="/ayuda" element={<Ayuda />} />
         <Route path="/configuracion" element={<Configuracion />} />
-
+        <Route path="/Venta" element={<Venta />} />
+        <Route path="/VentaCarro" element={<VentaCarro />} />
+        <Route path="/VentaArticulo" element={<VentaArticulo />} />
         {/* Comenta temporalmente estas rutas si los componentes no existen */}
         {/* <Route path="/notificaciones" element={<Notificaciones />} />
         <Route path="/historial-compras" element={<HistorialCompras />} />

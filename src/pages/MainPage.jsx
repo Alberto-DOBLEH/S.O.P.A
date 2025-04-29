@@ -147,7 +147,7 @@
 //   // ESTADOS
 //   const [showOpciones, setShowOpciones] = useState(false);
 //   const [searchTerm, setSearchTerm] = useState("");
-//   const navigate = useNavigate();
+// const navigate = useNavigate();
 
 //   // REFS
 //   const menuRef = useRef(null);
@@ -159,9 +159,9 @@
 //     console.log(`Buscando: ${searchTerm}`);
 //   };
 
-//   const handleCarritoClick = () => {
-//     navigate("/carrito");
-//   };
+// const handleCarritoClick = () => {
+//   navigate("/carrito");
+// };
 
 //   const handleLoginClick = () => {
 //     if (onLoginClick) {
@@ -816,7 +816,10 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     }
     setShowOpciones(true);
   };
-
+  const handleCarritoClick = () => {
+    // Lógica adicional si es necesaria
+    navigateTo.carrito();
+  };
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setShowOpciones(false);
@@ -918,7 +921,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
         </Button>
 
         {/* Menú de opciones */}
-        <div
+        {/* <div
           className="relative"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -938,7 +941,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
               className="absolute right-0 mt-2 w-72 bg-[#edf6f9] rounded-lg shadow-xl z-50 border border-gray-200 overflow-hidden"
             >
               {/* Sección Pricipal */}
-              <div className="p-2">
+        {/* <div className="p-2">
                 <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Mi Cuenta
                 </div>
@@ -965,7 +968,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
               </div>
 
               {/* Sección Mis Compras */}
-              <div className="p-2">
+        {/* <div className="p-2">
                 <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Mis Compras
                 </div>
@@ -984,10 +987,10 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                   text="Pedidos activos"
                   onClick={navigateTo.pedidos}
                 />
-              </div>
+              </div> */}
 
-              {/* Sección Métodos de Pago */}
-              <div className="p-2">
+        {/* Sección Métodos de Pago */}
+        {/* <div className="p-2">
                 <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Métodos de Pago
                 </div>
@@ -1001,10 +1004,10 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                   text="Cupones y promociones"
                   onClick={navigateTo.cupones}
                 />
-              </div>
+              </div> */}
 
-              {/* Sección Mis Listas */}
-              <div className="p-2">
+        {/* Sección Mis Listas */}
+        {/* <div className="p-2">
                 <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Mis Listas
                 </div>
@@ -1018,10 +1021,10 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                   text="Lista de compras"
                   onClick={navigateTo.listaCompras}
                 />
-              </div>
+              </div> */}
 
-              {/* Sección Ayuda y Configuración */}
-              <div className="p-2">
+        {/* Sección Ayuda y Configuración */}
+        {/* <div className="p-2">
                 <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Ayuda y Configuración
                 </div>
@@ -1045,16 +1048,160 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                   text="Configuración"
                   onClick={navigateTo.configuracion}
                 />
-              </div>
+              </div> */}
 
-              {/* Cerrar sesión */}
-              <div className="p-2">
+        {/* Cerrar sesión */}
+        {/* <div className="p-2">
                 <MenuItem
                   icon={<FaSignOutAlt />}
                   text="Cerrar sesión"
                   onClick={navigateTo.logout}
                   highlight={true}
                 />
+              </div>
+            </div> */}
+        {/* )} */}
+
+        <div
+          className="relative"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <Button
+            onClick={toggleMenu}
+            className="hover:bg-[#edf6f9] transition-all relative z-10 p-2 bg-[#123e9d] group"
+            aria-label="Menú de opciones"
+            aria-expanded={showOpciones}
+          >
+            <FaBars className="text-white w-6 h-6 group-hover:text-black transition-colors duration-200" />
+          </Button>
+
+          {showOpciones && (
+            <div
+              ref={menuRef}
+              className="absolute right-0 mt-2 w-72 bg-[#edf6f9] rounded-lg shadow-xl z-50 border border-gray-200 overflow-hidden"
+            >
+              <div className="p-4 border-b border-gray-200 bg-gray-50">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full mr-3 border border-gray-200 bg-blue-100 flex items-center justify-center">
+                    <FaUser className="text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">nombrePerfil</p>
+                    <p className="text-xs text-gray-500">Comprador</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="max-h-96 overflow-y-auto divide-y divide-gray-200">
+                <div className="p-2">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Mi Cuenta
+                  </div>
+                  <MenuItem
+                    icon={<FaUser />}
+                    text="Mi perfil"
+                    onClick={() => console.log("Mi perfil")}
+                  />
+                  <MenuItem
+                    icon={<FaHeart />}
+                    text="Favoritos"
+                    onClick={() => console.log("Favoritos")}
+                  />
+                  <MenuItem
+                    icon={<FaBell />}
+                    text="Notificaciones"
+                    onClick={() => console.log("Notificaciones")}
+                  />
+                </div>
+
+                <div className="p-2">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Mis Compras
+                  </div>
+                  <MenuItem
+                    icon={<FaShoppingCart />}
+                    text="Carrito de compras"
+                    onClick={handleCarritoClick}
+                  />
+                  <MenuItem
+                    icon={<FaHistory />}
+                    text="Historial de compras"
+                    onClick={() => console.log("Historial")}
+                  />
+                  <MenuItem
+                    icon={<FaStore />}
+                    text="Pedidos activos"
+                    onClick={() => console.log("Pedidos")}
+                  />
+                </div>
+
+                <div className="p-2">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Métodos de Pago
+                  </div>
+                  <MenuItem
+                    icon={<FaCreditCard />}
+                    text="Mis tarjetas"
+                    onClick={() => console.log("Tarjetas")}
+                  />
+                  <MenuItem
+                    icon={<RiCouponLine />}
+                    text="Cupones y promociones"
+                    onClick={() => console.log("Cupones")}
+                  />
+                </div>
+
+                <div className="p-2">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Mis Listas
+                  </div>
+                  <MenuItem
+                    icon={<FaList />}
+                    text="Lista de deseos"
+                    onClick={() => console.log("Deseos")}
+                  />
+                  <MenuItem
+                    icon={<FaList />}
+                    text="Lista de compras"
+                    onClick={() => console.log("Compras")}
+                  />
+                </div>
+
+                <div className="p-2">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Ayuda y Configuración
+                  </div>
+                  <MenuItem
+                    icon={<IoMdHelp />}
+                    text="Centro de ayuda"
+                    onClick={() => console.log("Ayuda")}
+                  />
+                  <MenuItem
+                    icon={<FaLock />}
+                    text="Privacidad y seguridad"
+                    onClick={() => console.log("Privacidad")}
+                  />
+                  <MenuItem
+                    icon={<FaEnvelope />}
+                    text="Contactar soporte"
+                    onClick={() => console.log("Soporte")}
+                  />
+                  <MenuItem
+                    icon={<FaCog />}
+                    text="Configuración"
+                    onClick={() => console.log("Configuración")}
+                  />
+                </div>
+
+                <div className="p-2">
+                  <MenuItem
+                    icon={<FaSignOutAlt />}
+                    text="Cerrar sesión"
+                    onClick={() => console.log("Cerrar sesión")}
+                    highlight={true}
+                  />
+                </div>
               </div>
             </div>
           )}

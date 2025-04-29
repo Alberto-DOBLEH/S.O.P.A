@@ -1082,30 +1082,43 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       }
     };
 
+    // const scrollCategories = (direction) => {
+    //   if (categoriesContainerRef.current) {
+    //     const scrollAmount = 300;
+    //     const maxScroll =
+    //       categoriesContainerRef.current.scrollWidth -
+    //       categoriesContainerRef.current.clientWidth;
+    //     const currentScroll = categoriesContainerRef.current.scrollLeft;
+
+    //     let newScrollPosition;
+    //     if (direction === "right") {
+    //       newScrollPosition = Math.min(currentScroll + scrollAmount, maxScroll);
+    //     } else {
+    //       newScrollPosition = Math.max(currentScroll - scrollAmount, 0);
+    //     }
+
+    //     categoriesContainerRef.current.scrollTo({
+    //       left: newScrollPosition,
+    //       behavior: "smooth",
+    //     });
+
+    //     setTimeout(verificarPosicionScroll, 300);
+    //   }
+    // };
     const scrollCategories = (direction) => {
       if (categoriesContainerRef.current) {
         const scrollAmount = 300;
-        const maxScroll =
-          categoriesContainerRef.current.scrollWidth -
-          categoriesContainerRef.current.clientWidth;
-        const currentScroll = categoriesContainerRef.current.scrollLeft;
-
-        let newScrollPosition;
-        if (direction === "right") {
-          newScrollPosition = Math.min(currentScroll + scrollAmount, maxScroll);
-        } else {
-          newScrollPosition = Math.max(currentScroll - scrollAmount, 0);
-        }
+        const newScrollLeft =
+          direction === "left"
+            ? categoriesContainerRef.current.scrollLeft - scrollAmount
+            : categoriesContainerRef.current.scrollLeft + scrollAmount;
 
         categoriesContainerRef.current.scrollTo({
-          left: newScrollPosition,
+          left: newScrollLeft,
           behavior: "smooth",
         });
-
-        setTimeout(verificarPosicionScroll, 300);
       }
     };
-
     useEffect(() => {
       const container = categoriesContainerRef.current;
       const preventNativeScroll = (e) => {
@@ -1138,9 +1151,9 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     }, []);
 
     return (
-      <div className="flex flex-col relative mb-8">
-        <h2 className="text-xl font-bold uppercase mb-4">Categorías</h2>
-        <div className="flex items-center relative">
+      <div className="flex items-center relative mb-4 w-full">
+        <h2 className="text-xl font-bold uppercase mb-2">Categorías</h2>
+        <div className="relative w-full">
           <div
             ref={categoriesContainerRef}
             className="flex overflow-x-auto space-x-4 pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] relative w-full px-8"

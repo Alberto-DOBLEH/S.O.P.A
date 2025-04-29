@@ -16,6 +16,11 @@ const Login = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!username || !password) {
+      toast.error("Por favor completa todos los campos.");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:3001/api/login", {
         method: "POST",
@@ -23,7 +28,7 @@ const Login = ({ onClose }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          telefono: username,
+          usuario: username,
           contraseña: password,
         }),
       });
@@ -75,9 +80,9 @@ const Login = ({ onClose }) => {
 
           <form onSubmit={handleSubmit}>
             <Input
-              placeholder="Teléfono (sin código)..."
+              placeholder="Usuario o Teléfono..."
               value={username}
-              onChange={(e) => setUsername(e.target.value.replace(/[^0-9]/g, ""))}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full p-4 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-75"
             />
 

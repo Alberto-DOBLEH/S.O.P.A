@@ -59,34 +59,35 @@ const Registro = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    toast.dismiss();
 
     if (!username || !password || !confirmPassword || !phoneNumber) {
-      toast.error("Completa todos los campos");
+      toast.error("Completa todos los campos", { toastId: "campos-vacios" });
       return;
     }
 
     if (isUsernameTaken) {
-      toast.error("El nombre de usuario ya está en uso");
+      toast.error("El nombre de usuario ya está en uso", { toastId: "usuario-existe" });
       return;
     }
 
     if (isPhoneTaken) {
-      toast.error("El número de teléfono ya está registrado");
+      toast.error("El número de teléfono ya está registrado", { toastId: "telefono-existe" });
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("Las contraseñas no coinciden");
+      toast.error("Las contraseñas no coinciden", { toastId: "no-coincide" });
       return;
     }
 
     if (password.length < 8) {
-      toast.error("La contraseña debe tener al menos 8 caracteres");
+      toast.error("La contraseña debe tener al menos 8 caracteres", { toastId: "clave-corta" });
       return;
     }
 
     if (!/^[0-9]{10}$/.test(phoneNumber)) {
-      toast.error("El número debe tener exactamente 10 dígitos");
+      toast.error("El número debe tener exactamente 10 dígitos", { toastId: "telefono-invalido" });
       return;
     }
 
@@ -106,14 +107,14 @@ const Registro = ({ onClose }) => {
       const data = await response.text();
 
       if (!response.ok) {
-        toast.error(data);
+        toast.error(data, { toastId: "registro-error" });
       } else {
-        toast.success(data);
+        toast.success(data, { toastId: "registro-ok" });
         onClose();
       }
     } catch (error) {
       console.error("Error al registrar:", error);
-      toast.error("Hubo un error al registrar al usuario");
+      toast.error("Hubo un error al registrar al usuario", { toastId: "registro-falla" });
     }
   };
 

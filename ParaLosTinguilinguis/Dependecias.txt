@@ -71,3 +71,12 @@ Libreria para los slyders de las imagenes
 npm install lucide-react react-slick slick-carousel
 
 eso brat
+
+Para carpeta backend:
+npm init -y
+npm install express mysql2 cors body-parser
+
+npm run dev   # para usar nodemon
+
+para los mensajes no alert:
+npm install react-toastify

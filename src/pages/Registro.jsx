@@ -1,20 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../components/UI/Button";
 import Input from "../components/UI/input";
 import Card from "../components/Layout/Card";
 import backgroundImage from "../assets/imagenes/logo-completo.png";
+import { toast } from "react-toastify";
 
 const Registro = ({ onClose }) => {
   const [username, setUsername] = useState("");
+  const [isUsernameTaken, setIsUsernameTaken] = useState(false);
+  const [isPhoneTaken, setIsPhoneTaken] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [countryCode, setCountryCode] = useState("+52");
   const [phoneNumber, setPhoneNumber] = useState("");
 
+  useEffect(() => {
+    const verificarUsuario = async () => {
+      if (!username) {
+        setIsUsernameTaken(false);
+        return;
+      }
+      try {
+        const response = await fetch("http://localhost:3001/api/verificar-usuario", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombre: username })
+        });
+        const data = await response.json();
+        setIsUsernameTaken(data.existe);
+      } catch (err) {
+        console.error("Error al verificar usuario:", err);
+      }
+    };
+    verificarUsuario();
+  }, [username]);
+
+  useEffect(() => {
+    const verificarTelefono = async () => {
+      const fullPhone = countryCode + phoneNumber;
+      if (!/^[0-9]{10}$/.test(phoneNumber)) {
+        setIsPhoneTaken(false);
+        return;
+      }
+      try {
+        const response = await fetch("http://localhost:3001/api/verificar-telefono", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ telefono: fullPhone })
+        });
+        const data = await response.json();
+        setIsPhoneTaken(data.existe);
+      } catch (err) {
+        console.error("Error al verificar teléfono:", err);
+      }
+    };
+    verificarTelefono();
+  }, [phoneNumber, countryCode]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!username || !password || !confirmPassword || !phoneNumber) {
+      toast.error("Completa todos los campos");
+      return;
+    }
+
+    if (isUsernameTaken) {
+      toast.error("El nombre de usuario ya está en uso");
+      return;
+    }
+
+    if (isPhoneTaken) {
+      toast.error("El número de teléfono ya está registrado");
+      return;
+    }
+
     if (password !== confirmPassword) {
-      alert("Las contraseñas no coinciden");
+      toast.error("Las contraseñas no coinciden");
+      return;
+    }
+
+    if (password.length < 8) {
+      toast.error("La contraseña debe tener al menos 8 caracteres");
+      return;
+    }
+
+    if (!/^[0-9]{10}$/.test(phoneNumber)) {
+      toast.error("El número debe tener exactamente 10 dígitos");
       return;
     }
 
@@ -32,11 +104,16 @@ const Registro = ({ onClose }) => {
       });
 
       const data = await response.text();
-      alert(data);
-      onClose();
+
+      if (!response.ok) {
+        toast.error(data);
+      } else {
+        toast.success(data);
+        onClose();
+      }
     } catch (error) {
       console.error("Error al registrar:", error);
-      alert("Hubo un error al registrar al usuario");
+      toast.error("Hubo un error al registrar al usuario");
     }
   };
 
@@ -63,6 +140,10 @@ const Registro = ({ onClose }) => {
               onChange={(e) => setUsername(e.target.value)}
               className="w-full p-4 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-75"
             />
+            {isUsernameTaken && (
+              <p className="text-red-500 text-sm mt-1">El nombre de usuario ya está en uso.</p>
+            )}
+
             <Input
               placeholder="Contraseña..."
               type="password"
@@ -70,6 +151,13 @@ const Registro = ({ onClose }) => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-4 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-75"
             />
+            {password && password.length < 8 && (
+              <p className="text-red-500 text-sm mt-1">La contraseña debe tener al menos 8 caracteres.</p>
+            )}
+            {password && !/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password) && (
+              <p className="text-yellow-500 text-sm mt-1">Se recomienda incluir al menos un carácter especial.</p>
+            )}
+
             <Input
               placeholder="Confirmar Contraseña..."
               type="password"
@@ -92,10 +180,19 @@ const Registro = ({ onClose }) => {
               <Input
                 placeholder="Número..."
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, "");
+                  setPhoneNumber(value);
+                }}
                 className="w-full p-4 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-75"
               />
             </div>
+            {phoneNumber && phoneNumber.length !== 10 && (
+              <p className="text-red-500 text-sm mt-1">Número no reconocido</p>
+            )}
+            {isPhoneTaken && (
+              <p className="text-red-500 text-sm mt-1">Este número ya está registrado.</p>
+            )}
 
             <div className="flex justify-center mt-6 ">
               <Button

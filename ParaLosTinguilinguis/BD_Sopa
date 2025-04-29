@@ -1,0 +1,53 @@
+create database sopa;
+
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    telefono VARCHAR(15) UNIQUE NOT NULL,
+    contraseña VARCHAR(255) NOT NULL,
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE productos (
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10,2) NOT NULL CHECK (precio > 0),
+    stock INT NOT NULL CHECK (stock >= 0),
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME 
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+WHERE TABLE_SCHEMA = 'sopa';
+
+SELECT v.id_venta, u.nombre, p.nombre AS producto, v.total, v.estado 
+FROM ventas v
+JOIN usuarios u ON v.id_usuario = u.id_usuario
+JOIN productos p ON v.id_producto = p.id_producto;
+
+CREATE TABLE ventas (
+    id_venta INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL CHECK (cantidad > 0),
+    total DECIMAL(10,2) NOT NULL CHECK (total > 0),
+    metodo_pago ENUM('Tarjeta Crédito', 'Tarjeta Débito', 'PayPal', 'Transferencia') NOT NULL,
+    estado ENUM('Pendiente', 'Pagado', 'Enviado', 'Entregado', 'Cancelado') NOT NULL DEFAULT 'Pendiente',
+    fecha_compra DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE
+);
+
+CREATE TABLE detalle_ventas (
+    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
+    id_venta INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL CHECK (cantidad > 0),
+    precio_unitario DECIMAL(10,2) NOT NULL CHECK (precio_unitario > 0),
+    subtotal DECIMAL(10,2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,
+    FOREIGN KEY (id_venta) REFERENCES ventas(id_venta) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE
+);

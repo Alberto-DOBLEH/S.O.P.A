@@ -55,6 +55,9 @@ import Tarjeta from "./pages/Tarjeta";
 import Venta from "./pages/Venta";
 import VentaArticulo from "./pages/VentaArticulo";
 import VentaCarro from "./pages/VentaCarro";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // Comenta temporalmente estas importaciones si no existen aún
 // import Notificaciones from "./pages/Notificaciones";
@@ -94,6 +97,16 @@ function App() {
 
         <Route path="*" element={<div>Página no encontrada</div>} />
       </Routes>
+      <ToastContainer
+  position="bottom-center"
+  autoClose={750}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  pauseOnHover
+  draggable
+  theme="colored"
+/>
     </Router>
   );
 }

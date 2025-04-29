@@ -39,30 +39,56 @@
 // }
 
 // export default App;
-
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import Login from "./pages/Login";
+import Registro from "./pages/Registro";
+import Perfil from "./pages/Perfil";
 import CarritoCompras from "./pages/CarritoCompras";
-import "./index.css";
+import ListaDeseos from "./pages/ListaDeseos";
+import ListaCompras from "./pages/ListaCompras";
+import Ayuda from "./pages/Ayuda";
+import Configuracion from "./pages/Configuracion";
+import ContraNueva from "./pages/ContraNueva";
+import Tarjeta from "./pages/Tarjeta";
+
+// Comenta temporalmente estas importaciones si no existen aún
+// import Notificaciones from "./pages/Notificaciones";
+// import HistorialCompras from "./pages/HistorialCompras";
+// import PedidosActivos from "./pages/PedidosActivos";
+// import Cupones from "./pages/Cupones";
+// import Privacidad from "./pages/Privacidad";
+// import Soporte from "./pages/Soporte";
+// import BuscarResultados from "./pages/BuscarResultados";
 
 function App() {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-
-  const openLogin = () => setIsLoginOpen(true);
-  const closeLogin = () => setIsLoginOpen(false);
-
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<MainPage onLoginClick={openLogin} />} />
-          <Route path="/carrito" element={<CarritoCompras />} />
-          {/* Puedes agregar más rutas aquí según sea necesario */}
-        </Routes>
-        {isLoginOpen && <Login onClose={closeLogin} />}
-      </div>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />
+        <Route path="/contra-nueva" element={<ContraNueva />} />
+        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/tarjeta" element={<Tarjeta />} />
+        <Route path="/carrito" element={<CarritoCompras />} />
+        <Route path="/lista-deseos" element={<ListaDeseos />} />
+        <Route path="/lista-compras" element={<ListaCompras />} />
+        <Route path="/ayuda" element={<Ayuda />} />
+        <Route path="/configuracion" element={<Configuracion />} />
+
+        {/* Comenta temporalmente estas rutas si los componentes no existen */}
+        {/* <Route path="/notificaciones" element={<Notificaciones />} />
+        <Route path="/historial-compras" element={<HistorialCompras />} />
+        <Route path="/pedidos-activos" element={<PedidosActivos />} />
+        <Route path="/cupones" element={<Cupones />} />
+        <Route path="/privacidad" element={<Privacidad />} />
+        <Route path="/soporte" element={<Soporte />} />
+        <Route path="/buscar" element={<BuscarResultados />} /> */}
+
+        <Route path="*" element={<div>Página no encontrada</div>} />
+      </Routes>
     </Router>
   );
 }

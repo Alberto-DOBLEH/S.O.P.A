@@ -15,9 +15,10 @@ const Login = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    toast.dismiss();
 
     if (!username || !password) {
-      toast.error("Por favor completa todos los campos.");
+      toast.error("Por favor completa todos los campos.", { toastId: "login-vacio" });
       return;
     }
 
@@ -36,14 +37,19 @@ const Login = ({ onClose }) => {
       const data = await response.text();
 
       if (response.ok) {
-        toast.success(data);
+        toast.success("Inicio de sesión exitoso", { toastId: "login-exito" });
+
+        // Aquí puedes guardar los datos del usuario en localStorage
+        localStorage.setItem("usuario", username);
+
+        // Aquí puedes redirigir al usuario a una zona protegida o actualizar el estado de autenticación
         onClose();
       } else {
-        toast.error(data);
+        toast.error(data, { toastId: "login-error" });
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
-      toast.error("Error al conectar con el servidor");
+      toast.error("Error al conectar con el servidor", { toastId: "conexion-falla" });
     }
   };
 

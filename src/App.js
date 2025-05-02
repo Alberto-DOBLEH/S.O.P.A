@@ -48,6 +48,7 @@ import Perfil from "./pages/Perfil";
 import CarritoCompras from "./pages/CarritoCompras";
 import ListaDeseos from "./pages/ListaDeseos";
 import ListaCompras from "./pages/ListaCompras";
+import ListaProductos from "./pages/ListaProductos";
 import Ayuda from "./pages/Ayuda";
 import Configuracion from "./pages/Configuracion";
 import ContraNueva from "./pages/ContraNueva";
@@ -57,6 +58,7 @@ import VentaArticulo from "./pages/VentaArticulo";
 import VentaCarro from "./pages/VentaCarro";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 
 // Comenta temporalmente estas importaciones si no existen aún
@@ -73,7 +75,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login onClose={() => {}} />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/contra-nueva" element={<ContraNueva />} />
         <Route path="/perfil" element={<Perfil />} />
@@ -86,6 +88,8 @@ function App() {
         <Route path="/Venta" element={<Venta />} />
         <Route path="/VentaCarro" element={<VentaCarro />} />
         <Route path="/VentaArticulo" element={<VentaArticulo />} />
+        <Route path="/productos" element={<ListaProductos />} />
+
         {/* Comenta temporalmente estas rutas si los componentes no existen */}
         {/* <Route path="/notificaciones" element={<Notificaciones />} />
         <Route path="/historial-compras" element={<HistorialCompras />} />

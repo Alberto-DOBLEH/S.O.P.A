@@ -1,58 +1,52 @@
-let products = [
-  { id: 1, nombre: 'Producto 1', precio: 100 },
-  { id: 2, nombre: 'Producto 2', precio: 200 }
-];
+const db = require('../db');
 
-// GET: Obtener todos los productos
-const getProducts = (req, res) => {
-  res.json(products);
+// 🔍 Obtener todos los productos
+const getProductos = (req, res) => {
+  db.query('SELECT * FROM productos', (err, results) => {
+    if (err) return res.status(500).json({ error: 'Error al obtener productos' });
+    res.json(results);
+  });
 };
 
-// POST: Crear un nuevo producto
-const createProduct = (req, res) => {
-  const { nombre, precio } = req.body;
-  const nuevoProducto = {
-    id: products.length + 1,
-    nombre,
-    precio
-  };
-  products.push(nuevoProducto);
-  res.status(201).json(nuevoProducto);
-};
-
-// PUT: Actualizar un producto
-const updateProduct = (req, res) => {
-  const { id } = req.params;
-  const { nombre, precio } = req.body;
-  const producto = products.find(p => p.id === parseInt(id));
-
-  if (!producto) {
-    return res.status(404).json({ mensaje: 'Producto no encontrado' });
+// ➕ Crear nuevo producto
+const crearProducto = (req, res) => {
+  const { nombre, descripcion, precio, stock } = req.body;
+  if (!nombre || !precio || stock === undefined) {
+    return res.status(400).json({ error: 'Faltan campos obligatorios' });
   }
 
-  producto.nombre = nombre || producto.nombre;
-  producto.precio = precio || producto.precio;
-
-  res.json(producto);
+  const query = 'INSERT INTO productos (nombre, descripcion, precio, stock) VALUES (?, ?, ?, ?)';
+  db.query(query, [nombre, descripcion, precio, stock], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Error al crear producto' });
+    res.status(201).json({ id_producto: result.insertId, nombre, descripcion, precio, stock });
+  });
 };
 
-// DELETE: Eliminar un producto
-const deleteProduct = (req, res) => {
+// ✏️ Editar producto
+const actualizarProducto = (req, res) => {
   const { id } = req.params;
-  const index = products.findIndex(p => p.id === parseInt(id));
+  const { nombre, descripcion, precio, stock } = req.body;
 
-  if (index === -1) {
-    return res.status(404).json({ mensaje: 'Producto no encontrado' });
-  }
+  const query = 'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, stock = ? WHERE id_producto = ?';
+  db.query(query, [nombre, descripcion, precio, stock, id], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Error al actualizar producto' });
+    res.json({ mensaje: 'Producto actualizado correctamente' });
+  });
+};
 
-  products.splice(index, 1);
+// ❌ Eliminar producto
+const eliminarProducto = (req, res) => {
+  const { id } = req.params;
 
-  res.json({ mensaje: 'Producto eliminado' });
+  db.query('DELETE FROM productos WHERE id_producto = ?', [id], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Error al eliminar producto' });
+    res.json({ mensaje: 'Producto eliminado correctamente' });
+  });
 };
 
 module.exports = {
-  getProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct
+  getProductos,
+  crearProducto,
+  actualizarProducto,
+  eliminarProducto
 };

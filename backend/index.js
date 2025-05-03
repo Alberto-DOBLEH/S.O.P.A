@@ -25,6 +25,7 @@ app.use("/api", authRoutes);
    // 👉 Importa rutas
    const authRoutes = require("./routes/authRoutes");
    const productosRoutes = require("./routes/products"); 
+   const ventasRoutes = require("./routes/ventas");
    
    // 👉 Middlewares
    app.use(cors());
@@ -33,6 +34,8 @@ app.use("/api", authRoutes);
    // 👉 Rutas
    app.use("/api", authRoutes);
    app.use("/api/productos", productosRoutes); 
+   app.use("/api/ventas", ventasRoutes);
+
    
    // 👉 Servidor
    const PORT = process.env.PORT || 3001;

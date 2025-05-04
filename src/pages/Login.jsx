@@ -18,10 +18,12 @@ const Login = ({ onClose }) => {
     toast.dismiss();
 
     if (!username || !password) {
-      toast.error("Por favor completa todos los campos.", { toastId: "login-vacio" });
+      toast.error("Por favor completa todos los campos.", {
+        toastId: "login-vacio",
+      });
       return;
     }
-    
+
     let data = {};
     try {
       const response = await fetch("http://localhost:3001/api/login", {
@@ -35,34 +37,35 @@ const Login = ({ onClose }) => {
         }),
       });
 
-      
       try {
         data = await response.json();
       } catch (e) {
         data.mensaje = "Respuesta no válida del servidor";
       }
 
-
       if (response.ok) {
         toast.success("Inicio de sesión exitoso", { toastId: "login-exito" });
-      
+
         console.log("Respuesta del backend:", data); // 🔍 Ver qué llega
-      
+
         if (data.token && data.usuario) {
           localStorage.setItem("token", data.token);
           localStorage.setItem("nombre", data.usuario.nombre);
         } else {
           throw new Error("Respuesta del backend incompleta");
         }
-      
+
         onClose();
       } else {
-        toast.error(data.mensaje || "Error al iniciar sesión", { toastId: "login-error" });
+        toast.error(data.mensaje || "Error al iniciar sesión", {
+          toastId: "login-error",
+        });
       }
-      
     } catch (error) {
       console.error("Error al conectar:", error);
-      toast.error("Error al conectar con el servidor", { toastId: "conexion-falla" });
+      toast.error("Error al conectar con el servidor", {
+        toastId: "conexion-falla",
+      });
     }
   };
 

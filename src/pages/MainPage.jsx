@@ -10,13 +10,14 @@ import {
   desaparecido,
   losFondo,
   alanSombrero,
+  hotsale,
 } from "../assets/imagenes/imagenesslider";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Login from "./Login"; // Importa tu componente Login existente
-import { ICONS } from "../assets/iconos/iconos";
+// import { ICONS } from "../assets/iconos/iconos";
 import {
   FaSearch,
   FaShoppingCart,
@@ -34,52 +35,92 @@ import {
   FaBars,
   FaShopify,
   FaTimes,
+  // Nuevos iconos para las categorías
+  FaMobile,
+  FaKeyboard,
+  FaLaptop,
+  FaCamera,
+  FaTv,
+  FaHome,
+  FaRunning,
+  FaCar,
+  FaGamepad,
+  FaTshirt,
+  FaShoePrints,
+  FaChild,
+  FaGuitar,
+  FaBook,
+  FaBaby,
+  FaPaw,
+  FaUtensils,
+  FaBath,
+  FaPlane,
+  FaTree,
+  FaDumbbell,
+  FaGlassWhiskey,
+  FaAppleAlt,
+  FaGift,
+  FaHeadphones,
+  FaTabletAlt,
+  FaDesktop,
+  FaMousePointer,
 } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { IoMdHelp } from "react-icons/io";
 import { RiCouponLine } from "react-icons/ri";
-
+// Iconos correctos (ejemplos):
+import {
+  FaTag, // Ícono singular de etiqueta
+  FaTags, // Ícono plural de etiquetas
+  FaChevronRight, // Flecha derecha
+  // FaShoppingCart, // Carrito de compras
+  FaClock, // Reloj
+  // Tus otros íconos FA aquí...
+} from "react-icons/fa";
 // CATEGORÍAS
 const CATEGORIES = [
-  { icon: ICONS.smartphones, label: "Smartphones", path: "/telefonos" },
-  { icon: ICONS.perifericos, label: "Periféricos", path: "/perifericos" },
-  { icon: ICONS.laptops, label: "Laptops", path: "/laptops" },
-  { icon: ICONS.camaras, label: "Cámaras", path: "/camaras" },
-  { icon: ICONS.televisores, label: "Televisores", path: "/televisores" },
-  { icon: ICONS.hogar, label: "Hogar", path: "/hogar" },
-  { icon: ICONS.deportes, label: "Deportes", path: "/deportes" },
-  { icon: ICONS.vehiculos, label: "Vehículos", path: "/vehiculos" },
-  { icon: ICONS.videojuegos, label: "Videojuegos", path: "/videojuegos" },
-  { icon: ICONS.ropa, label: "Ropa", path: "/ropa" },
-  { icon: ICONS.zapatos, label: "Zapatos", path: "/zapatos" },
-  { icon: ICONS.juguetes, label: "Juguetes", path: "/juguetes" },
+  { icon: <FaMobile size={32} />, label: "Smartphones", path: "/telefonos" },
   {
-    icon: <BiCategory size={24} />,
+    icon: <FaKeyboard size={32} />,
+    label: "Periféricos",
+    path: "/perifericos",
+  },
+  { icon: <FaLaptop size={32} />, label: "Laptops", path: "/laptops" },
+  { icon: <FaCamera size={32} />, label: "Cámaras", path: "/camaras" },
+  { icon: <FaTv size={32} />, label: "Televisores", path: "/televisores" },
+  { icon: <FaHome size={32} />, label: "Hogar", path: "/hogar" },
+  { icon: <FaRunning size={32} />, label: "Deportes", path: "/deportes" },
+  { icon: <FaCar size={32} />, label: "Vehículos", path: "/vehiculos" },
+  { icon: <FaGamepad size={32} />, label: "Videojuegos", path: "/videojuegos" },
+  { icon: <FaTshirt size={32} />, label: "Ropa", path: "/ropa" },
+  { icon: <FaShoePrints size={32} />, label: "Zapatos", path: "/zapatos" },
+  { icon: <FaChild size={32} />, label: "Juguetes", path: "/juguetes" },
+  {
+    icon: <FaGuitar size={32} />,
     label: "Instrumentos",
     path: "/instrumentos",
   },
-  { icon: <BiCategory size={32} />, label: "Libros", path: "/libros" },
-  { icon: <BiCategory size={32} />, label: "Bebés", path: "/bebes" },
-  { icon: <BiCategory size={32} />, label: "Mascotas", path: "/mascotas" },
-  { icon: <BiCategory size={32} />, label: "Cocina", path: "/cocina" },
-  { icon: <BiCategory size={32} />, label: "Baño", path: "/bano" },
-  { icon: <BiCategory size={32} />, label: "Viajes", path: "/viajes" },
-  { icon: <BiCategory size={32} />, label: "Jardín", path: "/jardin" },
-  { icon: <BiCategory size={32} />, label: "Fitness", path: "/fitness" },
-  { icon: <BiCategory size={32} />, label: "Bebidas", path: "/bebidas" },
-  { icon: <BiCategory size={32} />, label: "Alimentos", path: "/alimentos" },
-  { icon: <BiCategory size={32} />, label: "Regalos", path: "/regalos" },
-  { icon: <BiCategory size={32} />, label: "Audio", path: "/audio" },
-  { icon: <BiCategory size={32} />, label: "Tablets", path: "/tablets" },
+  { icon: <FaBook size={32} />, label: "Libros", path: "/libros" },
+  { icon: <FaBaby size={32} />, label: "Bebés", path: "/bebes" },
+  { icon: <FaPaw size={32} />, label: "Mascotas", path: "/mascotas" },
+  { icon: <FaUtensils size={32} />, label: "Cocina", path: "/cocina" },
+  { icon: <FaBath size={32} />, label: "Baño", path: "/bano" },
+  { icon: <FaPlane size={32} />, label: "Viajes", path: "/viajes" },
+  { icon: <FaTree size={32} />, label: "Jardín", path: "/jardin" },
+  { icon: <FaDumbbell size={32} />, label: "Fitness", path: "/fitness" },
+  { icon: <FaGlassWhiskey size={32} />, label: "Bebidas", path: "/bebidas" },
+  { icon: <FaAppleAlt size={32} />, label: "Alimentos", path: "/alimentos" },
+  { icon: <FaGift size={32} />, label: "Regalos", path: "/regalos" },
+  { icon: <FaHeadphones size={32} />, label: "Audio", path: "/audio" },
+  { icon: <FaTabletAlt size={32} />, label: "Tablets", path: "/tablets" },
   {
-    icon: <BiCategory size={32} />,
+    icon: <FaDesktop size={32} />,
     label: "Computadoras",
     path: "/computadoras",
   },
-  { icon: <BiCategory size={32} />, label: "Teclados", path: "/teclados" },
-  { icon: <BiCategory size={32} />, label: "Mouses", path: "/mouses" },
+  { icon: <FaKeyboard size={32} />, label: "Teclados", path: "/teclados" },
+  { icon: <FaMousePointer size={32} />, label: "Mouses", path: "/mouses" },
 ];
-
 // ANUNCIOS
 const ANUNCIOS = [
   {
@@ -105,6 +146,14 @@ const ANUNCIOS = [
   },
   {
     imagen: alanSombrero,
+    alt: "Sombreros",
+    tag: "Sabor a Mexico",
+    tagIcon: "🌮",
+    tagColor: "bg-blue-500",
+    badge: "CLICK YA!!",
+  },
+  {
+    imagen: hotsale,
     alt: "Sombreros",
     tag: "Sabor a Mexico",
     tagIcon: "🌮",
@@ -143,7 +192,209 @@ const SLIDER_SETTINGS = {
     },
   ],
 };
+// const SLIDER_SETTINGS = {
+//   dots: true,
+//   infinite: true,
+//   speed: 500,
+//   slidesToShow: 1,
+//   slidesToScroll: 1,
+//   autoplay: true,
+//   autoplaySpeed: 5000,
+//   pauseOnHover: true,
+//   // Puedes agregar estas propiedades para modificar el comportamiento
+//   centerMode: true, // Centra el slide actual
+//   // centerPadding: "60px", // Añade padding a los lados (muestra parte de los slides vecinos)
+//   responsive: [
+//     {
+//       breakpoint: 1024,
+//       settings: {
+//         slidesToShow: 1,
+//         slidesToScroll: 1,
+//         // centerPadding: "40px",
+//       },
+//     },
+//     {
+//       breakpoint: 768,
+//       settings: {
+//         slidesToShow: 1,
+//         slidesToScroll: 1,
+//         // centerPadding: "20px",
+//       },
+//     },
+//     {
+//       breakpoint: 480,
+//       settings: {
+//         slidesToShow: 1,
+//         slidesToScroll: 1,
+//         arrows: false,
+//         dots: true,
+//         centerMode: false, // Desactiva centerMode en móviles
+//       },
+//     },
+//   ],
+// };
+const OfertasDestacadas = () => {
+  // Datos de ejemplo para ofertas destacadas
+  const OFERTAS = [
+    {
+      id: 1,
+      imagen: "https://via.placeholder.com/300x300", // Reemplazar con imagen real
+      titulo: "Smartwatch último modelo",
+      precioOriginal: 3999,
+      precioOferta: 2499,
+      descuento: 38,
+      tiempoRestante: "2 días",
+      stock: 5,
+      categoria: "Electrónicos",
+    },
+    {
+      id: 2,
+      // imagen:  // Reemplazar por imagen
+      titulo: "Audífonos inalámbricos premium",
+      precioOriginal: 1899,
+      precioOferta: 999,
+      descuento: 47,
+      tiempoRestante: "12 horas",
+      stock: 8,
+      categoria: "Audio",
+    },
+    {
+      id: 3,
+      // imagen:  // Reemplazar por imagen
+      titulo: "Cámara deportiva 4K resistente al agua",
+      precioOriginal: 4599,
+      precioOferta: 2999,
+      descuento: 35,
+      tiempoRestante: "3 días",
+      stock: 3,
+      categoria: "Cámaras",
+    },
+    {
+      id: 4,
+      // imagen:  // Reemplazar por imagen
+      titulo: "Zapatos deportivos ultralivianos",
+      precioOriginal: 1299,
+      precioOferta: 799,
+      descuento: 40,
+      tiempoRestante: "1 día",
+      stock: 12,
+      categoria: "Deportes",
+    },
+  ];
 
+  // Función para formatear precios en formato de moneda mexicana
+  const formatoPrecio = (precio) => {
+    return new Intl.NumberFormat("es-MX", {
+      style: "currency",
+      currency: "MXN",
+      minimumFractionDigits: 0,
+    }).format(precio);
+  };
+
+  return (
+    <section className="py-10 bg-gradient-to-br rounded-2xl shadow-sm my-10">
+      <div className="container mx-auto px-4">
+        {/* Encabezado de la sección */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center">
+            <div className="mr-4 bg-red-500 text-white p-2 rounded-lg">
+              <FaTag size={24} />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800">
+              OFERTAS DESTACADAS
+            </h2>
+          </div>
+          <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
+            Ver todas <FaChevronRight className="ml-1" size={14} />
+          </button>
+        </div>
+
+        {/* Grid de ofertas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {OFERTAS.map((oferta) => (
+            <div
+              key={oferta.id}
+              className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+            >
+              {/* Badge de descuento */}
+              <div className="relative">
+                <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-bold px-2 py-1 rounded-lg z-10">
+                  -{oferta.descuento}%
+                </span>
+
+                {/* Badge de stock limitado si hay menos de 6 productos */}
+                {oferta.stock < 6 && (
+                  <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
+                    ¡Solo {oferta.stock} disponibles!
+                  </span>
+                )}
+
+                {/* Imagen del producto */}
+                <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
+                  <img
+                    src={oferta.imagen}
+                    alt={oferta.titulo}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              </div>
+
+              {/* Detalles del producto */}
+              <div className="p-4">
+                <div className="text-xs text-blue-600 font-medium mb-1">
+                  {oferta.categoria}
+                </div>
+                <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12">
+                  {oferta.titulo}
+                </h3>
+
+                {/* Precios */}
+                <div className="flex items-end mb-3">
+                  <span className="text-xl font-bold text-gray-800 mr-2">
+                    {formatoPrecio(oferta.precioOferta)}
+                  </span>
+                  <span className="text-sm text-gray-500 line-through">
+                    {formatoPrecio(oferta.precioOriginal)}
+                  </span>
+                </div>
+
+                {/* Temporizador */}
+                <div className="flex items-center text-xs text-gray-500 mb-4">
+                  <FaClock className="mr-1" />
+                  <span>Termina en: {oferta.tiempoRestante}</span>
+                </div>
+
+                {/* Botón de compra */}
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+                  <FaShoppingCart className="mr-2" />
+                  Agregar al carrito
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Banner promocional
+        <div className="mt-10 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl p-6 shadow-lg">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-4 md:mb-0">
+              <h3 className="text-2xl font-bold mb-2">
+                Ofertas exclusivas para miembros
+              </h3>
+              <p className="text-blue-100">
+                Regístrate ahora y obtén un 15% de descuento en tu primera
+                compra
+              </p>
+            </div>
+            <button className="px-6 py-3 bg-white text-blue-700 rounded-lg font-bold hover:bg-blue-50 transition-colors duration-200">
+              Registrarse ahora
+            </button>
+          </div>
+        </div> */}
+      </div>
+    </section>
+  );
+};
 const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
   const [showOpciones, setShowOpciones] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -217,30 +468,6 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       }
     };
   }, []);
-
-  // const SearchBar = () => (
-  //   <div className="w-full max-w-3xl mx-auto mb-2">
-  //     <form onSubmit={handleSearch} className="relative flex items-center">
-  //       <input
-  //         type="text"
-  //         value={searchTerm}
-  //         onChange={(e) => setSearchTerm(e.target.value)}
-  //         placeholder="Buscar productos, categorías, marcas..."
-  //         className="w-full px-4 py-2 pl-10 pr-16 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#123e9d] focus:border-transparent"
-  //       />
-  //       <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-  //         <FaSearch className="text-gray-500" />
-  //       </div>
-  //       <button
-  //         type="submit"
-  //         className="absolute right-2 bg-[#123e9d] text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm"
-  //       >
-  //         Buscar
-  //       </button>
-  //     </form>
-  //   </div>
-  // );
-
   const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
@@ -481,116 +708,6 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       </header>
     );
   };
-  // const Categorias = () => {
-  //   const [showLeftButton, setShowLeftButton] = useState(false);
-  //   const [showRightButton, setShowRightButton] = useState(true);
-  //   const categoriesContainerRef = useRef(null);
-
-  //   const handleCategoryClick = (path) => {
-  //     navigate(path);
-  //   };
-
-  //   const verificarPosicionScroll = () => {
-  //     if (categoriesContainerRef.current) {
-  //       const { scrollLeft, scrollWidth, clientWidth } =
-  //         categoriesContainerRef.current;
-  //       setShowLeftButton(scrollLeft > 0);
-  //       setShowRightButton(scrollLeft < scrollWidth - clientWidth - 1);
-  //     }
-  //   };
-
-  //   const scrollCategories = (direction) => {
-  //     if (categoriesContainerRef.current) {
-  //       const scrollAmount = 300;
-  //       const newScrollLeft =
-  //         direction === "left"
-  //           ? categoriesContainerRef.current.scrollLeft - scrollAmount
-  //           : categoriesContainerRef.current.scrollLeft + scrollAmount;
-
-  //       categoriesContainerRef.current.scrollTo({
-  //         left: newScrollLeft,
-  //         behavior: "smooth",
-  //       });
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     const container = categoriesContainerRef.current;
-  //     const preventNativeScroll = (e) => {
-  //       if (e.deltaY === 0) return;
-  //       if (
-  //         (e.deltaY < 0 && container.scrollLeft <= 0) ||
-  //         (e.deltaY > 0 &&
-  //           container.scrollLeft >=
-  //             container.scrollWidth - container.clientWidth)
-  //       ) {
-  //         e.preventDefault();
-  //       }
-  //     };
-
-  //     if (container) {
-  //       container.addEventListener("wheel", preventNativeScroll, {
-  //         passive: false,
-  //       });
-  //     }
-
-  //     verificarPosicionScroll();
-  //     window.addEventListener("resize", verificarPosicionScroll);
-
-  //     return () => {
-  //       if (container) {
-  //         container.removeEventListener("wheel", preventNativeScroll);
-  //       }
-  //       window.removeEventListener("resize", verificarPosicionScroll);
-  //     };
-  //   }, []);
-
-  //   return (
-  //     <div className="flex items-center relative mb-4 w-full">
-  //       <h2 className="text-xl font-bold uppercase mb-2">Categorías</h2>
-  //       <div className="relative w-full">
-  //         <div
-  //           ref={categoriesContainerRef}
-  //           className="flex overflow-x-auto space-x-4 pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] relative w-full px-8"
-  //           onScroll={verificarPosicionScroll}
-  //         >
-  //           {CATEGORIES.map((category) => (
-  //             <button
-  //               key={category.path}
-  //               onClick={() => handleCategoryClick(category.path)}
-  //               className="flex-shrink-0 bg-white p-4 rounded-lg shadow hover:shadow-md flex flex-col items-center justify-center hover:bg-gray-50 border border-gray-200 w-[150px] h-[150px] hover:scale-90 transition-transform duration-200"
-  //             >
-  //               <span className="text-2xl mb-2">{category.icon}</span>
-  //               <span className="text-sm font-medium text-gray-700 uppercase">
-  //                 {category.label}
-  //               </span>
-  //             </button>
-  //           ))}
-  //         </div>
-
-  //         {showLeftButton && (
-  //           <button
-  //             onClick={() => scrollCategories("left")}
-  //             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white hover:bg-gray-200 shadow-md rounded-full p-2 hover:scale-110 transition-transform duration-200 z-10"
-  //             aria-label="Categorías anteriores"
-  //           >
-  //             <ChevronRight className="text-gray-600 rotate-180" size={24} />
-  //           </button>
-  //         )}
-
-  //         {showRightButton && (
-  //           <button
-  //             onClick={() => scrollCategories("right")}
-  //             className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white hover:bg-gray-200 shadow-md rounded-full p-2 hover:scale-110 transition-transform duration-200 z-10"
-  //             aria-label="Más categorías"
-  //           >
-  //             <ChevronRight className="text-gray-600" size={24} />
-  //           </button>
-  //         )}
-  //       </div>
-  //     </div>
-  //   );
-  // };
 
   const Categorias = () => {
     const navigate = useNavigate();
@@ -606,20 +723,20 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       if (categoriesContainerRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } =
           categoriesContainerRef.current;
-        setShowLeftButton(scrollLeft > 5); // Pequeño umbral para mostrar el botón izquierdo
-        setShowRightButton(scrollLeft < scrollWidth - clientWidth - 5); // Pequeño umbral para el botón derecho
+        setShowLeftButton(scrollLeft > 5);
+        setShowRightButton(scrollLeft < scrollWidth - clientWidth - 5);
       }
     };
 
     const scrollCategories = (direction) => {
       if (categoriesContainerRef.current) {
-        // Calculamos el tamaño de cada tarjeta (incluyendo margen)
-        const cardWidth = 140; // Ancho aproximado de cada tarjeta con margen
+        const cardWidth = 128; // Ancho aproximado de cada tarjeta con margen
+        const visibleWidth = categoriesContainerRef.current.clientWidth;
         const scrollAmount =
-          direction === "left" ? -cardWidth * 3 : cardWidth * 3; // Desplazamiento de 3 tarjetas
+          Math.floor(visibleWidth / cardWidth) * cardWidth * 0.8;
 
         categoriesContainerRef.current.scrollBy({
-          left: scrollAmount,
+          left: direction === "left" ? -scrollAmount : scrollAmount,
           behavior: "smooth",
         });
 
@@ -631,7 +748,6 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     useEffect(() => {
       const container = categoriesContainerRef.current;
 
-      // Prevenir scroll vertical cuando se usa la rueda para scroll horizontal
       const preventVerticalScroll = (e) => {
         if (e.deltaY === 0) return;
 
@@ -663,59 +779,109 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     }, []);
 
     return (
-      <div className="flex items-center mb-8 w-full relative">
-        {/* Título centrado verticalmente */}
-        <h2 className="text-xl font-bold uppercase mr-4 text-gray-800 w-36 flex-shrink-0 self-center">
-          CATEGORÍAS
-        </h2>
-
-        {/* Contenedor del carrusel que ocupa el resto del espacio */}
-        <div className="flex-grow relative">
-          <div
-            ref={categoriesContainerRef}
-            className="flex overflow-x-auto space-x-4 pb-4 pt-2 px-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth"
-            onScroll={checkScrollPosition}
-          >
-            {CATEGORIES.map((category) => (
-              <button
-                key={category.path}
-                onClick={() => handleCategoryClick(category.path)}
-                className="flex-shrink-0 bg-white p-4 rounded-lg shadow hover:shadow-md flex flex-col items-center justify-center w-32 h-32 hover:bg-gray-50 border border-gray-200 transition-all duration-200 hover:scale-95"
+      <div className="w-[1600px] pb-3">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center relative">
+            <h2 className="text-xl font-bold uppercase mr-8 text-gray-600 w-36 flex-shrink-0 self-center ml-[-80px]">
+              CATEGORÍAS
+            </h2>
+            {/* Contenedor del carrusel expandido */}
+            <div className="flex-grow relative overflow-hidden">
+              <div
+                ref={categoriesContainerRef}
+                className="flex overflow-x-auto space-x-4 pb-4 pt-2 px-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth"
+                onScroll={checkScrollPosition}
               >
-                <span className="text-2xl mb-2">{category.icon}</span>
-                <span className="text-sm font-medium text-gray-700 uppercase">
-                  {category.label}
-                </span>
-              </button>
-            ))}
+                {CATEGORIES.map((category) => (
+                  <button
+                    key={category.path}
+                    onClick={() => handleCategoryClick(category.path)}
+                    className="flex-shrink-0 bg-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center w-32 h-36 hover:bg-blue-50 border border-gray-100 transition-all duration-200 hover:scale-105 group"
+                  >
+                    <span className="text-2xl mb-3 text-black group-hover:text-blue-800">
+                      {category.icon}
+                    </span>
+                    <span className="text-xs font-semibold text-gray-700 uppercase text-center px-1 group-hover:text-blue-900">
+                      {category.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Botones de navegación mejorados */}
+              {showLeftButton && (
+                <button
+                  onClick={() => scrollCategories("left")}
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-100 shadow-lg rounded-full p-3 hover:scale-110 transition-all duration-200 z-10 border border-gray-200"
+                  aria-label="Categorías anteriores"
+                >
+                  <ChevronLeft className="text-blue-600" size={32} />
+                </button>
+              )}
+
+              {showRightButton && (
+                <button
+                  onClick={() => scrollCategories("right")}
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-100 shadow-lg rounded-full p-3 hover:scale-110 transition-all duration-200 z-10 border border-gray-200"
+                  aria-label="Más categorías"
+                >
+                  <ChevronRight className="text-blue-600" size={32} />
+                </button>
+              )}
+            </div>
           </div>
-
-          {showLeftButton && (
-            <button
-              onClick={() => scrollCategories("left")}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white hover:bg-gray-100 shadow-md rounded-full p-2 hover:scale-110 transition-transform duration-200 z-10"
-              aria-label="Categorías anteriores"
-            >
-              <ChevronLeft className="text-gray-600" size={20} />
-            </button>
-          )}
-
-          {showRightButton && (
-            <button
-              onClick={() => scrollCategories("right")}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white hover:bg-gray-100 shadow-md rounded-full p-2 hover:scale-110 transition-transform duration-200 z-10"
-              aria-label="Más categorías"
-            >
-              <ChevronRight className="text-gray-600" size={20} />
-            </button>
-          )}
         </div>
       </div>
     );
   };
 
+  // const Anuncios = () => (
+  //   <section className="mb-12">
+  //     <h2 className="text-center text-2xl font-bold mb-4">
+  //       Anuncios de Temporada
+  //     </h2>
+  //     <div className="w-full mx-auto">
+  //       <Slider {...SLIDER_SETTINGS}>
+  //         {ANUNCIOS.map((anuncio, index) => (
+  //           <div key={index} className="px-2">
+  //             <div className="bg-white rounded-lg overflow-hidden shadow-lg">
+  //               <div className="relative h-64 md:h-100 overflow-hidden bg-gradient-to-r from-blue-100 via-yellow-100 to-orange-100">
+  //                 {anuncio.tag && (
+  //                   <div className="absolute top-4 left-4 z-10">
+  //                     <div
+  //                       className={`${anuncio.tagColor} text-white px-3 py-1 rounded-lg font-bold flex items-center`}
+  //                     >
+  //                       {anuncio.tagIcon && (
+  //                         <span className="mr-1">{anuncio.tagIcon}</span>
+  //                       )}
+  //                       {anuncio.tag}
+  //                     </div>
+  //                   </div>
+  //                 )}
+  //                 {anuncio.badge && (
+  //                   <div className="absolute top-4 right-4 z-10">
+  //                     <div className="bg-white text-gray-800 px-3 py-1 rounded-full text-xs font-medium shadow-sm">
+  //                       {anuncio.badge}
+  //                     </div>
+  //                   </div>
+  //                 )}
+  //                 <img
+  //                   src={anuncio.imagen}
+  //                   className="w-full h-full object-cover"
+  //                   alt={anuncio.alt}
+  //                 />
+  //               </div>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </Slider>
+  //     </div>
+  //   </section>
+  // );
   const Anuncios = () => (
-    <section className="mb-12">
+    <section className="mb-12 max-w-7xl mx-auto px-4">
+      {" "}
+      {/* Contenedor con ancho máximo */}
       <h2 className="text-center text-2xl font-bold mb-4">
         Anuncios de Temporada
       </h2>
@@ -724,7 +890,8 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
           {ANUNCIOS.map((anuncio, index) => (
             <div key={index} className="px-2">
               <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-                <div className="relative h-64 md:h-72 overflow-hidden bg-gradient-to-r from-blue-100 via-yellow-100 to-orange-100">
+                {/* Relaciones de aspecto personalizadas con aspect-ratio */}
+                <div className="relative aspect-[16/9] md:aspect-[16/7] lg:aspect-[16/5] overflow-hidden bg-gradient-to-r from-blue-100 via-yellow-100 to-orange-100">
                   {anuncio.tag && (
                     <div className="absolute top-4 left-4 z-10">
                       <div
@@ -757,7 +924,6 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       </div>
     </section>
   );
-
   const Footer = () => (
     <footer className="py-8 flex justify-center items-center">
       <img src={logoLetras} alt="SOAP Logo" className="w-[150px]" />
@@ -777,6 +943,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       <Header />
       <main className="container mx-auto px-4 py-8 relative z-10">
         <Categorias />
+        <OfertasDestacadas />
         <Anuncios />
       </main>
       <Footer />

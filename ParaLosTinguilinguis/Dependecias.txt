@@ -80,3 +80,8 @@ npm run dev   # para usar nodemon
 
 para los mensajes no alert:
 npm install react-toastify
+
+
+
+Instalar esto 
+npm install axios

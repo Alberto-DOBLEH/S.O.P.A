@@ -7,11 +7,11 @@ import Registro from "./Registro";
 import ContraNueva from "./ContraNueva";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"; // ⬅️ importa el contexto
+import { AuthContext } from "../context/AuthContext"; // ⬅ importa el contexto
 
 const Login = ({ onClose }) => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // ⬅️ accede a la función login del contexto
+  const { login } = useContext(AuthContext); // ⬅ accede a la función login del contexto
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

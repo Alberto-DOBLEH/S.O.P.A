@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   logoCompleto,
@@ -12,11 +12,15 @@ import {
   alanSombrero,
   hotsale,
 } from "../assets/imagenes/imagenesslider";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Login from "./Login"; // Importa tu componente Login existente
+
+import { AuthContext } from '../context/AuthContext'; // Asegúrate de importar el contexto de autenticación
+import { toast } from 'react-toastify'; // Importa la librería de toast
+
 // import { ICONS } from "../assets/iconos/iconos";
 import {
   FaSearch,
@@ -705,7 +709,9 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     }
   };
 
-  const navigateTo = {
+  const { logout } = useContext(AuthContext);
+
+  const navigateTo = { 
     home: () => navigate("/"),
     carrito: () => navigate("/carrito"),
     login: () => (onLoginClick ? onLoginClick() : navigate("/login")),
@@ -725,10 +731,12 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     venta: () => navigate("/venta"),
     verArticulo: () => navigate("/VerArticulo"),
     logout: () => {
-      console.log("Cerrando sesión");
-      navigate("/logout");
+      logout();
+      toast.success("Sesión cerrada exitosamente", {
+        toastId: "logout-exito",
+      });
+      navigate("/login");
     },
-    buscar: (term) => navigate(`/buscar?q=${encodeURIComponent(term)}`),
   };
 
   const handleMouseEnter = () => {

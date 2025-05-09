@@ -81,6 +81,11 @@ import {
 } from "react-icons/fa";
 import axios from "axios"; // Para realizar peticiones a la API/BD
 import { BsPatchCheck } from "react-icons/bs";
+
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+
+
 // CATEGORÍAS
 const CATEGORIES = [
   { icon: <FaMobile size={36} />, label: "Smartphones", path: "/telefonos" },
@@ -693,7 +698,6 @@ const OfertasDestacadas = () => {
 const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
   const [showOpciones, setShowOpciones] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
   const menuRef = useRef(null);
   const timeoutRef = useRef(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -705,31 +709,35 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     }
   };
 
-  const navigateTo = {
-    home: () => navigate("/"),
-    carrito: () => navigate("/carrito"),
-    login: () => (onLoginClick ? onLoginClick() : navigate("/login")),
-    perfil: () => navigate("/perfil"),
-    favoritos: () => navigate("/lista-deseos"),
-    notificaciones: () => navigate("/notificaciones"),
-    historial: () => navigate("/historial-compras"),
-    pedidos: () => navigate("/pedidos-activos"),
-    tarjetas: () => navigate("/tarjeta"),
-    cupones: () => navigate("/cupones"),
-    listaDeseos: () => navigate("/lista-deseos"),
-    listaCompras: () => navigate("/lista-compras"),
-    ayuda: () => navigate("/ayuda"),
-    privacidad: () => navigate("/privacidad"),
-    soporte: () => navigate("/soporte"),
-    configuracion: () => navigate("/configuracion"),
-    venta: () => navigate("/venta"),
-    verArticulo: () => navigate("/VerArticulo"),
-    logout: () => {
-      console.log("Cerrando sesión");
-      navigate("/logout");
-    },
-    buscar: (term) => navigate(`/buscar?q=${encodeURIComponent(term)}`),
-  };
+  const { logout } = useContext(AuthContext);
+const navigate = useNavigate();
+
+const navigateTo = { 
+  home: () => navigate("/"),
+  carrito: () => navigate("/carrito"),
+  login: () => (onLoginClick ? onLoginClick() : navigate("/login")),
+  perfil: () => navigate("/perfil"),
+  favoritos: () => navigate("/lista-deseos"),
+  notificaciones: () => navigate("/notificaciones"),
+  historial: () => navigate("/historial-compras"),
+  pedidos: () => navigate("/pedidos-activos"),
+  tarjetas: () => navigate("/tarjeta"),
+  cupones: () => navigate("/cupones"),
+  listaDeseos: () => navigate("/lista-deseos"),
+  listaCompras: () => navigate("/lista-compras"),
+  ayuda: () => navigate("/ayuda"),
+  privacidad: () => navigate("/privacidad"),
+  soporte: () => navigate("/soporte"),
+  configuracion: () => navigate("/configuracion"),
+  venta: () => navigate("/venta"),
+  verArticulo: () => navigate("/VerArticulo"),
+  logout: () => {
+    logout();
+    navigate("/login");
+  },
+  buscar: (term) => navigate(`/buscar?q=${encodeURIComponent(term)}`),
+};
+
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) {

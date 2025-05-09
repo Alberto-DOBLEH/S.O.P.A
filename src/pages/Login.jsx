@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Button from "../components/UI/Button";
 import Input from "../components/UI/input";
 import Card from "../components/Layout/Card";
@@ -6,8 +6,13 @@ import backgroundImage from "../assets/imagenes/logo-completo.png";
 import Registro from "./Registro";
 import ContraNueva from "./ContraNueva";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext"; // ⬅️ importa el contexto
 
 const Login = ({ onClose }) => {
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // ⬅️ accede a la función login del contexto
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showRegistro, setShowRegistro] = useState(false);
@@ -16,14 +21,14 @@ const Login = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     toast.dismiss();
-
+  
     if (!username || !password) {
       toast.error("Por favor completa todos los campos.", {
         toastId: "login-vacio",
       });
       return;
     }
-
+  
     let data = {};
     try {
       const response = await fetch("http://localhost:3001/api/login", {
@@ -36,26 +41,23 @@ const Login = ({ onClose }) => {
           contraseña: password,
         }),
       });
-
+  
       try {
         data = await response.json();
       } catch (e) {
         data.mensaje = "Respuesta no válida del servidor";
       }
-
+  
       if (response.ok) {
         toast.success("Inicio de sesión exitoso", { toastId: "login-exito" });
-
-        console.log("Respuesta del backend:", data); // 🔍 Ver qué llega
-
+  
         if (data.token && data.usuario) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("nombre", data.usuario.nombre);
+          // Usamos el contexto para iniciar sesión
+          login({ nombre: data.usuario.nombre, token: data.token });
+          navigate("/");  // Redirige a la página principal
         } else {
           throw new Error("Respuesta del backend incompleta");
         }
-
-        onClose();
       } else {
         toast.error(data.mensaje || "Error al iniciar sesión", {
           toastId: "login-error",
@@ -68,6 +70,7 @@ const Login = ({ onClose }) => {
       });
     }
   };
+  
 
   if (showRegistro) {
     return <Registro onClose={() => setShowRegistro(false)} />;
@@ -139,23 +142,6 @@ const Login = ({ onClose }) => {
           </form>
         </div>
       </Card>
-    </div>
-  );
-};
-
-const App = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  return (
-    <div>
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="p-2 bg-blue-500 text-white rounded"
-      >
-        Abrir Login
-      </button>
-
-      {isModalOpen && <Login onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };

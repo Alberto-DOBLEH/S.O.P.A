@@ -58,7 +58,9 @@ import VentaArticulo from "./pages/VentaArticulo";
 import VentaCarro from "./pages/VentaCarro";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { AuthProvider } from "./context/AuthContext";
+import RutaPrivada from "./components/RutaPrivada";
+import ZonaPrivada from "./pages/ZonaPrivada";
 
 
 // Comenta temporalmente estas importaciones si no existen aún
@@ -72,24 +74,76 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<Login onClose={() => {}} />} />
-        <Route path="/registro" element={<Registro />} />
-        <Route path="/contra-nueva" element={<ContraNueva />} />
-        <Route path="/perfil" element={<Perfil />} />
-        <Route path="/tarjeta" element={<Tarjeta />} />
-        <Route path="/carrito" element={<CarritoCompras />} />
-        <Route path="/lista-deseos" element={<ListaDeseos />} />
-        <Route path="/lista-compras" element={<ListaCompras />} />
-        <Route path="/ayuda" element={<Ayuda />} />
-        <Route path="/configuracion" element={<Configuracion />} />
-        <Route path="/Venta" element={<Venta />} />
-        <Route path="/VentaCarro" element={<VentaCarro />} />
-        <Route path="/VentaArticulo" element={<VentaArticulo />} />
-        <Route path="/productos" element={<ListaProductos />} />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<Login onClose={() => {}} />} />
+          <Route path="/registro" element={<Registro />} />
+          <Route path="/contra-nueva" element={<ContraNueva />} />
+          <Route path="/productos" element={<ListaProductos />} />
+          <Route path="/ayuda" element={<Ayuda />} />
 
+          <Route path="/perfil" element={
+            <RutaPrivada>
+              <Perfil />
+            </RutaPrivada>
+          } />
+
+          <Route path="/tarjeta" element={
+            <RutaPrivada>
+              <Tarjeta />
+            </RutaPrivada>
+          } />
+
+          <Route path="/carrito" element={
+            <RutaPrivada>
+              <CarritoCompras />
+            </RutaPrivada>
+          } />
+
+          <Route path="/lista-deseos" element={
+            <RutaPrivada>
+              <ListaDeseos />
+            </RutaPrivada>
+          } />
+
+          <Route path="/lista-compras" element={
+            <RutaPrivada>
+              <ListaCompras />
+            </RutaPrivada>
+          } />
+
+          <Route path="/configuracion" element={
+            <RutaPrivada>
+              <Configuracion />
+            </RutaPrivada>
+          } />
+
+          <Route path="/venta" element={
+            <RutaPrivada>
+              <Venta />
+            </RutaPrivada>
+          } />
+
+          <Route path="/venta-carro" element={
+            <RutaPrivada>
+              <VentaCarro />
+            </RutaPrivada>
+          } />
+
+          <Route path="/venta-articulo" element={
+            <RutaPrivada>
+              <VentaArticulo />
+            </RutaPrivada>
+          } />
+
+          <Route path="/zona" element={
+            <RutaPrivada>
+              <ZonaPrivada />
+            </RutaPrivada>
+          } />
+        
         {/* Comenta temporalmente estas rutas si los componentes no existen */}
         {/* <Route path="/notificaciones" element={<Notificaciones />} />
         <Route path="/historial-compras" element={<HistorialCompras />} />
@@ -112,6 +166,7 @@ function App() {
   theme="colored"
 />
     </Router>
+    </AuthProvider>
   );
 }
 

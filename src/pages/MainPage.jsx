@@ -18,8 +18,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Login from "./Login"; // Importa tu componente Login existente
 
-import { AuthContext } from '../context/AuthContext'; // Asegúrate de importar el contexto de autenticación
-import { toast } from 'react-toastify'; // Importa la librería de toast
+import { AuthContext } from "../context/AuthContext"; // Asegúrate de importar el contexto de autenticación
+import { toast } from "react-toastify"; // Importa la librería de toast
 
 // import { ICONS } from "../assets/iconos/iconos";
 import {
@@ -371,7 +371,7 @@ const ArticulosMasVendidos = () => {
               ARTÍCULOS MÁS VENDIDOS
             </h2>
           </div>
-          <button className="text-orange-600 font-medium hover:text-orange-800 flex items-center">
+          <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
             Ver todos <FaChevronRight className="ml-1" size={14} />
           </button>
         </div>
@@ -491,47 +491,7 @@ const SLIDER_SETTINGS = {
     },
   ],
 };
-// const SLIDER_SETTINGS = {
-//   dots: true,
-//   infinite: true,
-//   speed: 500,
-//   slidesToShow: 1,
-//   slidesToScroll: 1,
-//   autoplay: true,
-//   autoplaySpeed: 5000,
-//   pauseOnHover: true,
-//   // Puedes agregar estas propiedades para modificar el comportamiento
-//   centerMode: true, // Centra el slide actual
-//   // centerPadding: "60px", // Añade padding a los lados (muestra parte de los slides vecinos)
-//   responsive: [
-//     {
-//       breakpoint: 1024,
-//       settings: {
-//         slidesToShow: 1,
-//         slidesToScroll: 1,
-//         // centerPadding: "40px",
-//       },
-//     },
-//     {
-//       breakpoint: 768,
-//       settings: {
-//         slidesToShow: 1,
-//         slidesToScroll: 1,
-//         // centerPadding: "20px",
-//       },
-//     },
-//     {
-//       breakpoint: 480,
-//       settings: {
-//         slidesToShow: 1,
-//         slidesToScroll: 1,
-//         arrows: false,
-//         dots: true,
-//         centerMode: false, // Desactiva centerMode en móviles
-//       },
-//     },
-//   ],
-// };
+
 const OfertasDestacadas = () => {
   // Datos de ejemplo para ofertas destacadas
   const OFERTAS = [
@@ -664,7 +624,7 @@ const OfertasDestacadas = () => {
                 </div>
 
                 {/* Botón de compra */}
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
                   <FaShoppingCart className="mr-2" />
                   Agregar al carrito
                 </button>
@@ -694,6 +654,7 @@ const OfertasDestacadas = () => {
     </section>
   );
 };
+
 const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
   const [showOpciones, setShowOpciones] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -711,7 +672,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
 
   const { logout } = useContext(AuthContext);
 
-  const navigateTo = { 
+  const navigateTo = {
     home: () => navigate("/"),
     carrito: () => navigate("/carrito"),
     login: () => (onLoginClick ? onLoginClick() : navigate("/login")),
@@ -772,6 +733,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       }
     };
   }, []);
+
   const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
@@ -805,6 +767,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       </form>
     );
   };
+
   const MenuSection = ({ title, children }) => (
     <div className="py-2 px-1">
       <h3 className="text-xs font-semibold text-gray-500 px-3 mb-2">{title}</h3>
@@ -1013,128 +976,6 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     );
   };
 
-  // const Categorias = () => {
-  //   const navigate = useNavigate();
-  //   const [showLeftButton, setShowLeftButton] = useState(false);
-  //   const [showRightButton, setShowRightButton] = useState(true);
-  //   const categoriesContainerRef = useRef(null);
-
-  //   const handleCategoryClick = (path) => {
-  //     navigate(path);
-  //   };
-
-  //   const checkScrollPosition = () => {
-  //     if (categoriesContainerRef.current) {
-  //       const { scrollLeft, scrollWidth, clientWidth } =
-  //         categoriesContainerRef.current;
-  //       setShowLeftButton(scrollLeft > 5);
-  //       setShowRightButton(scrollLeft < scrollWidth - clientWidth - 5);
-  //     }
-  //   };
-
-  //   const scrollCategories = (direction) => {
-  //     if (categoriesContainerRef.current) {
-  //       const cardWidth = 128;
-  //       const visibleWidth = categoriesContainerRef.current.clientWidth;
-  //       const scrollAmount =
-  //         Math.floor(visibleWidth / cardWidth) * cardWidth * 0.8;
-
-  //       categoriesContainerRef.current.scrollBy({
-  //         left: direction === "left" ? -scrollAmount : scrollAmount,
-  //         behavior: "smooth",
-  //       });
-
-  //       setTimeout(checkScrollPosition, 500);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     const container = categoriesContainerRef.current;
-  //     const preventVerticalScroll = (e) => {
-  //       if (e.deltaY === 0) return;
-  //       if (
-  //         (e.deltaY < 0 && container.scrollLeft <= 0) ||
-  //         (e.deltaY > 0 &&
-  //           container.scrollLeft >=
-  //             container.scrollWidth - container.clientWidth)
-  //       ) {
-  //         e.preventDefault();
-  //       }
-  //     };
-
-  //     if (container) {
-  //       container.addEventListener("wheel", preventVerticalScroll, {
-  //         passive: false,
-  //       });
-  //       checkScrollPosition();
-  //     }
-
-  //     window.addEventListener("resize", checkScrollPosition);
-  //     return () => {
-  //       if (container) {
-  //         container.removeEventListener("wheel", preventVerticalScroll);
-  //       }
-  //       window.removeEventListener("resize", checkScrollPosition);
-  //     };
-  //   }, []);
-
-  //   return (
-  //     <div className="w-full py-2 overflow-hidden">
-  //       <div className="container mx-auto px-1">
-  //         <div className="flex items-center relative">
-  //           <h2 className="text-xl font-bold uppercase mr-4 lg:mr-8 text-gray-600 w-24 lg:w-36 flex-shrink-0">
-  //             CATEGORÍAS
-  //           </h2>
-
-  //           <div className="flex-grow relative overflow-hidden">
-  //             <div
-  //               ref={categoriesContainerRef}
-  //               className="flex overflow-x-auto space-x-4 pb-2 pt-2 px-2 scrollbar-hide scroll-smooth"
-  //               onScroll={checkScrollPosition}
-  //             >
-  //               {CATEGORIES.map((category) => (
-  //                 <button
-  //                   key={category.path}
-  //                   onClick={() => handleCategoryClick(category.path)}
-  //                   className="flex-shrink-0 bg-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center w-28 h-32 sm:w-32 sm:h-36 hover:bg-blue-300 border border-gray-100 transition-all duration-200 hover:scale-105 group"
-  //                 >
-  //                   <span className="text-2xl mb-3 text-black group-hover:text-cyan-900">
-  //                     {category.icon}
-  //                   </span>
-  //                   <span className="text-xs font-semibold text-gray-700 uppercase text-center px-1 group-hover:text-white">
-  //                     {category.label}
-  //                   </span>
-  //                 </button>
-  //               ))}
-  //             </div>
-
-  //             {/* Boton slider izquierda */}
-  //             {showLeftButton && (
-  //               <button
-  //                 onClick={() => scrollCategories("left")}
-  //                 className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-200 shadow-lg rounded-full p-2 sm:p-3 hover:scale-110 transition-all duration-200 z-10 border border-gray-200"
-  //                 aria-label="Categorías anteriores"
-  //               >
-  //                 <ChevronLeft className="text-blue-600" size={24} />
-  //               </button>
-  //             )}
-
-  //             {/* Boton slider izquierda */}
-  //             {showRightButton && (
-  //               <button
-  //                 onClick={() => scrollCategories("right")}
-  //                 className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-100 shadow-lg rounded-full p-2 sm:p-3 hover:scale-110 transition-all duration-200 z-10 border border-gray-200"
-  //                 aria-label="Más categorías"
-  //               >
-  //                 <ChevronRight className="text-blue-600" size={24} />
-  //               </button>
-  //             )}
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
   const Categorias = () => {
     const navigate = useNavigate();
     const [showLeftButton, setShowLeftButton] = useState(false);
@@ -1201,8 +1042,8 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     }, []);
 
     return (
-      <div className="w-full py-0">
-        <div className="container mx-auto px-1">
+      <div className="w-full py-2 relative before:absolute before:inset-0 before:bg-gray-50 before:opacity-50">
+        <div className="container mx-auto px-1 relative z-10">
           <div className="flex items-center relative">
             <h2 className="text-xl font-bold uppercase mr-4 lg:mr-8 text-gray-600 w-24 lg:w-36 flex-shrink-0">
               CATEGORÍAS
@@ -1219,12 +1060,17 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                   <button
                     key={category.path}
                     onClick={() => handleCategoryClick(category.path)}
-                    className="flex-shrink-0 bg-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center w-28 h-32 sm:w-32 sm:h-36 hover:bg-blue-300 border border-gray-100 transition-all duration-200 hover:scale-105 group"
+                    className="flex-shrink-0 bg-white p-4 rounded-xl shadow-xl flex flex-col items-center justify-center w-28 h-32 sm:w-32 sm:h-36 hover:bg-blue-300 border border-gray-100 transition-all duration-300 hover:scale-105 group relative"
+                    style={{
+                      boxShadow:
+                        "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.03)",
+                    }}
                   >
-                    <span className="text-2xl mb-3 text-black group-hover:text-cyan-900">
+                    <div className="absolute inset-0 rounded-xl opacity-0 bg-gradient-to-b from-white to-transparent group-hover:opacity-10"></div>
+                    <span className="text-2xl mb-3 text-black group-hover:text-cyan-900 transition-colors duration-300">
                       {category.icon}
                     </span>
-                    <span className="text-xs font-semibold text-gray-700 uppercase text-center px-1 group-hover:text-white">
+                    <span className="text-xs font-semibold text-gray-700 uppercase text-center px-1 group-hover:text-white transition-colors duration-300">
                       {category.label}
                     </span>
                   </button>
@@ -1235,7 +1081,11 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
               {showLeftButton && (
                 <button
                   onClick={() => scrollCategories("left")}
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-200 shadow-lg rounded-full p-2 sm:p-3 hover:scale-110 transition-all duration-200 z-10 border border-gray-200"
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-200 shadow-xl rounded-full p-2 sm:p-3 hover:scale-110 transition-all duration-300 z-10 border border-gray-200"
+                  style={{
+                    boxShadow:
+                      "0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1)",
+                  }}
                   aria-label="Categorías anteriores"
                 >
                   <ChevronLeft className="text-blue-600" size={24} />
@@ -1246,7 +1096,11 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
               {showRightButton && (
                 <button
                   onClick={() => scrollCategories("right")}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-100 shadow-lg rounded-full p-2 sm:p-3 hover:scale-110 transition-all duration-200 z-10 border border-gray-200"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-100 shadow-xl rounded-full p-2 sm:p-3 hover:scale-110 transition-all duration-300 z-10 border border-gray-200"
+                  style={{
+                    boxShadow:
+                      "0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1)",
+                  }}
                   aria-label="Más categorías"
                 >
                   <ChevronRight className="text-blue-600" size={24} />
@@ -1259,24 +1113,171 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     );
   };
 
+  // const Categorias = () => {
+  //   const navigate = useNavigate();
+  //   const [showLeftButton, setShowLeftButton] = useState(false);
+  //   const [showRightButton, setShowRightButton] = useState(true);
+  //   const categoriesContainerRef = useRef(null);
+
+  //   const handleCategoryClick = (path) => {
+  //     navigate(path);
+  //   };
+
+  //   const checkScrollPosition = () => {
+  //     if (categoriesContainerRef.current) {
+  //       const { scrollLeft, scrollWidth, clientWidth } =
+  //         categoriesContainerRef.current;
+  //       setShowLeftButton(scrollLeft > 5);
+  //       setShowRightButton(scrollLeft < scrollWidth - clientWidth - 5);
+  //     }
+  //   };
+
+  //   const scrollCategories = (direction) => {
+  //     if (categoriesContainerRef.current) {
+  //       const cardWidth = 128;
+  //       const visibleWidth = categoriesContainerRef.current.clientWidth;
+  //       const scrollAmount =
+  //         Math.floor(visibleWidth / cardWidth) * cardWidth * 0.8;
+
+  //       categoriesContainerRef.current.scrollBy({
+  //         left: direction === "left" ? -scrollAmount : scrollAmount,
+  //         behavior: "smooth",
+  //       });
+
+  //       setTimeout(checkScrollPosition, 500);
+  //     }
+  //   };
+
+  //   useEffect(() => {
+  //     const container = categoriesContainerRef.current;
+  //     const preventVerticalScroll = (e) => {
+  //       if (e.deltaY === 0) return;
+  //       if (
+  //         (e.deltaY < 0 && container.scrollLeft <= 0) ||
+  //         (e.deltaY > 0 &&
+  //           container.scrollLeft >=
+  //             container.scrollWidth - container.clientWidth)
+  //       ) {
+  //         e.preventDefault();
+  //       }
+  //     };
+
+  //     if (container) {
+  //       container.addEventListener("wheel", preventVerticalScroll, {
+  //         passive: false,
+  //       });
+  //       checkScrollPosition();
+  //     }
+
+  //     window.addEventListener("resize", checkScrollPosition);
+  //     return () => {
+  //       if (container) {
+  //         container.removeEventListener("wheel", preventVerticalScroll);
+  //       }
+  //       window.removeEventListener("resize", checkScrollPosition);
+  //     };
+  //   }, []);
+
+  //   return (
+  //     <div className="w-full py-1 relative before:absolute before:inset-0 before:bg-gray-50 before:opacity-50">
+  //       <div className="container mx-auto px-1 relative z-10">
+  //         <div className="flex items-center relative">
+  //           <h2 className="text-xl font-bold uppercase mr-4 lg:mr-8 text-gray-600 w-24 lg:w-36 flex-shrink-0">
+  //             CATEGORÍAS
+  //           </h2>
+
+  //           <div className="flex-grow relative overflow-hidden">
+  //             <div
+  //               ref={categoriesContainerRef}
+  //               className="flex overflow-x-auto space-x-4 pt-2 px-2 scrollbar-hide scroll-smooth no-scrollbar"
+  //               onScroll={checkScrollPosition}
+  //               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+  //             >
+  //               {CATEGORIES.map((category) => (
+  //                 <button
+  //                   key={category.path}
+  //                   onClick={() => handleCategoryClick(category.path)}
+  //                   className="flex-shrink-0 bg-white p-4 rounded-xl shadow-xl flex flex-col items-center justify-center w-28 h-32 sm:w-32 sm:h-36 hover:bg-blue-300 border border-gray-100 transition-all duration-300 hover:scale-105 group relative"
+  //                   style={{
+  //                     boxShadow:
+  //                       "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.03)",
+  //                   }}
+  //                 >
+  //                   <div className="absolute inset-0 rounded-xl opacity-0 bg-gradient-to-b from-white to-transparent group-hover:opacity-10"></div>
+  //                   <span className="text-2xl mb-3 text-black group-hover:text-cyan-900 transition-colors duration-300">
+  //                     {category.icon}
+  //                   </span>
+  //                   <span className="text-xs font-semibold text-gray-700 uppercase text-center px-1 group-hover:text-white transition-colors duration-300">
+  //                     {category.label}
+  //                   </span>
+  //                 </button>
+  //               ))}
+  //             </div>
+
+  //             {/* Boton slider izquierda */}
+  //             {showLeftButton && (
+  //               <button
+  //                 onClick={() => scrollCategories("left")}
+  //                 className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-200 shadow-xl rounded-full p-2 sm:p-3 hover:scale-110 transition-all duration-300 z-10 border border-gray-200"
+  //                 style={{
+  //                   boxShadow:
+  //                     "0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1)",
+  //                 }}
+  //                 aria-label="Categorías anteriores"
+  //               >
+  //                 <ChevronLeft className="text-blue-600" size={24} />
+  //               </button>
+  //             )}
+
+  //             {/* Boton slider derecha */}
+  //             {showRightButton && (
+  //               <button
+  //                 onClick={() => scrollCategories("right")}
+  //                 className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-100 shadow-xl rounded-full p-2 sm:p-3 hover:scale-110 transition-all duration-300 z-10 border border-gray-200"
+  //                 style={{
+  //                   boxShadow:
+  //                     "0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1)",
+  //                 }}
+  //                 aria-label="Más categorías"
+  //               >
+  //                 <ChevronRight className="text-blue-600" size={24} />
+  //               </button>
+  //             )}
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
   const Anuncios = () => (
-    <section className="mb-8 max-w-7xl mx-auto px-4">
-      {" "}
-      {/* Contenedor con ancho máximo */}
-      <h2 className="text-center text-2xl font-bold mb-4">
-        Anuncios de Temporada
-      </h2>
+    <section className="mb-8 max-w-7xl mx-auto px-4 py relative ">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold  relative inline-block">
+          Anuncios de Temporada
+        </h2>
+      </div>
       <div className="w-full mx-auto">
         <Slider {...SLIDER_SETTINGS}>
           {ANUNCIOS.map((anuncio, index) => (
             <div key={index} className="px-2">
-              <div className="bg-white rounded-lg overflow-hidden shadow-lg">
+              <div
+                className="bg-white rounded-xl overflow-hidden "
+                style={{
+                  boxShadow:
+                    "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05)",
+                }}
+              >
                 {/* Relaciones de aspecto personalizadas con aspect-ratio */}
                 <div className="relative aspect-[16/9] md:aspect-[16/7] lg:aspect-[16/5] overflow-hidden bg-gradient-to-r from-blue-100 via-yellow-100 to-orange-100">
                   {anuncio.tag && (
                     <div className="absolute top-4 left-4 z-10">
                       <div
-                        className={`${anuncio.tagColor} text-white px-3 py-1 rounded-lg font-bold flex items-center`}
+                        className={`${anuncio.tagColor} text-white px-3 py-1 rounded-lg font-bold flex items-center filter drop-shadow-md`}
+                        style={{
+                          boxShadow:
+                            "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                        }}
                       >
                         {anuncio.tagIcon && (
                           <span className="mr-1">{anuncio.tagIcon}</span>
@@ -1287,15 +1288,25 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                   )}
                   {anuncio.badge && (
                     <div className="absolute top-4 right-4 z-10">
-                      <div className="bg-white text-gray-800 px-3 py-1 rounded-full text-xs font-medium shadow-sm">
+                      <div
+                        className="bg-white text-gray-800 px-3 py-1 rounded-full text-xs font-medium"
+                        style={{
+                          boxShadow:
+                            "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                        }}
+                      >
                         {anuncio.badge}
                       </div>
                     </div>
                   )}
+                  <div className="absolute inset-0 shadow-inner bg-gradient-to-t from-black/20 to-transparent opacity-30 pointer-events-none"></div>
                   <img
                     src={anuncio.imagen}
                     className="w-full h-full object-cover"
                     alt={anuncio.alt}
+                    style={{
+                      filter: "brightness(1.02) contrast(1.05)",
+                    }}
                   />
                 </div>
               </div>
@@ -1324,9 +1335,9 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       <Header />
       <main className="container mx-auto px-4 py-8 relative z-10">
         <Categorias />
+        <Anuncios />
         <OfertasDestacadas />
         <ArticulosMasVendidos />
-        <Anuncios />
       </main>
       <Footer />
 

@@ -86,3 +86,52 @@ npm install react-toastify
 Instalar esto 
 npm install axios
 npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons
+
+
+
+npm install postcss@^8.4.31 --save-dev
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Instalar todo al clonar (algunos por si acaso):
+
+//////////////////////////////////////////////////
+npm install
+npm install tailwindcss postcss autoprefixer
+npx tailwindcss init
+npm install postcss
+
+npm i bootstrap-icons
+npm install lucide-react react-slick slick-carousel
+npm install react-toastify
+npm install axios
+npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons
+npm install postcss@^8.4.31 --save-dev
+
+////////////////////////////////////////////////////////
+Para carpeta backend:
+npm init -y
+npm install express mysql2 cors body-parser
+
+Comando para iniciar la conexion:
+npm run dev   # para usar nodemon
+////////////////////////////////////////////////////////
+Para el archivo a crear en backend .env para la clave (el nombre del archivo es simplemente ".env"):
+
+JWT_SECRET=clave_secreta_super_segura
+PORT=3001
+////////////////////////////

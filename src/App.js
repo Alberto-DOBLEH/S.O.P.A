@@ -30,6 +30,8 @@ import ZonaPrivada from "./pages/ZonaPrivada";
 // import Soporte from "./pages/Soporte";
 // import BuscarResultados from "./pages/BuscarResultados";
 
+const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
+
 function App() {
   return (
     <AuthProvider>
@@ -63,9 +65,11 @@ function App() {
           <Route
             path="/carrito"
             element={
+              MODO_DESARROLLO ? <CarritoCompras /> : (
               <RutaPrivada>
                 <CarritoCompras />
               </RutaPrivada>
+              )
             }
           />
 

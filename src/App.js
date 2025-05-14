@@ -30,7 +30,7 @@ import ZonaPrivada from "./pages/ZonaPrivada";
 // import Soporte from "./pages/Soporte";
 // import BuscarResultados from "./pages/BuscarResultados";
 
-const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
+const MODO_DESARROLLO = false; // Cambia a false para volver a proteger
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/login" element={<Login onClose={() => {}} />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
           <Route path="/contra-nueva" element={<ContraNueva />} />
           <Route path="/productos" element={<ListaProductos />} />

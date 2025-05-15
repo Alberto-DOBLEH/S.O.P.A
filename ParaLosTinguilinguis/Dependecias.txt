@@ -86,7 +86,8 @@ npm install react-toastify
 Instalar esto 
 npm install axios
 npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons
-
+//multer para uploads
+npm install multer
 
 
 npm install postcss@^8.4.31 --save-dev

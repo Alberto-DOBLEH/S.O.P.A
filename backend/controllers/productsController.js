@@ -1,4 +1,5 @@
 const db = require('../db');
+const path = require("path");
 
 // 🔍 Obtener todos los productos
 const getProductos = (req, res) => {
@@ -44,9 +45,27 @@ const eliminarProducto = (req, res) => {
   });
 };
 
+
+const subirImagenProducto = (req, res) => {
+  const id = req.params.id_producto;
+  if (!req.file) return res.status(400).json({ error: "No se subió archivo" });
+
+  const ruta = `/uploads/${req.file.filename}`; // ruta pública
+  // Guardar la ruta en la BD:
+  db.query(
+    "UPDATE productos SET imagen = ? WHERE id_producto = ?",
+    [ruta, id],
+    (err) => {
+      if (err) return res.status(500).json({ error: "Error al guardar ruta en BD" });
+      res.json({ mensaje: "Imagen subida", imagen: ruta });
+    }
+  );
+};
+
 module.exports = {
   getProductos,
   crearProducto,
   actualizarProducto,
-  eliminarProducto
+  eliminarProducto,
+  subirImagenProducto,
 };

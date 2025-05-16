@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./context/AuthContext";
 import RutaPrivada from "./components/RutaPrivada";
 import ZonaPrivada from "./pages/ZonaPrivada";
-
+import VerArticulo from "./pages/VerArticulo";
 // Comenta temporalmente estas importaciones si no existen aún
 // import Notificaciones from "./pages/Notificaciones";
 // import HistorialCompras from "./pages/HistorialCompras";
@@ -30,7 +30,7 @@ import ZonaPrivada from "./pages/ZonaPrivada";
 // import Soporte from "./pages/Soporte";
 // import BuscarResultados from "./pages/BuscarResultados";
 
-const MODO_DESARROLLO = false; // Cambia a false para volver a proteger
+const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
 
 function App() {
   return (
@@ -43,6 +43,7 @@ function App() {
           <Route path="/contra-nueva" element={<ContraNueva />} />
           <Route path="/productos" element={<ListaProductos />} />
           <Route path="/ayuda" element={<Ayuda />} />
+          <Route path="/VerArticulo/:id" element={<VerArticulo />} />
 
           <Route
             path="/perfil"
@@ -65,10 +66,12 @@ function App() {
           <Route
             path="/carrito"
             element={
-              MODO_DESARROLLO ? <CarritoCompras /> : (
-              <RutaPrivada>
+              MODO_DESARROLLO ? (
                 <CarritoCompras />
-              </RutaPrivada>
+              ) : (
+                <RutaPrivada>
+                  <CarritoCompras />
+                </RutaPrivada>
               )
             }
           />
@@ -135,7 +138,14 @@ function App() {
               </RutaPrivada>
             }
           />
-
+          {/* <Route
+            path="/VerArticulo"
+            element={
+              <RutaPrivada>
+                <VerArticulo />
+              </RutaPrivada>
+            }
+          /> */}
           {/* Comenta temporalmente estas rutas si los componentes no existen */}
           {/* <Route path="/notificaciones" element={<Notificaciones />} />
         <Route path="/historial-compras" element={<HistorialCompras />} />

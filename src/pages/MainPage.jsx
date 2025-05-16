@@ -11,6 +11,8 @@ import {
   losFondo,
   alanSombrero,
   hotsale,
+  Anuncio01,
+  Anuncio02,
 } from "../assets/imagenes/imagenesslider";
 import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import Slider from "react-slick";
@@ -132,7 +134,7 @@ const CATEGORIES = [
 // ANUNCIOS
 const ANUNCIOS = [
   {
-    imagen: dobleh2023,
+    imagen: Anuncio01,
     alt: "Oferta de productos de oficina",
     tag: "FULL",
     tagColor: "bg-green-500",
@@ -140,7 +142,7 @@ const ANUNCIOS = [
     badge: "ENVÍOS RÁPIDOS",
   },
   {
-    imagen: desaparecido,
+    imagen: Anuncio02,
     alt: "Ventiladores y productos para el calor",
     tag: "OFERTA",
     tagColor: "bg-red-500",
@@ -278,6 +280,30 @@ const ArticulosMasVendidos = () => {
     alert(`✅ ${producto.titulo} agregado al carrito`);
   };
 
+  // Función para ver detalle del producto - MEJORADA Y CORREGIDA
+  const verDetalleProducto = (productoId) => {
+    // Encuentra el producto en el array correspondiente
+    const producto = masVendidos.find((p) => p.id === productoId);
+
+    // Validación completa antes de navegar
+    if (!producto) {
+      console.error("Producto no encontrado");
+      return;
+    }
+
+    navigate(`/VerArticulo/${productoId}`, {
+      state: {
+        producto: {
+          ...producto,
+          imagenes: producto.imagenes || [], // Asegura array de imágenes
+          especificaciones: producto.especificaciones || {},
+          titulo: producto.titulo || "Producto sin nombre",
+          precio: producto.precio || 0,
+        },
+      },
+    });
+  };
+
   // Función para compra rápida
   const handleCompraRapida = (productoId) => {
     const producto = masVendidos.find((p) => p.id === productoId);
@@ -382,7 +408,11 @@ const ArticulosMasVendidos = () => {
               key={producto.id}
               className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
             >
-              <div className="relative">
+              {/* Área de imagen - MEJORADA para navegación */}
+              <div
+                className="relative cursor-pointer"
+                onClick={() => verDetalleProducto(producto.id)}
+              >
                 {producto.etiquetas?.length > 0 && (
                   <div className="absolute top-3 left-3 z-10 flex flex-wrap gap-2">
                     {producto.etiquetas.map((etiqueta, idx) => (
@@ -415,11 +445,15 @@ const ArticulosMasVendidos = () => {
                 </div>
               </div>
 
-              <div className="p-4">
+              {/* Área de información - MEJORADA para navegación */}
+              <div
+                className="p-4 cursor-pointer"
+                onClick={() => verDetalleProducto(producto.id)}
+              >
                 <div className="text-xs text-blue-600 font-medium mb-1">
                   {producto.categoria}
                 </div>
-                <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12">
+                <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12 hover:text-blue-600 transition-colors">
                   {producto.titulo}
                 </h3>
                 <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -439,7 +473,10 @@ const ArticulosMasVendidos = () => {
                     {formatoPrecio(producto.precio)}
                   </span>
                   <button
-                    onClick={() => handleCompraRapida(producto.id)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
+                      handleCompraRapida(producto.id);
+                    }}
                     className="ml-2 bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded-lg text-sm font-medium transition-colors duration-200"
                   >
                     Comprar ya
@@ -447,7 +484,10 @@ const ArticulosMasVendidos = () => {
                 </div>
 
                 <button
-                  onClick={() => agregarAlCarrito(producto.id)}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
+                    agregarAlCarrito(producto.id);
+                  }}
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center mt-2"
                 >
                   <FaShoppingCart className="mr-2" />
@@ -461,7 +501,228 @@ const ArticulosMasVendidos = () => {
     </section>
   );
 };
-// CONFIGURACIÓN SLIDER
+
+const OfertasDestacadas = () => {
+  const navigate = useNavigate();
+
+  // Componente de estrellas para calificación
+  const EstrellaCalificacion = ({ calificacion }) => {
+    const calif = Math.round(calificacion * 10) / 10;
+    return (
+      <div className="flex items-center mb-2">
+        <div className="flex text-yellow-400 mr-1">
+          {[1, 2, 3, 4, 5].map((estrella) => (
+            <FaStar
+              key={estrella}
+              className={
+                calif >= estrella
+                  ? "text-yellow-400"
+                  : calif >= estrella - 0.5
+                  ? "text-yellow-300"
+                  : "text-gray-300"
+              }
+              size={14}
+            />
+          ))}
+        </div>
+        <span className="text-sm text-gray-600">{calif}</span>
+      </div>
+    );
+  };
+
+  // Datos de ejemplo para ofertas destacadas
+  const OFERTAS = [
+    {
+      id: 1,
+      imagen: "https://via.placeholder.com/200",
+      titulo: "Smartwatch último modelo",
+      precioOriginal: 3999,
+      precioOferta: 2499,
+      descuento: 38,
+      tiempoRestante: "2 días",
+      stock: 5,
+      categoria: "Electrónicos",
+      calificacion: 4.5,
+    },
+    {
+      id: 2,
+      imagen: "https://via.placeholder.com/200",
+      titulo: "Audífonos inalámbricos premium",
+      precioOriginal: 1899,
+      precioOferta: 999,
+      descuento: 47,
+      tiempoRestante: "12 horas",
+      stock: 8,
+      categoria: "Audio",
+      calificacion: 5.0,
+    },
+    {
+      id: 3,
+      imagen: "https://via.placeholder.com/200",
+      titulo: "Cámara deportiva 4K resistente al agua",
+      precioOriginal: 4599,
+      precioOferta: 2999,
+      descuento: 35,
+      tiempoRestante: "3 días",
+      stock: 3,
+      categoria: "Cámaras",
+      calificacion: 4.2,
+    },
+    {
+      id: 4,
+      imagen: "https://via.placeholder.com/200",
+      titulo: "Zapatos deportivos ultralivianos",
+      precioOriginal: 1299,
+      precioOferta: 799,
+      descuento: 40,
+      tiempoRestante: "1 día",
+      stock: 12,
+      categoria: "Deportes",
+      calificacion: 4.7,
+    },
+  ];
+
+  // Función para formatear precios en formato de moneda mexicana
+  const formatoPrecio = (precio) => {
+    return new Intl.NumberFormat("es-MX", {
+      style: "currency",
+      currency: "MXN",
+      minimumFractionDigits: 0,
+    }).format(precio);
+  };
+
+  // Función para ver detalle del producto - MEJORADA Y CORREGIDA
+  const verDetalleProducto = (productoId) => {
+    // Solo busca en OFERTAS ya que este componente solo maneja esos productos
+    const producto = OFERTAS.find((p) => p.id === productoId);
+
+    // Validación completa antes de navegar
+    if (!producto) {
+      console.error("Producto no encontrado");
+      return;
+    }
+
+    navigate(`/VerArticulo/${productoId}`, {
+      state: {
+        producto: {
+          ...producto,
+          imagenes: producto.imagenes || [], // Asegura array de imágenes
+          especificaciones: producto.especificaciones || {},
+          titulo: producto.titulo || "Producto sin nombre",
+          precio: producto.precio || 0,
+        },
+      },
+    });
+  };
+  // Función para agregar al carrito
+  const agregarAlCarrito = (productoId) => {
+    const producto = OFERTAS.find((p) => p.id === productoId);
+    alert(`✅ ${producto.titulo} agregado al carrito`);
+    // Implementar lógica real de carrito aquí
+  };
+
+  return (
+    <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
+      <div className="container mx-auto px-4">
+        {/* Encabezado de la sección */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center">
+            <div className="mr-4 bg-red-500 text-white p-2 rounded-lg">
+              <FaTag size={24} />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800">
+              OFERTAS DESTACADAS
+            </h2>
+          </div>
+          <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
+            Ver todas <FaChevronRight className="ml-1" size={14} />
+          </button>
+        </div>
+
+        {/* Grid de ofertas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {OFERTAS.map((oferta) => (
+            <div
+              key={oferta.id}
+              className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+            >
+              {/* Área de imagen - MEJORADA para navegación */}
+              <div
+                className="relative cursor-pointer"
+                onClick={() => verDetalleProducto(oferta.id)}
+              >
+                <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-bold px-2 py-1 rounded-lg z-10">
+                  -{oferta.descuento}%
+                </span>
+
+                {/* Badge de stock limitado si hay menos de 6 productos */}
+                {oferta.stock < 6 && (
+                  <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
+                    ¡Solo {oferta.stock} disponibles!
+                  </span>
+                )}
+
+                {/* Imagen del producto */}
+                <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
+                  <img
+                    src={oferta.imagen}
+                    alt={oferta.titulo}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              </div>
+
+              {/* Área de información - MEJORADA para navegación */}
+              <div
+                className="p-4 cursor-pointer"
+                onClick={() => verDetalleProducto(oferta.id)}
+              >
+                <div className="text-xs text-blue-600 font-medium mb-1">
+                  {oferta.categoria}
+                </div>
+                <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12 hover:text-blue-600 transition-colors">
+                  {oferta.titulo}
+                </h3>
+
+                {/* Estrellas de calificación */}
+                <EstrellaCalificacion calificacion={oferta.calificacion} />
+
+                {/* Precios */}
+                <div className="flex items-end mb-3">
+                  <span className="text-xl font-bold text-gray-800 mr-2">
+                    {formatoPrecio(oferta.precioOferta)}
+                  </span>
+                  <span className="text-sm text-gray-500 line-through">
+                    {formatoPrecio(oferta.precioOriginal)}
+                  </span>
+                </div>
+
+                {/* Temporizador */}
+                <div className="flex items-center text-xs text-gray-500 mb-4">
+                  <FaClock className="mr-1" />
+                  <span>Termina en: {oferta.tiempoRestante}</span>
+                </div>
+
+                {/* Botón de compra */}
+                <button
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
+                    agregarAlCarrito(oferta.id);
+                  }}
+                >
+                  <FaShoppingCart className="mr-2" />
+                  Agregar al carrito
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const SLIDER_SETTINGS = {
   dots: true,
   infinite: true,
@@ -490,169 +751,6 @@ const SLIDER_SETTINGS = {
       },
     },
   ],
-};
-
-const OfertasDestacadas = () => {
-  // Datos de ejemplo para ofertas destacadas
-  const OFERTAS = [
-    {
-      id: 1,
-      // imagen:, // Reemplazar con imagen real
-      titulo: "Smartwatch último modelo",
-      precioOriginal: 3999,
-      precioOferta: 2499,
-      descuento: 38,
-      tiempoRestante: "2 días",
-      stock: 5,
-      categoria: "Electrónicos",
-    },
-    {
-      id: 2,
-      // imagen:  // Reemplazar por imagen
-      titulo: "Audífonos inalámbricos premium",
-      precioOriginal: 1899,
-      precioOferta: 999,
-      descuento: 47,
-      tiempoRestante: "12 horas",
-      stock: 8,
-      categoria: "Audio",
-    },
-    {
-      id: 3,
-      // imagen:  // Reemplazar por imagen
-      titulo: "Cámara deportiva 4K resistente al agua",
-      precioOriginal: 4599,
-      precioOferta: 2999,
-      descuento: 35,
-      tiempoRestante: "3 días",
-      stock: 3,
-      categoria: "Cámaras",
-    },
-    {
-      id: 4,
-      // imagen:  // Reemplazar por imagen
-      titulo: "Zapatos deportivos ultralivianos",
-      precioOriginal: 1299,
-      precioOferta: 799,
-      descuento: 40,
-      tiempoRestante: "1 día",
-      stock: 12,
-      categoria: "Deportes",
-    },
-  ];
-
-  // Función para formatear precios en formato de moneda mexicana
-  const formatoPrecio = (precio) => {
-    return new Intl.NumberFormat("es-MX", {
-      style: "currency",
-      currency: "MXN",
-      minimumFractionDigits: 0,
-    }).format(precio);
-  };
-
-  return (
-    <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
-      <div className="container mx-auto px-4">
-        {/* Encabezado de la sección */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
-            <div className="mr-4 bg-red-500 text-white p-2 rounded-lg">
-              <FaTag size={24} />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-800">
-              OFERTAS DESTACADAS
-            </h2>
-          </div>
-          <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
-            Ver todas <FaChevronRight className="ml-1" size={14} />
-          </button>
-        </div>
-
-        {/* Grid de ofertas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {OFERTAS.map((oferta) => (
-            <div
-              key={oferta.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
-            >
-              {/* Badge de descuento */}
-              <div className="relative">
-                <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-bold px-2 py-1 rounded-lg z-10">
-                  -{oferta.descuento}%
-                </span>
-
-                {/* Badge de stock limitado si hay menos de 6 productos */}
-                {oferta.stock < 6 && (
-                  <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
-                    ¡Solo {oferta.stock} disponibles!
-                  </span>
-                )}
-
-                {/* Imagen del producto */}
-                <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
-                  <img
-                    src={oferta.imagen}
-                    alt={oferta.titulo}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              </div>
-
-              {/* Detalles del producto */}
-              <div className="p-4">
-                <div className="text-xs text-blue-600 font-medium mb-1">
-                  {oferta.categoria}
-                </div>
-                <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12">
-                  {oferta.titulo}
-                </h3>
-
-                {/* Precios */}
-                <div className="flex items-end mb-3">
-                  <span className="text-xl font-bold text-gray-800 mr-2">
-                    {formatoPrecio(oferta.precioOferta)}
-                  </span>
-                  <span className="text-sm text-gray-500 line-through">
-                    {formatoPrecio(oferta.precioOriginal)}
-                  </span>
-                </div>
-
-                {/* Temporizador */}
-                <div className="flex items-center text-xs text-gray-500 mb-4">
-                  <FaClock className="mr-1" />
-                  <span>Termina en: {oferta.tiempoRestante}</span>
-                </div>
-
-                {/* Botón de compra */}
-                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
-                  <FaShoppingCart className="mr-2" />
-                  Agregar al carrito
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Banner promocional
-        <div className="mt-10 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl p-6 shadow-lg">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="mb-4 md:mb-0">
-              <h3 className="text-2xl font-bold mb-2">
-                Ofertas exclusivas para miembros
-              </h3>
-              <p className="text-blue-100">
-                Regístrate ahora y obtén un 15% de descuento en tu primera
-                compra
-              </p>
-            </div>
-            <button className="px-6 py-3 bg-white text-blue-700 rounded-lg font-bold hover:bg-blue-50 transition-colors duration-200">
-              Registrarse ahora
-            </button>
-          </div>
-        </div> */}
-      </div>
-    </section>
-  );
 };
 
 const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
@@ -1250,34 +1348,90 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
   //   );
   // };
 
+  // const Anuncios = () => (
+  //   <section className="mb-8 max-w-7xl mx-auto px-4 py relative ">
+  //     <div className="text-center mb-6">
+  //       <h2 className="text-2xl font-bold  relative inline-block">
+  //         Anuncios de Temporada
+  //       </h2>
+  //     </div>
+  //     <div className="w-full mx-auto">
+  //       <Slider {...SLIDER_SETTINGS}>
+  //         {ANUNCIOS.map((anuncio, index) => (
+  //           <div key={index} className="px-2">
+  //             <div
+  //               className="bg-white rounded-xl overflow-hidden "
+  //               style={{
+  //                 boxShadow:
+  //                   "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05)",
+  //               }}
+  //             >
+  //               {/* Relaciones de aspecto personalizadas con aspect-ratio */}
+  //               <div className="relative aspect-[16/9] md:aspect-[16/7] lg:aspect-[16/5] overflow-hidden bg-gradient-to-r from-blue-100 via-yellow-100 to-orange-100">
+  //                 {anuncio.tag && (
+  //                   <div className="absolute top-4 left-4 z-10">
+  //                     <div
+  //                       className={`${anuncio.tagColor} text-white px-3 py-1 rounded-lg font-bold flex items-center filter drop-shadow-md`}
+  //                       style={{
+  //                         boxShadow:
+  //                           "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+  //                       }}
+  //                     >
+  //                       {anuncio.tagIcon && (
+  //                         <span className="mr-1">{anuncio.tagIcon}</span>
+  //                       )}
+  //                       {anuncio.tag}
+  //                     </div>
+  //                   </div>
+  //                 )}
+  //                 {anuncio.badge && (
+  //                   <div className="absolute top-4 right-4 z-10">
+  //                     <div
+  //                       className="bg-white text-gray-800 px-3 py-1 rounded-full text-xs font-medium"
+  //                       style={{
+  //                         boxShadow:
+  //                           "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+  //                       }}
+  //                     >
+  //                       {anuncio.badge}
+  //                     </div>
+  //                   </div>
+  //                 )}
+  //                 <div className="absolute inset-0 shadow-inner bg-gradient-to-t from-black/20 to-transparent opacity-30 pointer-events-none"></div>
+  //                 <img
+  //                   src={anuncio.imagen}
+  //                   className="w-full h-full object-cover"
+  //                   alt={anuncio.alt}
+  //                   style={{
+  //                     filter: "brightness(1.02) contrast(1.05)",
+  //                   }}
+  //                 />
+  //               </div>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </Slider>
+  //     </div>
+  //   </section>
+  // );
+
   const Anuncios = () => (
-    <section className="mb-8 max-w-7xl mx-auto px-4 py relative ">
+    <section className="w-full overflow-hidden">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold  relative inline-block">
+        <h2 className="text-2xl font-bold relative inline-block">
           Anuncios de Temporada
         </h2>
       </div>
-      <div className="w-full mx-auto">
+      <div className="w-full">
         <Slider {...SLIDER_SETTINGS}>
           {ANUNCIOS.map((anuncio, index) => (
-            <div key={index} className="px-2">
-              <div
-                className="bg-white rounded-xl overflow-hidden "
-                style={{
-                  boxShadow:
-                    "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05)",
-                }}
-              >
-                {/* Relaciones de aspecto personalizadas con aspect-ratio */}
+            <div key={index} className="w-full">
+              <div className="relative overflow-hidden w-full">
                 <div className="relative aspect-[16/9] md:aspect-[16/7] lg:aspect-[16/5] overflow-hidden bg-gradient-to-r from-blue-100 via-yellow-100 to-orange-100">
                   {anuncio.tag && (
                     <div className="absolute top-4 left-4 z-10">
                       <div
                         className={`${anuncio.tagColor} text-white px-3 py-1 rounded-lg font-bold flex items-center filter drop-shadow-md`}
-                        style={{
-                          boxShadow:
-                            "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                        }}
                       >
                         {anuncio.tagIcon && (
                           <span className="mr-1">{anuncio.tagIcon}</span>
@@ -1288,13 +1442,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                   )}
                   {anuncio.badge && (
                     <div className="absolute top-4 right-4 z-10">
-                      <div
-                        className="bg-white text-gray-800 px-3 py-1 rounded-full text-xs font-medium"
-                        style={{
-                          boxShadow:
-                            "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                        }}
-                      >
+                      <div className="bg-white text-gray-800 px-3 py-1 rounded-full text-xs font-medium">
                         {anuncio.badge}
                       </div>
                     </div>
@@ -1316,6 +1464,67 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       </div>
     </section>
   );
+
+  // const Anuncios = () => (
+  //   <section className="w-full overflow-hidden">
+  //     <div className="w-full">
+  //       <Slider {...SLIDER_SETTINGS}>
+  //         {ANUNCIOS.map((anuncio, index) => (
+  //           <div key={index} className="w-full">
+  //             <div className="relative w-full h-[70vh] min-h-[400px] max-h-[600px]">
+  //               {/* Contenedor principal sin márgenes */}
+  //               <div className="absolute inset-0 w-full h-full overflow-hidden">
+  //                 {/* Imagen que ocupa todo el espacio disponible */}
+  //                 <img
+  //                   src={anuncio.imagen}
+  //                   className="absolute inset-0 w-full h-full object-cover"
+  //                   alt={anuncio.alt}
+  //                 />
+
+  //                 {/* Overlay para mejor contraste */}
+  //                 <div className="absolute inset-0 bg-black/20"></div>
+
+  //                 {/* Contenido del anuncio */}
+  //                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4 z-10">
+  //                   {anuncio.tag && (
+  //                     <div className="mb-4">
+  //                       <div
+  //                         className={`${anuncio.tagColor} text-white px-6 py-2 rounded-full font-bold inline-flex items-center shadow-lg`}
+  //                       >
+  //                         {anuncio.tagIcon && (
+  //                           <span className="mr-2">{anuncio.tagIcon}</span>
+  //                         )}
+  //                         {anuncio.tag}
+  //                       </div>
+  //                     </div>
+  //                   )}
+
+  //                   <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 drop-shadow-lg">
+  //                     OFERTA DE TEMPORADA
+  //                   </h2>
+  //                   <p className="text-xl md:text-3xl lg:text-4xl font-semibold mb-8 drop-shadow-lg">
+  //                     HASTA 50% DE DESCUENTO
+  //                   </p>
+
+  //                   {anuncio.badge && (
+  //                     <div className="mb-6 bg-white/90 text-gray-800 px-4 py-2 rounded-full text-sm font-bold shadow-md">
+  //                       {anuncio.badge}
+  //                     </div>
+  //                   )}
+
+  //                   <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full text-lg md:text-xl transition-all transform hover:scale-105 shadow-xl">
+  //                     COMPRAR AHORA
+  //                   </button>
+  //                 </div>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </Slider>
+  //     </div>
+  //   </section>
+  // );
+
   const Footer = () => (
     <footer className="py-8 flex justify-center items-center">
       <img src={logoLetras} alt="SOAP Logo" className="w-[150px]" />

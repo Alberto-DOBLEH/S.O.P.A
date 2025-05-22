@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Header from "../components/Layout/Header";
 import Button from "../components/UI/Button";
 import Input from "../components/UI/input";
 import Card from "../components/Layout/Card";
@@ -29,65 +30,105 @@ const VentaArticulo = () => {
       return;
     }
 
-    console.log({ titulo, precio, estado, descripcion, tipo, envio, categoria });
     toast.success("Artículo publicado con éxito");
+    console.log({ titulo, precio, estado, descripcion, tipo, envio, categoria });
   };
 
   return (
-    <div className="flex justify-center items-start py-10 px-4 bg-[#f0f8ff] min-h-screen">
-      <Card className="w-full max-w-3xl bg-white shadow-lg p-6">
-        <h2 className="text-2xl font-bold mb-4 text-center">Publicar artículo</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex flex-col items-center">
-            <input type="file" accept="image/*" onChange={handleImagenChange} className="mb-2" />
-            {preview && <img src={preview} alt="Vista previa" className="w-40 h-40 object-cover rounded" />}
-          </div>
+    <>
+      <Header onLoginClick={() => toast.info("Inicia sesión")} />
 
-          <Input placeholder="Título del artículo" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
-          <Input placeholder="Precio" value={precio} type="number" onChange={(e) => setPrecio(e.target.value)} />
+      <div className="flex flex-col items-center bg-[#f0f8ff] min-h-screen px-4 py-8">
+        <Card className="w-full max-w-7xl shadow-lg bg-white p-6">
+          <h2 className="text-2xl font-bold text-center mb-6">Publicar artículo</h2>
 
-          <select
-            value={estado}
-            onChange={(e) => setEstado(e.target.value)}
-            className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            <option value="nuevo">Nuevo</option>
-            <option value="usado">Usado</option>
-          </select>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Sección izquierda */}
+            <div className="space-y-4">
+              <label className="block">
+                <span className="font-semibold">Añadir fotos</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImagenChange}
+                  className="w-full mt-1 p-2 border rounded-md"
+                />
+              </label>
 
-          <textarea
-            placeholder="Descripción"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-            className="w-full p-3 border rounded-md resize-none h-24 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          ></textarea>
+              <Input placeholder="Título" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
+              <Input placeholder="Precio" type="number" value={precio} onChange={(e) => setPrecio(e.target.value)} />
 
-          <select
-            value={tipo}
-            onChange={(e) => setTipo(e.target.value)}
-            className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            <option value="unico">Artículo único</option>
-            <option value="multiple">Artículo múltiple</option>
-          </select>
+              <select
+                value={categoria}
+                onChange={(e) => setCategoria(e.target.value)}
+                className="w-full border p-3 rounded-md"
+              >
+                <option value="">Categoría</option>
+                <option value="electronica">Electrónica</option>
+                <option value="hogar">Hogar</option>
+                <option value="ropa">Ropa</option>
+              </select>
 
-          <select
-            value={envio}
-            onChange={(e) => setEnvio(e.target.value)}
-            className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            <option value="si">Incluye envío</option>
-            <option value="no">Sin envío</option>
-          </select>
+              <select
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                className="w-full border p-3 rounded-md"
+              >
+                <option value="nuevo">Estado: Nuevo</option>
+                <option value="usado">Estado: Usado</option>
+              </select>
 
-          <Input placeholder="Categoría" value={categoria} onChange={(e) => setCategoria(e.target.value)} />
+              <select
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value)}
+                className="w-full border p-3 rounded-md"
+              >
+                <option value="unico">Artículo único</option>
+                <option value="multiple">Artículo múltiple</option>
+              </select>
 
-          <div className="flex justify-center">
-            <Button type="submit">Publicar</Button>
-          </div>
-        </form>
-      </Card>
-    </div>
+              <select
+                value={envio}
+                onChange={(e) => setEnvio(e.target.value)}
+                className="w-full border p-3 rounded-md"
+              >
+                <option value="si">Incluye envío</option>
+                <option value="no">Sin envío</option>
+              </select>
+            </div>
+
+            {/* Sección central - Vista previa */}
+            <div className="col-span-1 lg:col-span-1 bg-yellow-100 border border-black flex items-center justify-center min-h-[400px]">
+              {preview ? (
+                <img src={preview} alt="Vista previa" className="object-contain h-full max-h-[400px]" />
+              ) : (
+                <p className="text-center text-lg font-medium text-gray-600">Vista previa de las imágenes</p>
+              )}
+            </div>
+
+            {/* Sección derecha - Descripción */}
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold">Detalles del artículo</h3>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Descripción</label>
+                <textarea
+                  placeholder="Describe el artículo..."
+                  value={descripcion}
+                  onChange={(e) => setDescripcion(e.target.value)}
+                  className="w-full p-3 border rounded-md resize-none h-32"
+                ></textarea>
+              </div>
+
+              <div className="pt-4">
+                <Button type="submit" className="w-full">
+                  Publicar
+                </Button>
+              </div>
+            </div>
+          </form>
+        </Card>
+      </div>
+    </>
   );
 };
 

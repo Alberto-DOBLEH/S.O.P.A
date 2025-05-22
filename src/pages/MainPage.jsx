@@ -955,7 +955,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       categoria: (path) => navigate(path),
       perfil: () => navigate("/mi-perfil"),
       favoritos: () => navigate("/favoritos"),
-      venta: () => navigate("/vender-articulo"),
+      venta: () => navigate("/venta"),
       historial: () => navigate("/historial-compras"),
       pedidos: () => navigate("/pedidos-activos"),
       tarjetas: () => navigate("/mis-tarjetas"),

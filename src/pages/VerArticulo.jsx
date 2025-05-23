@@ -19,51 +19,27 @@ import {
   FaUser,
   FaBell,
   FaSearch,
-  FaBars,
-  FaTimes,
   FaShopify,
   FaHistory,
-  FaList,
-  FaLock,
-  FaEnvelope,
   FaCog,
-  FaSignOutAlt,
 } from "react-icons/fa";
 import {
-  FaMobile,
-  FaKeyboard,
   FaLaptop,
-  FaCamera,
   FaTv,
   FaHome,
-  FaRunning,
-  FaCar,
   FaGamepad,
   FaTshirt,
   FaShoePrints,
-  FaChild,
-  FaGuitar,
   FaBook,
-  FaBaby,
-  FaPaw,
   FaUtensils,
   FaBath,
-  FaPlane,
-  FaTree,
-  FaDumbbell,
-  FaGlassWhiskey,
-  FaAppleAlt,
   FaGift,
-  FaHeadphones,
   FaTabletAlt,
   FaClipboardList,
   FaHeadset,
-  FaFire,
-  FaClock,
   FaDesktop,
   FaMobileAlt,
   FaChevronDown,
-  FaMousePointer,
 } from "react-icons/fa";
 // Agrega esta importación con los demás imports de iconos
 import { IoMdHelp } from "react-icons/io";
@@ -73,751 +49,8 @@ import { toast } from "react-toastify";
 import logoCompleto from "../assets/imagenes/logo-completo.png";
 import { logoLetras, backgroundImage } from "../assets/imagenes/imagenes";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { FaTags } from "react-icons/fa";
 import { FaTag, FaListUl } from "react-icons/fa";
-
-// const Header = () => {
-//   const navigate = useNavigate();
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [cartCount] = useState(3);
-//   const [showCategories, setShowCategories] = useState(false);
-
-//   const [showHeader, setShowHeader] = useState(true);
-//   const headerRef = useRef(null);
-
-//   // Configuración de navegación
-//   const navigateTo = {
-//     home: () => navigate("/"),
-//     carrito: () => navigate("/carrito"),
-//     cuenta: () => navigate("/mi-cuenta"),
-//     notificaciones: () => navigate("/notificaciones"),
-//     categoria: (path) => navigate(path),
-//     favoritos: () => navigate("/favoritos"),
-//     venta: () => navigate("/vender-articulo"),
-//     historial: () => navigate("/historial-compras"),
-//     pedidos: () => navigate("/pedidos-activos"),
-//     tarjetas: () => navigate("/mis-tarjetas"),
-//     cupones: () => navigate("/cupones-promociones"),
-//     listaDeseos: () => navigate("/lista-deseos"),
-//     listaCompras: () => navigate("/lista-compras"),
-//     ayuda: () => navigate("/centro-ayuda"),
-//     soporte: () => navigate("/contactar-soporte"),
-//     configuracion: () => navigate("/configuracion"),
-//   };
-
-//   const handleSearch = (e) => {
-//     e.preventDefault();
-//     if (searchTerm.trim()) {
-//       navigate(`/buscar?q=${encodeURIComponent(searchTerm)}`);
-//       setShowCategories(false);
-//     }
-//   };
-
-//   const toggleCategories = (e) => {
-//     e.stopPropagation();
-//     setShowCategories(!showCategories);
-//   };
-
-//   // Datos de categorías
-//   const categoryGroups = [
-//     {
-//       title: "Tecnología",
-//       icon: <FaLaptop className="text-lg" />,
-//       categories: [
-//         { icon: <FaMobileAlt />, label: "Smartphones", path: "/telefonos" },
-//         { icon: <FaLaptop />, label: "Laptops", path: "/laptops" },
-//         { icon: <FaDesktop />, label: "Computadoras", path: "/computadoras" },
-//         { icon: <FaTabletAlt />, label: "Tablets", path: "/tablets" },
-//         { icon: <FaTv />, label: "Televisores", path: "/televisores" },
-//       ],
-//     },
-//     {
-//       title: "Hogar",
-//       icon: <FaHome className="text-lg" />,
-//       categories: [
-//         { icon: <FaHome />, label: "Muebles", path: "/muebles" },
-//         { icon: <FaUtensils />, label: "Cocina", path: "/cocina" },
-//         { icon: <FaBath />, label: "Baño", path: "/bano" },
-//       ],
-//     },
-//     {
-//       title: "Moda",
-//       icon: <FaTshirt className="text-lg" />,
-//       categories: [
-//         { icon: <FaTshirt />, label: "Ropa Mujer", path: "/ropa-mujer" },
-//         { icon: <FaTshirt />, label: "Ropa Hombre", path: "/ropa-hombre" },
-//         { icon: <FaShoePrints />, label: "Zapatos", path: "/zapatos" },
-//       ],
-//     },
-//     {
-//       title: "Otros",
-//       icon: <FaList className="text-lg" />,
-//       categories: [
-//         {
-//           icon: <FaGamepad />,
-//           label: "Videojuegos",
-//           path: "/videojuegos",
-//           hot: true,
-//         },
-//         { icon: <FaBook />, label: "Libros", path: "/libros" },
-//         { icon: <FaGift />, label: "Regalos", path: "/regalos" },
-//       ],
-//     },
-//   ];
-
-//   return (
-//     <header
-//       ref={headerRef}
-//       className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
-//         showHeader ? "translate-y-0" : "-translate-y-full"
-//       }`}
-//     >
-//       {/* Barra principal */}
-//       <div className="bg-[#cae8ff] border-b border-blue-200 shadow-md w-full">
-//         <div className="mx-auto px-4 sm:px-6 lg:px-8">
-//           <div className="flex flex-col md:flex-row justify-between items-center py-4">
-//             {/* Logo */}
-//             <div className="cursor-pointer" onClick={navigateTo.home}>
-//               <img src={logoCompleto} alt="Logo S.O.P.A" className="h-12" />
-//             </div>
-
-//             {/* Barra de búsqueda */}
-//             <div className="w-full md:max-w-3xl mx-0 md:mx-8 my-4 md:my-0">
-//               <form onSubmit={handleSearch} className="relative">
-//                 <input
-//                   type="text"
-//                   placeholder="Buscar productos, marcas..."
-//                   className="w-full px-5 py-3 pl-14 pr-24 bg-white border-2 border-gray-200 rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 text-lg placeholder-gray-400"
-//                   value={searchTerm}
-//                   onChange={(e) => setSearchTerm(e.target.value)}
-//                 />
-//                 <FaSearch className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
-//                 <button
-//                   type="submit"
-//                   className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-2 rounded-full font-medium hover:from-blue-600 hover:to-blue-700 transition-all shadow-md"
-//                 >
-//                   Buscar
-//                 </button>
-//               </form>
-//             </div>
-
-//             {/* Iconos de navegación */}
-//             <div className="flex items-center space-x-4">
-//               {/* Carrito */}
-//               <div className="text-center">
-//                 <button
-//                   onClick={navigateTo.carrito}
-//                   className="bg-blue-600 p-3 rounded-full text-white shadow-md transition-all duration-200 hover:bg-blue-700 flex flex-col items-center justify-center w-16 h-16 relative"
-//                   aria-label="Carrito de compras"
-//                 >
-//                   <FaShoppingCart className="text-xl mb-1" />
-//                   <span className="text-xs">Carrito</span>
-//                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-//                     {cartCount}
-//                   </span>
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Barra de categorías */}
-//       <div className="bg-yellow-400 text-blue-900 shadow w-full">
-//         <div className="container mx-auto px-0">
-//           <div className="flex justify-between">
-//             <button
-//               className="font-bold py-2 px-4 text-lg flex items-center "
-//               onClick={toggleCategories}
-//             >
-//               <span>Categorías</span>
-//               <FaChevronDown className="ml-3" />
-//             </button>
-
-//             {/* Menú horizontal de opciones principales */}
-//             <div className="hidden md:flex overflow-x-auto space-x-3 flex-1">
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.cuenta}
-//               >
-//                 <FaUser className="mr-1" /> Mi Cuenta
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.favoritos}
-//               >
-//                 <FaHeart className="mr-1" /> Favoritos
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.notificaciones}
-//               >
-//                 <FaBell className="mr-1" /> Notificaciones
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.historial}
-//               >
-//                 <FaHistory className="mr-1" /> Mis Compras
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.pedidos}
-//               >
-//                 <FaStore className="mr-1" /> Pedidos
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.tarjetas}
-//               >
-//                 <FaCreditCard className="mr-1" /> Tarjetas
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.venta}
-//               >
-//                 <FaShopify className="mr-1" /> Vender
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.cupones}
-//               >
-//                 <RiCouponLine className="mr-1" /> Cupones
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={() => navigateTo.categoria("/ofertas")}
-//               >
-//                 <FaTag className="mr-1" /> Ofertas
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.listaDeseos}
-//               >
-//                 <FaListUl className="mr-1" /> Lista de Deseos
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.listaCompras}
-//               >
-//                 <FaClipboardList className="mr-1" /> Lista de Compras
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.ayuda}
-//               >
-//                 <IoMdHelp className="mr-1" /> Ayuda
-//               </button>
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.soporte}
-//               >
-//                 <FaHeadset className="mr-1" /> Soporte
-//               </button>
-
-//               <button
-//                 className="whitespace-nowrap py-2 hover:text-blue-700 font-medium flex items-center text-sm"
-//                 onClick={navigateTo.configuracion}
-//               >
-//                 <FaCog className="mr-1" /> Configuración
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Menú desplegable de categorías */}
-//       {showCategories && (
-//         <div
-//           className="absolute w-full bg-[#f4f6fc] shadow-xl z-50 border-t-2 border-yellow-400 animate-fadeIn"
-//           onMouseLeave={() => setShowCategories(false)}
-//         >
-//           <div className="container mx-auto px-6 py-6">
-//             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-//               {categoryGroups.map((group, index) => (
-//                 <div
-//                   key={index}
-//                   className="border-r border-gray-200 last:border-r-0 pr-6"
-//                 >
-//                   <h3 className="font-bold text-lg mb-4 text-blue-800 flex items-center">
-//                     <span className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3 text-blue-600">
-//                       {group.icon}
-//                     </span>
-//                     {group.title}
-//                   </h3>
-//                   <ul className="space-y-2">
-//                     {group.categories.map((category, idx) => (
-//                       <li key={idx}>
-//                         <button
-//                           className="flex items-center w-full text-left py-2 px-3 rounded-lg hover:bg-blue-100/50 transition-all duration-200"
-//                           onClick={() => {
-//                             navigateTo.categoria(category.path);
-//                             setShowCategories(false);
-//                           }}
-//                         >
-//                           <span className="w-5 h-5 mr-3 text-blue-500">
-//                             {category.icon}
-//                           </span>
-//                           <span className="text-gray-700 hover:text-blue-600">
-//                             {category.label}
-//                           </span>
-//                           {category.hot && (
-//                             <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded-full flex items-center">
-//                               <FaFire className="mr-1 text-xs" /> HOT
-//                             </span>
-//                           )}
-//                         </button>
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 </div>
-//               ))}
-//             </div>
-
-//             {/* Sección de ofertas */}
-//             <div className="mt-6 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-//               <div className="flex items-center">
-//                 <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
-//                   <FaFire className="text-yellow-500" />
-//                 </div>
-//                 <div>
-//                   <h4 className="font-medium text-gray-900">
-//                     Ofertas especiales
-//                   </h4>
-//                   <p className="text-sm text-gray-500">
-//                     Descuentos exclusivos en categorías seleccionadas
-//                   </p>
-//                 </div>
-//                 <button
-//                   className="ml-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-//                   onClick={() => {
-//                     navigateTo.categoria("/ofertas");
-//                     setShowCategories(false);
-//                   }}
-//                 >
-//                   Ver ofertas
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </header>
-//   );
-// };
-
-const Header = () => {
-  const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [cartCount, setCartCount] = useState(3);
-  const [showCategories, setShowCategories] = useState(false);
-  const headerRef = useRef(null);
-  const menuScrollRef = useRef(null);
-
-  // Add scroll control for the horizontal menu
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-  // Track if header should be visible based on scroll position
-  const [headerVisible, setHeaderVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  // Check if scrolling is possible on mount and window resize
-  useEffect(() => {
-    const checkScroll = () => {
-      if (menuScrollRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = menuScrollRef.current;
-        setCanScrollLeft(scrollLeft > 0);
-        setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5); // 5px buffer
-      }
-    };
-
-    // Initial check
-    checkScroll();
-
-    // Add event listener for window resize
-    window.addEventListener("resize", checkScroll);
-
-    // Add scroll event listener to the menu
-    menuScrollRef.current?.addEventListener("scroll", checkScroll);
-
-    return () => {
-      window.removeEventListener("resize", checkScroll);
-      menuScrollRef.current?.removeEventListener("scroll", checkScroll);
-    };
-  }, []);
-
-  // Handle page scroll to hide/show header
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > lastScrollY && currentScrollY > 150) {
-        // Scrolling down & past header height - hide header
-        setHeaderVisible(false);
-      } else {
-        // Scrolling up or at top - show header
-        setHeaderVisible(true);
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
-
-  const scrollMenu = (direction) => {
-    if (menuScrollRef.current) {
-      const scrollAmount = 200; // px to scroll
-      menuScrollRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const navigateTo = {
-    home: () => navigate("/"),
-    carrito: () => navigate("/carrito"),
-    cuenta: () => navigate("/mi-cuenta"),
-    notificaciones: () => navigate("/notificaciones"),
-    categoria: (path) => navigate(path),
-    perfil: () => navigate("/mi-perfil"),
-    favoritos: () => navigate("/favoritos"),
-    venta: () => navigate("/vender-articulo"),
-    historial: () => navigate("/historial-compras"),
-    pedidos: () => navigate("/pedidos-activos"),
-    tarjetas: () => navigate("/mis-tarjetas"),
-    cupones: () => navigate("/cupones-promociones"),
-    listaDeseos: () => navigate("/lista-deseos"),
-    listaCompras: () => navigate("/lista-compras"),
-    ayuda: () => navigate("/centro-ayuda"),
-    privacidad: () => navigate("/privacidad-seguridad"),
-    soporte: () => navigate("/contactar-soporte"),
-    configuracion: () => navigate("/configuracion"),
-    logout: () => navigate("/logout"),
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/buscar?q=${encodeURIComponent(searchTerm)}`);
-      setShowCategories(false);
-    }
-  };
-
-  const toggleCategories = (e) => {
-    e.stopPropagation();
-    setShowCategories(!showCategories);
-  };
-
-  const categoryGroups = [
-    {
-      title: "Tecnología",
-      categories: [
-        { icon: <FaMobileAlt />, label: "Smartphones", path: "/telefonos" },
-        { icon: <FaLaptop />, label: "Laptops", path: "/laptops" },
-        { icon: <FaDesktop />, label: "Computadoras", path: "/computadoras" },
-        { icon: <FaTabletAlt />, label: "Tablets", path: "/tablets" },
-        { icon: <FaTv />, label: "Televisores", path: "/televisores" },
-      ],
-    },
-    {
-      title: "Hogar",
-      categories: [
-        { icon: <FaHome />, label: "Hogar", path: "/hogar" },
-        { icon: <FaUtensils />, label: "Cocina", path: "/cocina" },
-        { icon: <FaBath />, label: "Baño", path: "/bano" },
-      ],
-    },
-    {
-      title: "Moda",
-      categories: [
-        { icon: <FaTshirt />, label: "Ropa", path: "/ropa" },
-        { icon: <FaShoePrints />, label: "Zapatos", path: "/zapatos" },
-      ],
-    },
-    {
-      title: "Otros",
-      categories: [
-        { icon: <FaGamepad />, label: "Videojuegos", path: "/videojuegos" },
-        { icon: <FaBook />, label: "Libros", path: "/libros" },
-        { icon: <FaGift />, label: "Regalos", path: "/regalos" },
-      ],
-    },
-  ];
-
-  const MenuSection = ({ title, children }) => (
-    <div className="py-2">
-      <h3 className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-        {title}
-      </h3>
-      <div className="mt-1">{children}</div>
-    </div>
-  );
-
-  const MenuItem = ({ icon, text, onClick, className = "" }) => (
-    <button
-      onClick={onClick}
-      className={`w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 ${className}`}
-    >
-      <span className="mr-3">{icon}</span>
-      {text}
-    </button>
-  );
-
-  return (
-    <header
-      className={`w-full transition-transform duration-300 ${
-        headerVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
-      style={{ position: "sticky", top: 0, zIndex: 50 }}
-    >
-      {/* Barra principal - full width */}
-      <div className="bg-[#cae8ff] border-b border-blue-200 shadow-md w-full">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-2">
-            {/* Logo */}
-            <div className="cursor-pointer" onClick={navigateTo.home}>
-              <img src={logoCompleto} alt="Logo S.O.P.A" className="h-8" />
-            </div>
-
-            {/* Barra de búsqueda */}
-            <div className="flex-1 max-w-xl mx-4">
-              <form onSubmit={handleSearch} className="relative">
-                <input
-                  type="text"
-                  placeholder="Buscar productos, marcas..."
-                  className="w-full px-4 py-2 pl-10 pr-16 bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 text-sm placeholder-gray-400"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                <button
-                  type="submit"
-                  className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm hover:bg-blue-600 transition-all"
-                >
-                  Buscar
-                </button>
-              </form>
-            </div>
-
-            {/* Carrito */}
-            <div className="text-center">
-              <button
-                onClick={navigateTo.carrito}
-                className="bg-blue-600 p-2 rounded-full text-white hover:bg-blue-700 flex items-center justify-center relative"
-                aria-label="Carrito de compras"
-              >
-                <FaShoppingCart className="text-lg" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                  {cartCount}
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Barra de categorías - full width */}
-      <div className="bg-yellow-400 text-blue-900 w-full">
-        <div className="w-full px-2">
-          <div className="flex items-center">
-            <button
-              className="font-bold py-2 px-2 text-base flex items-center"
-              onClick={toggleCategories}
-            >
-              <span>Categorías</span>
-              <FaChevronDown className="ml-1" />
-            </button>
-
-            {/* Contenedor del slider horizontal para navegación */}
-            <div className="relative flex items-center flex-1 overflow-hidden">
-              {/* Botón de scroll izquierdo */}
-              {canScrollLeft && (
-                <button
-                  onClick={() => scrollMenu("left")}
-                  className="absolute left-0 z-10 h-full flex items-center justify-center px-1 bg-gradient-to-r from-yellow-400 to-transparent"
-                  aria-label="Scroll left"
-                >
-                  <FaChevronLeft className="text-blue-900" />
-                </button>
-              )}
-
-              {/* Menú horizontal de opciones principales con scroll */}
-              <div
-                ref={menuScrollRef}
-                className="flex overflow-x-auto py-2 space-x-4 flex-1 no-scrollbar scroll-smooth"
-                style={{
-                  msOverflowStyle: "none" /* IE and Edge */,
-                  scrollbarWidth: "none" /* Firefox */,
-                  paddingLeft: canScrollLeft ? "16px" : "0",
-                  paddingRight: canScrollRight ? "16px" : "0",
-                }}
-              >
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.cuenta}
-                >
-                  <FaUser className="mr-1" /> Mi Cuenta
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.favoritos}
-                >
-                  <FaHeart className="mr-1" /> Favoritos
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.notificaciones}
-                >
-                  <FaBell className="mr-1" /> Notificaciones
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.historial}
-                >
-                  <FaHistory className="mr-1" /> Mis Compras
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.pedidos}
-                >
-                  <FaStore className="mr-1" /> Pedidos
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.tarjetas}
-                >
-                  <FaCreditCard className="mr-1" /> Tarjetas
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.venta}
-                >
-                  <FaShopify className="mr-1" /> Vender
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.cupones}
-                >
-                  <RiCouponLine className="mr-1" /> Cupones
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={() => navigateTo.categoria("/ofertas")}
-                >
-                  <FaTag className="mr-1" /> Ofertas
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.listaDeseos}
-                >
-                  <FaListUl className="mr-1" /> Lista de Deseos
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.listaCompras}
-                >
-                  <FaClipboardList className="mr-1" /> Lista de Compras
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.ayuda}
-                >
-                  <IoMdHelp className="mr-1" /> Ayuda
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.soporte}
-                >
-                  <FaHeadset className="mr-1" /> Soporte
-                </button>
-                <button
-                  className="whitespace-nowrap text-blue-900 font-medium flex items-center text-xs"
-                  onClick={navigateTo.configuracion}
-                >
-                  <FaCog className="mr-1" /> Configuración
-                </button>
-              </div>
-
-              {/* Botón de scroll derecho */}
-              {canScrollRight && (
-                <button
-                  onClick={() => scrollMenu("right")}
-                  className="absolute right-0 z-10 h-full flex items-center justify-center px-1 bg-gradient-to-l from-yellow-400 to-transparent"
-                  aria-label="Scroll right"
-                >
-                  <FaChevronRight className="text-blue-900" />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Menú desplegable de categorías - full width */}
-      {showCategories && (
-        <div className="absolute w-full bg-white shadow-lg z-50">
-          <div className="w-full px-4 py-4 grid grid-cols-1 md:grid-cols-4 gap-6">
-            {categoryGroups.map((group, index) => (
-              <div key={index} className="border-r last:border-r-0 pr-4">
-                <h3 className="font-bold text-lg mb-3 text-blue-900">
-                  {group.title}
-                </h3>
-                <ul className="space-y-2">
-                  {group.categories.map((category, idx) => (
-                    <li key={idx}>
-                      <button
-                        className="flex items-center w-full text-left py-1 hover:text-blue-600"
-                        onClick={() => {
-                          navigateTo.categoria(category.path);
-                          setShowCategories(false);
-                        }}
-                      >
-                        <span className="mr-2 text-blue-500">
-                          {category.icon}
-                        </span>
-                        {category.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Breadcrumb navigation - full width */}
-      <div className="bg-white shadow-sm w-full">
-        <div className="w-full px-4 py-2">
-          <div className="flex text-sm">
-            <button
-              onClick={navigateTo.home}
-              className="text-gray-600 hover:text-blue-600"
-            >
-              Inicio
-            </button>
-            <span className="mx-2 text-gray-400">›</span>
-            <button
-              onClick={() => navigateTo.categoria("/zapatos")}
-              className="text-gray-600 hover:text-blue-600"
-            >
-              Calzado
-            </button>
-            <span className="mx-2 text-gray-400">›</span>
-            <span className="text-gray-800">Tenis semi originales Zona 30</span>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-};
-
+import Header from "../components/Header";
 const productosEjemplo = [
   {
     id: "1",
@@ -1317,42 +550,55 @@ const VerArticulo = () => {
 
   return (
     <>
-      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+      <Header />
+      <div className="relative w-full">
+        {/* Imagen de fondo decorativa */}
         <img
           src={backgroundImage}
           alt="Flor decorativa"
-          className="absolute left-0 w-1/3 md:w-1/4"
+          className="absolute left-0 w-1/3 md:w-1/4 z-0 opacity-15"
         />
-      </div>
 
-      <Header />
+        {/* Breadcrumb funcional */}
+        <div className="relative  bg-white/80 backdrop-blur-sm shadow-sm w-full border-b border-gray-200/30">
+          <div className="container mx-auto px-4">
+            <nav className="text-sm py-1">
+              <ol className="flex items-center space-x-2 text-gray-700">
+                <li className="flex items-center">
+                  <button
+                    onClick={() => navigate("/")}
+                    className="text-blue-600/90 hover:text-blue-700 hover:underline transition-colors duration-200"
+                  >
+                    Inicio
+                  </button>
+                </li>
+
+                <li className="flex items-center">
+                  <span className="mx-2 text-gray-400/80">&gt;</span>
+                  <button
+                    onClick={() =>
+                      navigate(`/categoria/${producto.categoria.toLowerCase()}`)
+                    }
+                    className="text-blue-600/90 hover:text-blue-700 hover:underline transition-colors duration-200"
+                  >
+                    {producto.categoria}
+                  </button>
+                </li>
+
+                <li className="flex items-center">
+                  <span className="mx-2 text-gray-400/80">&gt;</span>
+                  <span className="text-gray-800/90 font-medium truncate max-w-[160px] md:max-w-[240px]">
+                    {producto.titulo}
+                  </span>
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
       <div className="bg-gray-50 py-4">
         <div className="container mx-auto px-4">
           {/* Breadcrumbs */}
-          <nav className="text-sm mb-4">
-            <ol className="list-none p-0 flex flex-wrap">
-              <li className="flex items-center">
-                <button onClick={() => navigate("/")} className="text-blue-600">
-                  Inicio
-                </button>
-                <span className="mx-2 text-gray-500">&gt;</span>
-              </li>
-              <li className="flex items-center">
-                <button
-                  onClick={() =>
-                    navigate(`/categoria/${producto.categoria.toLowerCase()}`)
-                  }
-                  className="text-blue-600 hover:underline"
-                >
-                  {producto.categoria}
-                </button>
-                <span className="mx-2 text-gray-500">&gt;</span>
-              </li>
-              <li className="text-gray-600 truncate max-w-xs">
-                {producto.titulo}
-              </li>
-            </ol>
-          </nav>
 
           {/* Contenido principal */}
           <div className="bg-white rounded-lg shadow-sm p-4 md:p-8">

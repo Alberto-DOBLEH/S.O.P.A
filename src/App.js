@@ -29,6 +29,7 @@ import VerArticulo from "./pages/VerArticulo";
 // import Privacidad from "./pages/Privacidad";
 // import Soporte from "./pages/Soporte";
 // import BuscarResultados from "./pages/BuscarResultados";
+import ScrollToTop from "./components/ScrollToTop";
 
 const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
 
@@ -36,6 +37,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<Login />} />
@@ -118,9 +120,9 @@ function App() {
               MODO_DESARROLLO ? (
                 <VentaArticulo />
               ) : (
-              <RutaPrivada>
-                <VentaArticulo />
-              </RutaPrivada>
+                <RutaPrivada>
+                  <VentaArticulo />
+                </RutaPrivada>
               )
             }
           />

@@ -30,6 +30,7 @@ import VerArticulo from "./pages/VerArticulo";
 // import Soporte from "./pages/Soporte";
 // import BuscarResultados from "./pages/BuscarResultados";
 import ScrollToTop from "./components/ScrollToTop";
+import BusquedaProducto from "./pages/BusquedaProductos";
 
 const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
 
@@ -46,7 +47,12 @@ function App() {
           <Route path="/productos" element={<ListaProductos />} />
           <Route path="/ayuda" element={<Ayuda />} />
           <Route path="/VerArticulo/:id" element={<VerArticulo />} />
+          <Route path="/buscar" element={<BusquedaProducto />} />
 
+          {/* <Route
+            path="/categoria/:categoryName"
+            element={<BusquedaProducto />}
+          /> */}
           <Route
             path="/perfil"
             element={

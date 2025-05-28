@@ -228,7 +228,7 @@ const Header = () => {
       style={{ position: "sticky", top: 0, zIndex: 50 }}
     >
       {/* 🎨 BARRA PRINCIPAL CON LOGO, BÚSQUEDA Y ACCIONES */}
-      <div className="bg-[#cae8ff] border-b border-blue-200 shadow-md">
+      <div className="bg-[#cae8ff] border-b border-blue-200 shadow-md opacity-80">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="w-full flex flex-col md:flex-row justify-between items-center py-4">
             {/* LOGO EN LA ESQUINA IZQUIERDA */}
@@ -272,7 +272,9 @@ const Header = () => {
       </div>
 
       {/* 🎨 BARRA DE CATEGORÍAS CON SCROLL HORIZONTAL */}
-      <div className="bg-yellow-400 text-blue-900 w-full">
+      {/* <div className="bg-yellow-400 text-blue-900 w-full">
+       */}
+      <div className="bg-[#f4f6fc] text-blue-900 w-full opacity-80">
         <div className="w-full px-2 py-1">
           <div className="flex items-center space-x-2">
             {/* Botón de Categorías */}

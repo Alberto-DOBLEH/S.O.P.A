@@ -1,5 +1,5 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState, useRef, useEffect, useMemo } from "react";
+import { useNavigate, useLocation, useParams } from "react-router-dom"; // Añadido useLocation
 import {
   logoCompleto,
   backgroundImage,
@@ -14,14 +14,20 @@ import {
   Anuncio01,
   Anuncio02,
 } from "../assets/imagenes/imagenesslider";
-import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  LogOut,
+  Star, // Añadido
+  Filter, // Añadido
+  X, // Añadido
+} from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Login from "./Login"; // Importa tu componente Login existente
-import { AuthContext } from "../context/AuthContext"; // Asegúrate de importar el contexto de autenticación
-import { toast } from "react-toastify"; // Importa la librería de toast
-// import { ICONS } from "../assets/iconos/iconos";
+import Login from "./Login";
+import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 import {
   FaSearch,
   FaShoppingCart,
@@ -39,7 +45,6 @@ import {
   FaBars,
   FaShopify,
   FaTimes,
-  // Nuevos iconos para las categorías
   FaMobile,
   FaKeyboard,
   FaLaptop,
@@ -68,68 +73,192 @@ import {
   FaTabletAlt,
   FaDesktop,
   FaMousePointer,
+  FaTag,
+  FaTags,
+  FaChevronRight,
+  FaClock,
+  FaStar,
+  FaFire,
 } from "react-icons/fa";
 import { IoMdHelp } from "react-icons/io";
 import { RiCouponLine } from "react-icons/ri";
-// Iconos correctos (ejemplos):
-import {
-  FaTag, // Ícono singular de etiqueta
-  FaTags, // Ícono plural de etiquetas
-  FaChevronRight, // Flecha derecha
-  // FaShoppingCart, // Carrito de compras
-  FaClock, // Reloj
-  FaStar, // Añade esto
-  FaFire, // Añade esto
-  // Tus otros íconos FA aquí...
-} from "react-icons/fa";
-import axios from "axios"; // Para realizar peticiones a la API/BD
+import axios from "axios";
 import { BsPatchCheck } from "react-icons/bs";
 import Footer from "../components/Footer";
-// CATEGORÍAS
 
+// CATEGORÍAS
 const CATEGORIES = [
-  { icon: <FaMobile size={36} />, label: "Smartphones", path: "/telefonos" },
   {
-    icon: <FaKeyboard size={36} />,
+    icon: <FaMobile className="text-blue-500" />,
+    label: "Smartphones",
+    path: "/buscar",
+    categoryValue: "TELEFONOS",
+  },
+  {
+    icon: <FaKeyboard className="text-purple-500" />,
     label: "Periféricos",
-    path: "/perifericos",
+    path: "/buscar",
+    categoryValue: "PERIFÉRICOS", // Coincide con tus productos
   },
-  { icon: <FaLaptop size={36} />, label: "Laptops", path: "/laptops" },
-  { icon: <FaCamera size={36} />, label: "Cámaras", path: "/camaras" },
-  { icon: <FaTv size={36} />, label: "Televisores", path: "/televisores" },
-  { icon: <FaHome size={36} />, label: "Hogar", path: "/hogar" },
-  { icon: <FaRunning size={36} />, label: "Deportes", path: "/deportes" },
-  { icon: <FaCar size={36} />, label: "Vehículos", path: "/vehiculos" },
-  { icon: <FaGamepad size={36} />, label: "Videojuegos", path: "/videojuegos" },
-  { icon: <FaTshirt size={36} />, label: "Ropa", path: "/ropa" },
-  { icon: <FaShoePrints size={36} />, label: "Zapatos", path: "/zapatos" },
-  { icon: <FaChild size={36} />, label: "Juguetes", path: "/juguetes" },
   {
-    icon: <FaGuitar size={36} />,
+    icon: <FaLaptop className="text-indigo-500" />,
+    label: "Laptops",
+    path: "/buscar",
+    categoryValue: "LAPTOPS",
+  },
+  {
+    icon: <FaCamera className="text-yellow-500" />,
+    label: "Cámaras",
+    path: "/buscar",
+    categoryValue: "CÁMARAS",
+  },
+  {
+    icon: <FaTv className="text-red-500" />,
+    label: "Televisores",
+    path: "/buscar",
+    categoryValue: "TELEVISORES",
+  },
+  {
+    icon: <FaHome className="text-green-500" />,
+    label: "Hogar",
+    path: "/buscar",
+    categoryValue: "HOGAR",
+  },
+  {
+    icon: <FaRunning className="text-orange-500" />,
+    label: "Deportes",
+    path: "/buscar",
+    categoryValue: "DEPORTES",
+  },
+  {
+    icon: <FaCar className="text-gray-600" />,
+    label: "Vehículos",
+    path: "/buscar",
+    categoryValue: "VEHÍCULOS",
+  },
+  {
+    icon: <FaGamepad className="text-pink-500" />,
+    label: "Videojuegos",
+    path: "/buscar",
+    categoryValue: "GAMING", // Coincide con tus productos
+  },
+  {
+    icon: <FaTshirt className="text-teal-500" />,
+    label: "Ropa",
+    path: "/buscar",
+    categoryValue: "ROPA",
+  },
+  {
+    icon: <FaShoePrints className="text-brown-500" />,
+    label: "Zapatos",
+    path: "/buscar",
+    categoryValue: "ZAPATOS",
+  },
+  {
+    icon: <FaChild className="text-amber-500" />,
+    label: "Juguetes",
+    path: "/buscar",
+    categoryValue: "JUGUETES",
+  },
+  {
+    icon: <FaGuitar className="text-lime-500" />,
     label: "Instrumentos",
-    path: "/instrumentos",
+    path: "/buscar",
+    categoryValue: "INSTRUMENTOS",
   },
-  { icon: <FaBook size={36} />, label: "Libros", path: "/libros" },
-  { icon: <FaBaby size={36} />, label: "Bebés", path: "/bebes" },
-  { icon: <FaPaw size={36} />, label: "Mascotas", path: "/mascotas" },
-  { icon: <FaUtensils size={36} />, label: "Cocina", path: "/cocina" },
-  { icon: <FaBath size={36} />, label: "Baño", path: "/bano" },
-  { icon: <FaPlane size={36} />, label: "Viajes", path: "/viajes" },
-  { icon: <FaTree size={36} />, label: "Jardín", path: "/jardin" },
-  { icon: <FaDumbbell size={36} />, label: "Fitness", path: "/fitness" },
-  { icon: <FaGlassWhiskey size={36} />, label: "Bebidas", path: "/bebidas" },
-  { icon: <FaAppleAlt size={36} />, label: "Alimentos", path: "/alimentos" },
-  { icon: <FaGift size={36} />, label: "Regalos", path: "/regalos" },
-  { icon: <FaHeadphones size={36} />, label: "Audio", path: "/audio" },
-  { icon: <FaTabletAlt size={36} />, label: "Tablets", path: "/tablets" },
   {
-    icon: <FaDesktop size={36} />,
-    label: "Computadoras",
-    path: "/computadoras",
+    icon: <FaBook className="text-blue-600" />,
+    label: "Libros",
+    path: "/buscar",
+    categoryValue: "LIBROS",
   },
-  { icon: <FaKeyboard size={36} />, label: "Teclados", path: "/teclados" },
-  { icon: <FaMousePointer size={36} />, label: "Mouses", path: "/mouses" },
+  {
+    icon: <FaBaby className="text-pink-300" />,
+    label: "Bebés",
+    path: "/buscar",
+    categoryValue: "BEBÉS",
+  },
+  {
+    icon: <FaPaw className="text-yellow-600" />,
+    label: "Mascotas",
+    path: "/buscar",
+    categoryValue: "MASCOTAS",
+  },
+  {
+    icon: <FaUtensils className="text-red-400" />,
+    label: "Cocina",
+    path: "/buscar",
+    categoryValue: "COCINA",
+  },
+  {
+    icon: <FaBath className="text-blue-300" />,
+    label: "Baño",
+    path: "/buscar",
+    categoryValue: "BAÑO",
+  },
+  {
+    icon: <FaPlane className="text-indigo-300" />,
+    label: "Viajes",
+    path: "/buscar",
+    categoryValue: "VIAJE",
+  },
+  {
+    icon: <FaTree className="text-green-600" />,
+    label: "Jardín",
+    path: "/buscar",
+    categoryValue: "JARDÍN",
+  },
+  {
+    icon: <FaDumbbell className="text-gray-700" />,
+    label: "Fitness",
+    path: "/buscar",
+    categoryValue: "FITNESS",
+  },
+  {
+    icon: <FaGlassWhiskey className="text-amber-600" />,
+    label: "Bebidas",
+    path: "/buscar",
+    categoryValue: "BEBIDAS",
+  },
+
+  {
+    icon: <FaGift className="text-pink-500" />,
+    label: "Regalos",
+    path: "/buscar",
+    categoryValue: "REGALOS",
+  },
+  {
+    icon: <FaHeadphones className="text-blue-400" />,
+    label: "Audio",
+    path: "/buscar",
+    categoryValue: "AUDIO",
+  },
+  {
+    icon: <FaTabletAlt className="text-indigo-400" />,
+    label: "Tablets",
+    path: "/buscar",
+    categoryValue: "TABLETS",
+  },
+  {
+    icon: <FaDesktop className="text-gray-800" />,
+    label: "Computadoras",
+    path: "/buscar",
+    categoryValue: "COMPUTADORAS",
+  },
+  {
+    icon: <FaKeyboard className="text-purple-400" />,
+    label: "Teclados",
+    path: "/buscar",
+    categoryValue: "TECLADOS",
+  },
+  {
+    icon: <FaMousePointer className="text-gray-500" />,
+    label: "Mouses",
+    path: "/buscar",
+    categoryValue: "MOUSES",
+  },
 ];
+
 // ANUNCIOS
 const ANUNCIOS = [
   {
@@ -1176,8 +1305,9 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     const [showRightButton, setShowRightButton] = useState(true);
     const categoriesContainerRef = useRef(null);
 
-    const handleCategoryClick = (path) => {
-      navigate(path);
+    const handleCategoryClick = (path, categoryValue) => {
+      // Navegar a /buscar con el parámetro de categoría
+      navigate(`/buscar?category=${encodeURIComponent(categoryValue)}`);
     };
 
     const checkScrollPosition = () => {
@@ -1253,25 +1383,26 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                 {CATEGORIES.map((category) => (
                   <button
                     key={category.path}
-                    onClick={() => handleCategoryClick(category.path)}
-                    className="flex-shrink-0 bg-white p-4 rounded-xl shadow-xl flex flex-col items-center justify-center w-28 h-32 sm:w-32 sm:h-36 hover:bg-blue-300 border border-gray-100 transition-all duration-300 hover:scale-105 group relative"
+                    onClick={() =>
+                      handleCategoryClick(category.path, category.categoryValue)
+                    }
+                    className="flex-shrink-0 bg-white p-4 rounded-xl shadow-xl flex flex-col items-center justify-center w-28 h-32 sm:w-32 sm:h-36 hover:bg-blue-100 border border-gray-100 transition-all duration-300 hover:scale-105 group relative"
                     style={{
                       boxShadow:
                         "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.03)",
                     }}
                   >
                     <div className="absolute inset-0 rounded-xl opacity-0 bg-gradient-to-b from-white to-transparent group-hover:opacity-10"></div>
-                    <span className="text-2xl mb-3 text-black group-hover:text-cyan-900 transition-colors duration-300">
+                    <span className="text-3xl mb-3 group-hover:text-blue-600 transition-colors duration-300">
                       {category.icon}
                     </span>
-                    <span className="text-xs font-semibold text-gray-700 uppercase text-center px-1 group-hover:text-white transition-colors duration-300">
+                    <span className="text-xs font-semibold text-gray-700 uppercase text-center px-1 group-hover:text-blue-800 transition-colors duration-300">
                       {category.label}
                     </span>
                   </button>
                 ))}
               </div>
 
-              {/* Boton slider izquierda */}
               {showLeftButton && (
                 <button
                   onClick={() => scrollCategories("left")}
@@ -1286,7 +1417,6 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                 </button>
               )}
 
-              {/* Boton slider derecha */}
               {showRightButton && (
                 <button
                   onClick={() => scrollCategories("right")}

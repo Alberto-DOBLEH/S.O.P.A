@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Header from "../components/Layout/Header";
 import Button from "../components/UI/Button";
 import Input from "../components/UI/input";
-import Card from "../components/Layout/Card";
 import { toast } from "react-toastify";
 
 const VentaArticulo = () => {
@@ -30,33 +29,25 @@ const VentaArticulo = () => {
       return;
     }
 
-    toast.success("Artículo publicado con éxito");
+    // Aquí podrías enviar los datos a tu backend si ya tienes configurado
     console.log({ titulo, precio, estado, descripcion, tipo, envio, categoria });
+    toast.success("Artículo publicado con éxito");
   };
 
   return (
     <>
-      <Header onLoginClick={() => toast.info("Inicia sesión")} />
-
-      <div className="flex flex-col items-center bg-[#f0f8ff] min-h-screen px-4 py-8">
-        <Card className="w-full max-w-7xl shadow-lg bg-white p-6">
+      <Header />
+      <div className="flex flex-col items-center bg-[#eaf6ff] min-h-screen py-10 px-6">
+        <div className="bg-white rounded-lg shadow-lg w-full max-w-7xl p-6">
           <h2 className="text-2xl font-bold text-center mb-6">Publicar artículo</h2>
-
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Sección izquierda */}
-            <div className="space-y-4">
-              <label className="block">
-                <span className="font-semibold">Añadir fotos</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImagenChange}
-                  className="w-full mt-1 p-2 border rounded-md"
-                />
-              </label>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Columna izquierda */}
+            <div className="space-y-3">
+              <label className="block font-semibold">Añadir fotos</label>
+              <input type="file" accept="image/*" onChange={handleImagenChange} />
 
               <Input placeholder="Título" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
-              <Input placeholder="Precio" type="number" value={precio} onChange={(e) => setPrecio(e.target.value)} />
+              <Input placeholder="Precio" value={precio} type="number" onChange={(e) => setPrecio(e.target.value)} />
 
               <select
                 value={categoria}
@@ -64,9 +55,10 @@ const VentaArticulo = () => {
                 className="w-full border p-3 rounded-md"
               >
                 <option value="">Categoría</option>
-                <option value="electronica">Electrónica</option>
-                <option value="hogar">Hogar</option>
+                <option value="smartphones">Smartphones</option>
+                <option value="laptops">Laptops</option>
                 <option value="ropa">Ropa</option>
+                <option value="hogar">Hogar</option>
               </select>
 
               <select
@@ -93,40 +85,38 @@ const VentaArticulo = () => {
                 className="w-full border p-3 rounded-md"
               >
                 <option value="si">Incluye envío</option>
-                <option value="no">Sin envío</option>
+                <option value="no">No incluye envío</option>
               </select>
             </div>
 
-            {/* Sección central - Vista previa */}
-            <div className="col-span-1 lg:col-span-1 bg-yellow-100 border border-black flex items-center justify-center min-h-[400px]">
+            {/* Columna central (Vista previa) */}
+            <div className="flex justify-center items-center bg-yellow-100 border rounded-md h-[400px]">
               {preview ? (
-                <img src={preview} alt="Vista previa" className="object-contain h-full max-h-[400px]" />
+                <img src={preview} alt="Vista previa" className="max-h-full max-w-full object-contain" />
               ) : (
-                <p className="text-center text-lg font-medium text-gray-600">Vista previa de las imágenes</p>
+                <p className="text-center text-gray-500">Vista previa de las imágenes</p>
               )}
             </div>
 
-            {/* Sección derecha - Descripción */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">Detalles del artículo</h3>
+            {/* Columna derecha (resumen y publicar) */}
+            <div className="flex flex-col justify-between">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Descripción</label>
+                <h3 className="text-lg font-semibold mb-2">Detalles del artículo</h3>
+                <label className="block text-sm font-medium mb-1">Descripción</label>
                 <textarea
                   placeholder="Describe el artículo..."
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}
-                  className="w-full p-3 border rounded-md resize-none h-32"
+                  className="w-full p-3 border rounded-md resize-none h-28"
                 ></textarea>
               </div>
 
-              <div className="pt-4">
-                <Button type="submit" className="w-full">
-                  Publicar
-                </Button>
+              <div className="mt-6 text-center">
+                <Button type="submit">Publicar</Button>
               </div>
             </div>
           </form>
-        </Card>
+        </div>
       </div>
     </>
   );

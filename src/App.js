@@ -31,6 +31,7 @@ import VerArticulo from "./pages/VerArticulo";
 // import BuscarResultados from "./pages/BuscarResultados";
 import ScrollToTop from "./components/ScrollToTop";
 import BusquedaProducto from "./pages/BusquedaProductos";
+import ComprarYa from "./pages/ComprarYa";
 
 const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
 
@@ -48,19 +49,18 @@ function App() {
           <Route path="/ayuda" element={<Ayuda />} />
           <Route path="/VerArticulo/:id" element={<VerArticulo />} />
           <Route path="/buscar" element={<BusquedaProducto />} />
+          <Route path="/ComprarYa/:id" element={<ComprarYa />} />
+          <Route path="/perfil" element={<Perfil />} />
+          <Route path="/configuracion" element={<Configuracion />} />
 
           {/* <Route
-            path="/categoria/:categoryName"
-            element={<BusquedaProducto />}
-          /> */}
-          <Route
             path="/perfil"
             element={
               <RutaPrivada>
                 <Perfil />
               </RutaPrivada>
             }
-          />
+          /> */}
 
           <Route
             path="/tarjeta"
@@ -102,14 +102,14 @@ function App() {
             }
           />
 
-          <Route
+          {/* <Route
             path="/configuracion"
             element={
               <RutaPrivada>
                 <Configuracion />
               </RutaPrivada>
             }
-          />
+          /> */}
 
           <Route
             path="/venta-carro"

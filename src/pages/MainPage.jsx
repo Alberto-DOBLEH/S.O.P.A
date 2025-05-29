@@ -600,14 +600,28 @@ const ArticulosMasVendidos = () => {
                   <span className="text-xl font-bold text-gray-800">
                     {formatoPrecio(producto.precio)}
                   </span>
-                  <button
+                  {/* <button
                     onClick={(e) => {
                       e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
-                      handleCompraRapida(producto.id);
+                      navigate(
+                        `/ComprarYa/${producto.id}`,
+                        "_blank",
+                        "noopener,noreferrer"
+                      );
+                    }}
+                    
+                  >
+                    Comprar ya
+                  </button> */}
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/ComprarYa/${producto.id}`);
                     }}
                     className="ml-2 bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded-lg text-sm font-medium transition-colors duration-200"
                   >
-                    Comprar ya
+                    Comprar Ya
                   </button>
                 </div>
 
@@ -1079,8 +1093,8 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       carrito: () => navigate("/carrito"),
       cuenta: () => navigate("/mi-cuenta"),
       notificaciones: () => navigate("/notificaciones"),
-      categoria: (path) => navigate(path),
-      perfil: () => navigate("/mi-perfil"),
+      // categoria: (path) => navigate(path),
+      perfil: () => navigate("/perfil"),
       favoritos: () => navigate("/favoritos"),
       venta: () => navigate("/venta"),
       historial: () => navigate("/historial-compras"),
@@ -1089,7 +1103,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       cupones: () => navigate("/cupones-promociones"),
       listaDeseos: () => navigate("/lista-deseos"),
       listaCompras: () => navigate("/lista-compras"),
-      ayuda: () => navigate("/centro-ayuda"),
+      ayuda: () => navigate("/ayuda"),
       privacidad: () => navigate("/privacidad-seguridad"),
       soporte: () => navigate("/contactar-soporte"),
       configuracion: () => navigate("/configuracion"),

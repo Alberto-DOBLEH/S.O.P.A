@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/Alberto-DOBLEH/S.O.P.A/static/css/main.8b13fe77.css",
+    "main.js": "/Alberto-DOBLEH/S.O.P.A/static/js/main.7e142b95.js",
+    "static/media/Hot-Sale.png": "/Alberto-DOBLEH/S.O.P.A/static/media/Hot-Sale.484977b73d52f5b564fc.png",
+    "static/media/desaparecido.jpg": "/Alberto-DOBLEH/S.O.P.A/static/media/desaparecido.9b654e57e2907f098cc7.jpg",
+    "static/media/dobleh2023.jpg": "/Alberto-DOBLEH/S.O.P.A/static/media/dobleh2023.7620ff102d93190ac67f.jpg",
+    "static/media/Los-Fondo.jpg": "/Alberto-DOBLEH/S.O.P.A/static/media/Los-Fondo.bf83e45497742af60071.jpg",
+    "static/media/Flor-Fondo.png": "/Alberto-DOBLEH/S.O.P.A/static/media/Flor-Fondo.82efc6354a5857065a17.png",
+    "static/media/Webo.png": "/Alberto-DOBLEH/S.O.P.A/static/media/Webo.753610e1ad781d9ad351.png",
+    "static/media/logo-completo.png": "/Alberto-DOBLEH/S.O.P.A/static/media/logo-completo.3b2b193ef01216ef7127.png",
+    "static/media/Alan-Sombreron.jpg": "/Alberto-DOBLEH/S.O.P.A/static/media/Alan-Sombreron.9174d36667ce328eaaca.jpg",
+    "static/media/slick.svg": "/Alberto-DOBLEH/S.O.P.A/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/Alberto-DOBLEH/S.O.P.A/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/Alberto-DOBLEH/S.O.P.A/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/Alberto-DOBLEH/S.O.P.A/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/Alberto-DOBLEH/S.O.P.A/index.html",
+    "main.8b13fe77.css.map": "/Alberto-DOBLEH/S.O.P.A/static/css/main.8b13fe77.css.map",
+    "main.7e142b95.js.map": "/Alberto-DOBLEH/S.O.P.A/static/js/main.7e142b95.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8b13fe77.css",
+    "static/js/main.7e142b95.js"
+  ]
+}

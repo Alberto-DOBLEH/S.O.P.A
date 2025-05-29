@@ -1,114 +1,131 @@
+// backend/controllers/ventasController.js
+
 const db = require("../db");
 
-// POST /api/ventas
+// 1) Crear una nueva venta (checkout)
 const crearVenta = (req, res) => {
-  const { id_usuario, productos, metodo_pago } = req.body;
+  const { productos, metodo_pago } = req.body;
+  const id_usuario = req.userId || req.body.id_usuario;
 
-  if (!id_usuario || !productos || productos.length === 0) {
-    return res.status(400).json({ error: "Faltan datos para crear la venta" });
+  if (!productos || productos.length === 0) {
+    return res.status(400).json({ error: "Faltan productos para la venta" });
   }
 
-  // Calcular total
-  let total = 0;
-  for (let p of productos) {
-    total += p.precio * p.cantidad;
-  }
-
-  const insertVenta = `
-    INSERT INTO ventas (id_usuario, total, metodo_pago)
-    VALUES (?, ?, ?)
-  `;
-
-  db.query(insertVenta, [id_usuario, total, metodo_pago], (err, result) => {
-    if (err) {
-        console.error("Error SQL al crear la venta:", err);
-        return res.status(500).json({ error: "Error al crear la venta", detalle: err.message });
+  // 1.1 Obtener precios reales de la BD
+  const ids = productos.map(p => p.id_producto);
+  db.query(
+    "SELECT id_producto, precio FROM productos WHERE id_producto IN (?)",
+    [ids],
+    (err, rows) => {
+      if (err) {
+        console.error("Error al leer precios:", err);
+        return res.status(500).json({ error: "Error al leer precios" });
       }
-      
-    const id_venta = result.insertId;
 
-    // Insertar detalle por cada producto
-    const insertDetalle = `
-      INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario)
-      VALUES ?
-    `;
+      const priceMap = {};
+      rows.forEach(r => {
+        priceMap[r.id_producto] = r.precio;
+      });
 
-    const valores = productos.map(p => [
-      id_venta,
-      p.id_producto,
-      parseInt(p.cantidad),        // 👈 Fuerza a entero
-      parseFloat(p.precio)         // 👈 Fuerza a decimal
-    ]);
-    
+      // 1.2 Calcular total
+      const total = productos.reduce(
+        (sum, p) => sum + (priceMap[p.id_producto] || 0) * p.cantidad,
+        0
+      );
 
-    db.query(insertDetalle, [valores], (err2) => {
-      if (err2) return res.status(500).json({ error: "Error al insertar detalle de venta" });
+      // 1.3 Insertar cabecera de la venta
+      db.query(
+        "INSERT INTO ventas (id_usuario, total, metodo_pago) VALUES (?, ?, ?)",
+        [id_usuario, total, metodo_pago],
+        (err2, result) => {
+          if (err2) {
+            console.error("Error al crear venta (cabecera):", err2);
+            return res.status(500).json({ error: "Error al crear venta" });
+          }
 
-      res.status(201).json({ mensaje: "Venta registrada con éxito", id_venta });
-    });
-  });
+          const id_venta = result.insertId;
+
+          // 1.4 Preparar y guardar los detalles
+          const valores = productos.map(p => [
+            id_venta,
+            p.id_producto,
+            p.cantidad,
+            priceMap[p.id_producto]
+          ]);
+
+          db.query(
+            "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES ?",
+            [valores],
+            (err3) => {
+              if (err3) {
+                console.error("Error al insertar detalle de venta:", err3);
+                return res.status(500).json({ error: "Error al insertar detalle" });
+              }
+              return res.status(201).json({ mensaje: "Venta registrada con éxito", id_venta });
+            }
+          );
+        }
+      );
+    }
+  );
 };
-// PUT /api/ventas/estado/:id_venta
+
+// 2) Actualizar el estado de una venta
 const actualizarEstadoVenta = (req, res) => {
-  const { id_venta } = req.params;
+  const id_venta = req.params.id_venta;
   const { estado } = req.body;
 
-  const query = "UPDATE ventas SET estado = ?, fecha_actualizacion = NOW() WHERE id_venta = ?";
-  db.query(query, [estado, id_venta], (err, result) => {
-    if (err) {
-      console.error("Error al actualizar estado:", err);
-      return res.status(500).json({ error: "No se pudo actualizar el estado" });
-    }
-    res.status(200).json({ mensaje: "Estado actualizado correctamente" });
-  });
-};
+  if (!estado) {
+    return res.status(400).json({ error: "Debe enviar el nuevo estado" });
+  }
 
-// GET /api/ventas/usuario/:id_usuario
-const obtenerVentasPorUsuario = (req, res) => {
-  const { id_usuario } = req.params;
-
-  const query = `
-    SELECT v.id_venta, v.total, v.estado, v.metodo_pago, v.fecha_compra,
-           dv.id_producto, dv.cantidad, dv.precio_unitario, p.nombre AS nombre_producto
-    FROM ventas v
-    JOIN detalle_ventas dv ON v.id_venta = dv.id_venta
-    JOIN productos p ON dv.id_producto = p.id_producto
-    WHERE v.id_usuario = ?
-    ORDER BY v.fecha_compra DESC
-  `;
-
-  db.query(query, [id_usuario], (err, results) => {
-    if (err) {
-      console.error("Error al obtener ventas:", err);
-      return res.status(500).json({ error: "Error al obtener las ventas" });
-    }
-
-    // Agrupar por id_venta
-    const ventas = {};
-    results.forEach(row => {
-      if (!ventas[row.id_venta]) {
-        ventas[row.id_venta] = {
-          id_venta: row.id_venta,
-          total: row.total,
-          estado: row.estado,
-          metodo_pago: row.metodo_pago,
-          fecha_compra: row.fecha_compra,
-          productos: []
-        };
+  db.query(
+    "UPDATE ventas SET estado = ? WHERE id_venta = ?",
+    [estado, id_venta],
+    (err, result) => {
+      if (err) {
+        console.error("Error al actualizar estado de venta:", err);
+        return res.status(500).json({ error: "Error al actualizar estado" });
       }
-
-      ventas[row.id_venta].productos.push({
-        id_producto: row.id_producto,
-        nombre: row.nombre_producto,
-        cantidad: row.cantidad,
-        precio_unitario: row.precio_unitario
-      });
-    });
-
-    res.status(200).json(Object.values(ventas));
-  });
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: "Venta no encontrada" });
+      }
+      res.json({ mensaje: "Estado de venta actualizado" });
+    }
+  );
 };
 
+// 3) Obtener el historial de ventas de un usuario
+const obtenerVentasPorUsuario = (req, res) => {
+  const id_usuario = req.userId || req.params.id_usuario;
+  db.query(
+    `SELECT v.id_venta,
+            v.total,
+            v.metodo_pago,
+            v.estado,
+            v.fecha_creacion,
+            dv.id_producto,
+            dv.cantidad,
+            dv.precio_unitario,
+            p.nombre AS nombre_producto
+     FROM ventas v
+     JOIN detalle_ventas dv ON v.id_venta = dv.id_venta
+     JOIN productos p ON dv.id_producto = p.id_producto
+     WHERE v.id_usuario = ?
+     ORDER BY v.fecha_creacion DESC`,
+    [id_usuario],
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener ventas:", err);
+        return res.status(500).json({ error: "Error al obtener ventas" });
+      }
+      res.json(results);
+    }
+  );
+};
 
-module.exports = { crearVenta, actualizarEstadoVenta, obtenerVentasPorUsuario };
-
+module.exports = {
+  crearVenta,
+  actualizarEstadoVenta,
+  obtenerVentasPorUsuario
+};

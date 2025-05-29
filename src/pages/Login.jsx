@@ -84,11 +84,18 @@ const Login = ({ onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <Card className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#cae8ff] relative">
         <button
-          onClick={onClose}
+          onClick={() => {
+            if (onClose) {
+              onClose();
+            } else {
+              navigate(-1);
+            }
+          }}
           className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 z-50"
         >
           ✕
         </button>
+
 
         <div className="absolute inset-0 flex items-center justify-center opacity-15">
           <img

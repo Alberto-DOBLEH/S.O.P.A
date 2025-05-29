@@ -1,0 +1,16 @@
+npm install
+npm install react-router-dom
+npm install tailwindcss postcss autoprefixer
+npx tailwindcss init
+npm install postcss
+npm install nombre-de-la-dependencia
+npm i bootstrap-icons
+npm install lucide-react react-slick slick-carousel
+npm install react-toastify
+npm install axios
+npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons
+
+Para carpeta backend:
+npm init -y
+npm install express mysql2 cors body-parser
+npm run dev   # para usar nodemon

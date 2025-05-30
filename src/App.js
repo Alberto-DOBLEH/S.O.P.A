@@ -124,10 +124,10 @@ function App() {
             path="/venta"
             element={
               MODO_DESARROLLO ? (
-                <VentaArticulo />
+                <Venta />
               ) : (
                 <RutaPrivada>
-                  <VentaArticulo />
+                  <Venta />
                 </RutaPrivada>
               )
             }

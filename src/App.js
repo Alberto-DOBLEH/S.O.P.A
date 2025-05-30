@@ -112,11 +112,28 @@ function App() {
           /> */}
 
           <Route
+            path="/venta-articulo"
+            element={
+              MODO_DESARROLLO ? (
+                <VentaArticulo />
+              ) : (
+                <RutaPrivada>
+                  <VentaArticulo />
+                </RutaPrivada>
+              )
+            }
+          />
+
+          <Route
             path="/venta-carro"
             element={
-              <RutaPrivada>
+              MODO_DESARROLLO ? (
                 <VentaCarro />
-              </RutaPrivada>
+              ) : (
+                <RutaPrivada>
+                  <VentaCarro />
+                </RutaPrivada>
+              )
             }
           />
 

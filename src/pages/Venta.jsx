@@ -11,7 +11,7 @@ const Venta = () => {
   };
 
   const irAVentaVehiculo = () => {
-    navigate("/venta-vehiculo");
+    navigate("/venta-carro");
   };
 
   return (
@@ -38,7 +38,7 @@ const Venta = () => {
           </button>
         </div>
 
-        <footer className="mt-10 text-sm text-gray-500">Footer</footer>
+        <footer className="mt-10 text-sm text-gray-500"></footer>
       </div>
     </>
   );

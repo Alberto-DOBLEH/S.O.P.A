@@ -31,7 +31,7 @@ const Login = ({ onClose }) => {
   
     let data = {};
     try {
-      const response = await fetch("http://localhost:3001/api/login", {
+      const response = await fetch("http://localhost:3001/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,6 +54,8 @@ const Login = ({ onClose }) => {
         if (data.token && data.usuario) {
           // Usamos el contexto para iniciar sesión
           login({ nombre: data.usuario.nombre, token: data.token });
+          localStorage.setItem("usuario", data.usuario.nombre);
+          if (onClose) onClose();
           navigate("/");  // Redirige a la página principal
         } else {
           throw new Error("Respuesta del backend incompleta");

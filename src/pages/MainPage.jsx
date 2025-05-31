@@ -130,6 +130,8 @@ const CATEGORIES = [
   { icon: <FaKeyboard size={36} />, label: "Teclados", path: "/teclados" },
   { icon: <FaMousePointer size={36} />, label: "Mouses", path: "/mouses" },
 ];
+
+
 // ANUNCIOS
 const ANUNCIOS = [
   {
@@ -930,6 +932,30 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
   );
 
   const Header = () => {
+    const [userName, setuserName] = useState();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    useEffect(() => {
+      const usuario = localStorage.getItem("usuario");
+      if (usuario) {
+        setuserName(usuario);
+        setIsAuthenticated(true);
+      }
+      
+    }, []);
+    const logout = () => {
+      if(!isAuthenticated) {
+        toast.error("No hay sesión iniciada", {
+          toastId: "logout-error",
+        });
+      }else{
+        localStorage.removeItem("usuario");
+        setIsAuthenticated(false);
+        toast.success("Sesión cerrada exitosamente", {
+          toastId: "logout-exito",
+        });
+        navigate("/");
+      }
+    }
     const handleCarritoClick = () => {
       navigateTo.carrito();
       setShowOpciones(false);
@@ -937,7 +963,6 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     const navigate = useNavigate(); // Asegúrate de inicializar navigate si no lo hiciste
 
     const [showOpciones, setShowOpciones] = useState(false); // 🔧 Estado faltante
-    const [userName] = useState("Usuario Ejemplo");
     const menuRef = useRef(null); // 🔧 Referencia faltante
     // Funciones para manejar el menú de opciones
     const toggleMenu = () => setShowOpciones(!showOpciones);
@@ -964,7 +989,6 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       privacidad: () => navigate("/privacidad-seguridad"),
       soporte: () => navigate("/contactar-soporte"),
       configuracion: () => navigate("/configuracion"),
-      logout: () => navigate("/logout"),
     };
 
     // Componentes auxiliares para el menú
@@ -1019,12 +1043,14 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                 </span>
               </button>
               {/* B O T O N   L O G I N */}
-              <button
-                onClick={() => setShowLoginModal(true)}
-                className="bg-blue-600 text-white px-8 py-2 rounded-full font-medium shadow-md transition-all duration-200 text-lg md:text-xl hover:bg-[#edf6f9] hover:text-blue-600 group"
-              >
-                <span>Login</span>
-              </button>
+              {!isAuthenticated && (
+                <button
+                  onClick={() => setShowLoginModal(true)}
+                  className="bg-blue-600 text-white px-8 py-2 rounded-full font-medium shadow-md transition-all duration-200 text-lg md:text-xl hover:bg-[#edf6f9] hover:text-blue-600 group"
+                >
+                  <span>Login</span>
+                </button>
+              )}
               {/* B O T O N   M E N U */}
               <div
                 className="relative"
@@ -1152,12 +1178,14 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                       </MenuSection>
 
                       <div className="p-2 bg-gray-50">
+                      {isAuthenticated && (
                         <MenuItem
                           icon={<FaSignOutAlt className="text-red-500" />}
                           text="Cerrar sesión"
-                          onClick={navigateTo.logout}
+                          onClick={logout}
                           className="hover:bg-red-50"
                         />
+                      )}
                       </div>
                     </div>
                   </div>

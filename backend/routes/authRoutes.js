@@ -6,11 +6,12 @@ Cada ruta llama a una función del authController, así se separa lógica de rut
 */ 
 const express = require("express");
 const router = express.Router();
-const { verificarUsuario, verificarTelefono, registrar, login } = require("../controllers/authController");
+const { verificarUsuario, verificarTelefono, registrar, login, informacionUsuario } = require("../controllers/authController");
 
-router.post("/verificar-usuario", verificarUsuario);
+router.get("/verificar-usuario", verificarUsuario);
 router.post("/verificar-telefono", verificarTelefono);
 router.post("/registro", registrar);
 router.post("/login", login);
+router.get("/informacion-usuario", informacionUsuario);
 
 module.exports = router;

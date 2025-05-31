@@ -21,6 +21,7 @@ const verificarUsuario = (req, res) => {
   db.query("SELECT * FROM usuarios WHERE nombre = ?", [nombre], (err, results) => {
     if (err) return res.status(500).send("Error en BD");
     res.status(200).json({ existe: results.length > 0 });
+    console.log(`Verificando usuario: ${nombre}, existe: ${results.length > 0}`);
   });
 };
 
@@ -80,4 +81,20 @@ const login = (req, res) => {
   });
 };
 
-module.exports = { verificarUsuario, verificarTelefono, registrar, login };
+const informacionUsuario = (req, res) => {
+  const { nombre } = req.body;
+
+  db.query("SELECT * FROM usuarios WHERE nombre = ?", [nombre], (err, results) => {
+    if (err) return res.status(500).send("Error en la BD");
+    if (results.length === 0) return res.status(404).send("Usuario no encontrado");
+
+    const user = results[0];
+    res.status(200).json({
+      id: user.id_usuario,
+      nombre: user.nombre,
+      telefono: user.telefono
+    });
+  });
+};
+
+module.exports = { verificarUsuario, verificarTelefono, registrar, login, informacionUsuario };

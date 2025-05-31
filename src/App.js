@@ -32,162 +32,107 @@ import VerArticulo from "./pages/VerArticulo";
 import ScrollToTop from "./components/ScrollToTop";
 import BusquedaProducto from "./pages/BusquedaProductos";
 import ComprarYa from "./pages/ComprarYa";
-
+import { CurrencyProvider } from "./CurrencyContext";
 const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<Registro />} />
-          <Route path="/contra-nueva" element={<ContraNueva />} />
-          <Route path="/productos" element={<ListaProductos />} />
-          <Route path="/ayuda" element={<Ayuda />} />
-          <Route path="/VerArticulo/:id" element={<VerArticulo />} />
-          <Route path="/buscar" element={<BusquedaProducto />} />
-          <Route path="/ComprarYa/:id" element={<ComprarYa />} />
-          <Route path="/perfil" element={<Perfil />} />
-          <Route path="/configuracion" element={<Configuracion />} />
-
-          {/* <Route
-            path="/perfil"
-            element={
-              <RutaPrivada>
-                <Perfil />
-              </RutaPrivada>
-            }
-          /> */}
-
-          <Route
-            path="/tarjeta"
-            element={
-              <RutaPrivada>
-                <Tarjeta />
-              </RutaPrivada>
-            }
-          />
-
-          <Route
-            path="/carrito"
-            element={
-              MODO_DESARROLLO ? (
-                <CarritoCompras />
-              ) : (
+      <CurrencyProvider>
+        {" "}
+        {/* Envuelve todo en CurrencyProvider */}
+        <Router>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registro" element={<Registro />} />
+            <Route path="/contra-nueva" element={<ContraNueva />} />
+            <Route path="/productos" element={<ListaProductos />} />
+            <Route path="/ayuda" element={<Ayuda />} />
+            <Route path="/VerArticulo/:id" element={<VerArticulo />} />
+            <Route path="/buscar" element={<BusquedaProducto />} />
+            <Route path="/ComprarYa/:id" element={<ComprarYa />} />
+            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/configuracion" element={<Configuracion />} />
+            <Route
+              path="/tarjeta"
+              element={
                 <RutaPrivada>
+                  <Tarjeta />
+                </RutaPrivada>
+              }
+            />
+            <Route
+              path="/carrito"
+              element={
+                MODO_DESARROLLO ? (
                   <CarritoCompras />
-                </RutaPrivada>
-              )
-            }
-          />
-
-          <Route
-            path="/lista-deseos"
-            element={
-              <RutaPrivada>
-                <ListaDeseos />
-              </RutaPrivada>
-            }
-          />
-
-          <Route
-            path="/lista-compras"
-            element={
-              <RutaPrivada>
-                <ListaCompras />
-              </RutaPrivada>
-            }
-          />
-
-          {/* <Route
-            path="/configuracion"
-            element={
-              <RutaPrivada>
-                <Configuracion />
-              </RutaPrivada>
-            }
-          /> */}
-
-          <Route
-            path="/venta-articulo"
-            element={
-              MODO_DESARROLLO ? (
-                <VentaArticulo />
-              ) : (
+                ) : (
+                  <RutaPrivada>
+                    <CarritoCompras />
+                  </RutaPrivada>
+                )
+              }
+            />
+            <Route
+              path="/lista-deseos"
+              element={
                 <RutaPrivada>
-                  <VentaArticulo />
+                  <ListaDeseos />
                 </RutaPrivada>
-              )
-            }
-          />
-
-          <Route
-            path="/venta-carro"
-            element={
-              MODO_DESARROLLO ? (
-                <VentaCarro />
-              ) : (
+              }
+            />
+            <Route
+              path="/lista-compras"
+              element={
+                <RutaPrivada>
+                  <ListaCompras />
+                </RutaPrivada>
+              }
+            />
+            <Route
+              path="/venta-carro"
+              element={
                 <RutaPrivada>
                   <VentaCarro />
                 </RutaPrivada>
-              )
-            }
-          />
-
-          <Route
-            path="/venta"
-            element={
-              MODO_DESARROLLO ? (
-                <Venta />
-              ) : (
+              }
+            />
+            <Route
+              path="/venta"
+              element={
+                MODO_DESARROLLO ? (
+                  <VentaArticulo />
+                ) : (
+                  <RutaPrivada>
+                    <VentaArticulo />
+                  </RutaPrivada>
+                )
+              }
+            />
+            <Route
+              path="/zona"
+              element={
                 <RutaPrivada>
-                  <Venta />
+                  <ZonaPrivada />
                 </RutaPrivada>
-              )
-            }
+              }
+            />
+            <Route path="*" element={<div>Página no encontrada</div>} />
+          </Routes>
+          <ToastContainer
+            position="bottom-center"
+            autoClose={750}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            pauseOnHover
+            draggable
+            theme="colored"
           />
-
-          <Route
-            path="/zona"
-            element={
-              <RutaPrivada>
-                <ZonaPrivada />
-              </RutaPrivada>
-            }
-          />
-          {/* <Route
-            path="/VerArticulo"
-            element={
-              <RutaPrivada>
-                <VerArticulo />
-              </RutaPrivada>
-            }
-          /> */}
-          {/* Comenta temporalmente estas rutas si los componentes no existen */}
-          {/* <Route path="/notificaciones" element={<Notificaciones />} />
-        <Route path="/historial-compras" element={<HistorialCompras />} />
-        <Route path="/pedidos-activos" element={<PedidosActivos />} />
-        <Route path="/cupones" element={<Cupones />} />
-        <Route path="/privacidad" element={<Privacidad />} />
-        <Route path="/soporte" element={<Soporte />} />
-        <Route path="/buscar" element={<BuscarResultados />} /> */}
-
-          <Route path="*" element={<div>Página no encontrada</div>} />
-        </Routes>
-        <ToastContainer
-          position="bottom-center"
-          autoClose={750}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          pauseOnHover
-          draggable
-          theme="colored"
-        />
-      </Router>
+        </Router>
+      </CurrencyProvider>
     </AuthProvider>
   );
 }

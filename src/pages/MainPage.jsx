@@ -18,9 +18,9 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
-  Star, // Añadido
-  Filter, // Añadido
-  X, // Añadido
+  Star,
+  Filter,
+  X,
 } from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -85,8 +85,11 @@ import { RiCouponLine } from "react-icons/ri";
 import axios from "axios";
 import { BsPatchCheck } from "react-icons/bs";
 import Footer from "../components/Footer";
-
+import { useCurrency } from "../CurrencyContext"; // Asegúrate de que la ruta sea correcta
+import OfertasDestacadas from "../components/OfertasDestacadas";
+import ArticulosMasVendidos from "../components/ArticulosMasVendidos";
 // CATEGORÍAS
+
 const CATEGORIES = [
   {
     icon: <FaMobile className="text-blue-500" />,
@@ -300,618 +303,846 @@ const ANUNCIOS = [
   },
 ];
 
-const ArticulosMasVendidos = () => {
-  // Estados para los productos
-  const [masVendidos, setMasVendidos] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(null);
+// const ArticulosMasVendidos = () => {
+//   // Estados para los productos
+//   const [masVendidos, setMasVendidos] = useState([]);
+//   const [cargando, setCargando] = useState(true);
+//   const [error, setError] = useState(null);
 
-  // Estado para el carrito (ejemplo básico)
-  const [carrito, setCarrito] = useState([]);
-  const navigate = useNavigate();
+//   // Estado para el carrito (ejemplo básico)
+//   const [carrito, setCarrito] = useState([]);
+//   const navigate = useNavigate();
 
-  // Datos de ejemplo
-  const DATOS_EJEMPLO_MAS_VENDIDOS = [
-    {
-      id: 1,
-      imagen: "https://via.placeholder.com/200",
-      titulo: "Auriculares Bluetooth con cancelación de ruido",
-      precio: 1299,
-      calificacion: 4.8,
-      numeroVentas: 1243,
-      etiquetas: ["Tendencia", "Envío Gratis"],
-      vendedor: "AudioPro México",
-      verificado: true,
-      categoria: "Audio",
-    },
-    {
-      id: 2,
-      imagen: "https://via.placeholder.com/200",
-      titulo: "No son orijiji",
-      precio: 999,
-      calificacion: 5.0,
-      numeroVentas: 1000,
-      etiquetas: ["Tendencia", "Envío Gratis"],
-      vendedor: "Adeudo México",
-      verificado: true,
-      categoria: "Calzado",
-    },
-    {
-      id: 3,
-      imagen: "https://via.placeholder.com/200",
-      titulo: "Tenis semi originales Zona 30",
-      precio: 1500,
-      calificacion: 4.0,
-      numeroVentas: 1243,
-      etiquetas: ["Tendencia", "Envío Gratis"],
-      vendedor: "Mike México",
-      verificado: true,
-      categoria: "Calzado",
-    },
-    {
-      id: 4,
-      imagen: "https://via.placeholder.com/200",
-      titulo: "Juguete Tralalero Tralala",
-      precio: 3000,
-      calificacion: 5.0,
-      numeroVentas: 10000,
-      etiquetas: ["Tendencia", "Envío Gratis"],
-      vendedor: "Bain Rot Italiano",
-      verificado: true,
-      categoria: "Jueguete",
-    },
-    // ... otros productos de ejemplo
-  ];
+//   // Datos de ejemplo
+//   const DATOS_EJEMPLO_MAS_VENDIDOS = [
+//     {
+//       id: 1,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Auriculares Bluetooth con cancelación de ruido",
+//       precio: 1299,
+//       calificacion: 4.8,
+//       numeroVentas: 1243,
+//       etiquetas: ["Tendencia", "Envío Gratis"],
+//       vendedor: "AudioPro México",
+//       verificado: true,
+//       categoria: "Audio",
+//     },
+//     {
+//       id: 2,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "No son orijiji",
+//       precio: 999,
+//       calificacion: 5.0,
+//       numeroVentas: 1000,
+//       etiquetas: ["Tendencia", "Envío Gratis"],
+//       vendedor: "Adeudo México",
+//       verificado: true,
+//       categoria: "Calzado",
+//     },
+//     {
+//       id: 3,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Tenis semi originales Zona 30",
+//       precio: 1500,
+//       calificacion: 4.0,
+//       numeroVentas: 1243,
+//       etiquetas: ["Tendencia", "Envío Gratis"],
+//       vendedor: "Mike México",
+//       verificado: true,
+//       categoria: "Calzado",
+//     },
+//     {
+//       id: 4,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Juguete Tralalero Tralala",
+//       precio: 3000,
+//       calificacion: 5.0,
+//       numeroVentas: 10000,
+//       etiquetas: ["Tendencia", "Envío Gratis"],
+//       vendedor: "Bain Rot Italiano",
+//       verificado: true,
+//       categoria: "Jueguete",
+//     },
+//     // ... otros productos de ejemplo
+//   ];
 
-  // Efecto para cargar productos
-  useEffect(() => {
-    const obtenerProductosMasVendidos = async () => {
-      try {
-        setCargando(true);
-        // En producción, reemplazar con tu endpoint real
-        // const respuesta = await axios.get('/api/productos/mas-vendidos');
-        // setMasVendidos(respuesta.data);
+//   // Efecto para cargar productos
+//   useEffect(() => {
+//     const obtenerProductosMasVendidos = async () => {
+//       try {
+//         setCargando(true);
+//         // En producción, reemplazar con tu endpoint real
+//         // const respuesta = await axios.get('/api/productos/mas-vendidos');
+//         // setMasVendidos(respuesta.data);
 
-        // Usando datos de ejemplo para el demo
-        setTimeout(() => {
-          setMasVendidos(DATOS_EJEMPLO_MAS_VENDIDOS);
-          setCargando(false);
-        }, 1000);
-      } catch (err) {
-        console.error("Error:", err);
-        setError("Error al cargar productos");
-        setMasVendidos(DATOS_EJEMPLO_MAS_VENDIDOS);
-        setCargando(false);
-      }
-    };
+//         // Usando datos de ejemplo para el demo
+//         setTimeout(() => {
+//           setMasVendidos(DATOS_EJEMPLO_MAS_VENDIDOS);
+//           setCargando(false);
+//         }, 1000);
+//       } catch (err) {
+//         console.error("Error:", err);
+//         setError("Error al cargar productos");
+//         setMasVendidos(DATOS_EJEMPLO_MAS_VENDIDOS);
+//         setCargando(false);
+//       }
+//     };
 
-    obtenerProductosMasVendidos();
-  }, []);
+//     obtenerProductosMasVendidos();
+//   }, []);
 
-  // Función para agregar al carrito
-  const agregarAlCarrito = (productoId) => {
-    const producto = masVendidos.find((p) => p.id === productoId);
-    setCarrito((prev) => {
-      const existe = prev.find((item) => item.id === productoId);
-      if (existe) {
-        return prev.map((item) =>
-          item.id === productoId
-            ? { ...item, cantidad: item.cantidad + 1 }
-            : item
-        );
-      }
-      return [...prev, { ...producto, cantidad: 1 }];
-    });
+//   // Función para agregar al carrito
+//   const agregarAlCarrito = (productoId) => {
+//     const producto = masVendidos.find((p) => p.id === productoId);
+//     setCarrito((prev) => {
+//       const existe = prev.find((item) => item.id === productoId);
+//       if (existe) {
+//         return prev.map((item) =>
+//           item.id === productoId
+//             ? { ...item, cantidad: item.cantidad + 1 }
+//             : item
+//         );
+//       }
+//       return [...prev, { ...producto, cantidad: 1 }];
+//     });
 
-    // Feedback visual (en una app real usarías un toast)
-    console.log("Carrito actualizado:", carrito);
-    alert(`✅ ${producto.titulo} agregado al carrito`);
-  };
+//     // Feedback visual (en una app real usarías un toast)
+//     console.log("Carrito actualizado:", carrito);
+//     alert(`✅ ${producto.titulo} agregado al carrito`);
+//   };
 
-  // Función para ver detalle del producto - MEJORADA Y CORREGIDA
-  const verDetalleProducto = (productoId) => {
-    // Encuentra el producto en el array correspondiente
-    const producto = masVendidos.find((p) => p.id === productoId);
+//   // Función para ver detalle del producto - MEJORADA Y CORREGIDA
+//   const verDetalleProducto = (productoId) => {
+//     // Encuentra el producto en el array correspondiente
+//     const producto = masVendidos.find((p) => p.id === productoId);
 
-    // Validación completa antes de navegar
-    if (!producto) {
-      console.error("Producto no encontrado");
-      return;
-    }
+//     // Validación completa antes de navegar
+//     if (!producto) {
+//       console.error("Producto no encontrado");
+//       return;
+//     }
 
-    navigate(`/VerArticulo/${productoId}`, {
-      state: {
-        producto: {
-          ...producto,
-          imagenes: producto.imagenes || [], // Asegura array de imágenes
-          especificaciones: producto.especificaciones || {},
-          titulo: producto.titulo || "Producto sin nombre",
-          precio: producto.precio || 0,
-        },
-      },
-    });
-  };
+//     navigate(`/VerArticulo/${productoId}`, {
+//       state: {
+//         producto: {
+//           ...producto,
+//           imagenes: producto.imagenes || [], // Asegura array de imágenes
+//           especificaciones: producto.especificaciones || {},
+//           titulo: producto.titulo || "Producto sin nombre",
+//           precio: producto.precio || 0,
+//         },
+//       },
+//     });
+//   };
 
-  // Función para compra rápida
-  const handleCompraRapida = (productoId) => {
-    const producto = masVendidos.find((p) => p.id === productoId);
+//   // Función para compra rápida
+//   const handleCompraRapida = (productoId) => {
+//     const producto = masVendidos.find((p) => p.id === productoId);
 
-    // 1. Agrega al carrito
-    agregarAlCarrito(productoId);
+//     // 1. Agrega al carrito
+//     agregarAlCarrito(productoId);
 
-    // 2. Redirige a checkout
-    navigate("/checkout", {
-      state: {
-        productos: [{ ...producto, cantidad: 1 }],
-        modoCompraRapida: true,
-      },
-    });
-  };
+//     // 2. Redirige a checkout
+//     navigate("/checkout", {
+//       state: {
+//         productos: [{ ...producto, cantidad: 1 }],
+//         modoCompraRapida: true,
+//       },
+//     });
+//   };
 
-  // Formateadores
-  const formatoPrecio = (precio) => {
-    return new Intl.NumberFormat("es-MX", {
-      style: "currency",
-      currency: "MXN",
-      minimumFractionDigits: 0,
-    }).format(precio);
-  };
+//   // Formateadores
+//   const formatoPrecio = (precio) => {
+//     return new Intl.NumberFormat("es-MX", {
+//       style: "currency",
+//       currency: "MXN",
+//       minimumFractionDigits: 0,
+//     }).format(precio);
+//   };
 
-  const formatearNumeroVentas = (numero) => {
-    return numero >= 1000
-      ? `${(numero / 1000).toFixed(1)}K vendidos`
-      : `${numero} vendidos`;
-  };
+//   const formatearNumeroVentas = (numero) => {
+//     return numero >= 1000
+//       ? `${(numero / 1000).toFixed(1)}K vendidos`
+//       : `${numero} vendidos`;
+//   };
 
-  // Componente de estrellas
-  const EstrellaCalificacion = ({ calificacion }) => {
-    const calif = Math.round(calificacion * 10) / 10;
-    return (
-      <div className="flex items-center">
-        <div className="flex text-yellow-400 mr-1">
-          {[1, 2, 3, 4, 5].map((estrella) => (
-            <FaStar
-              key={estrella}
-              className={
-                calif >= estrella
-                  ? "text-yellow-400"
-                  : calif >= estrella - 0.5
-                  ? "text-yellow-300"
-                  : "text-gray-300"
-              }
-              size={14}
-            />
-          ))}
-        </div>
-        <span className="text-sm text-gray-600">{calif}</span>
-      </div>
-    );
-  };
+//   // Componente de estrellas
+//   const EstrellaCalificacion = ({ calificacion }) => {
+//     const calif = Math.round(calificacion * 10) / 10;
+//     return (
+//       <div className="flex items-center">
+//         <div className="flex text-yellow-400 mr-1">
+//           {[1, 2, 3, 4, 5].map((estrella) => (
+//             <FaStar
+//               key={estrella}
+//               className={
+//                 calif >= estrella
+//                   ? "text-yellow-400"
+//                   : calif >= estrella - 0.5
+//                   ? "text-yellow-300"
+//                   : "text-gray-300"
+//               }
+//               size={14}
+//             />
+//           ))}
+//         </div>
+//         <span className="text-sm text-gray-600">{calif}</span>
+//       </div>
+//     );
+//   };
 
-  // Renderizado condicional
-  if (cargando) {
-    return (
-      <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center">
-              <div className="mr-4 bg-orange-500 text-white p-2 rounded-lg">
-                <FaFire size={24} />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-800">
-                ARTÍCULOS MÁS VENDIDOS
-              </h2>
-            </div>
-          </div>
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
-            <span className="ml-3 text-gray-600">Cargando productos...</span>
-          </div>
-        </div>
-      </section>
-    );
-  }
+//   // Renderizado condicional
+//   if (cargando) {
+//     return (
+//       <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
+//         <div className="container mx-auto px-4">
+//           <div className="flex items-center justify-between mb-8">
+//             <div className="flex items-center">
+//               <div className="mr-4 bg-orange-500 text-white p-2 rounded-lg">
+//                 <FaFire size={24} />
+//               </div>
+//               <h2 className="text-2xl font-bold text-gray-800">
+//                 ARTÍCULOS MÁS VENDIDOS
+//               </h2>
+//             </div>
+//           </div>
+//           <div className="flex justify-center items-center py-20">
+//             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+//             <span className="ml-3 text-gray-600">Cargando productos...</span>
+//           </div>
+//         </div>
+//       </section>
+//     );
+//   }
 
-  // Renderizado principal
-  return (
-    <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
-            <div className="mr-4 bg-orange-500 text-white p-2 rounded-lg">
-              <FaFire size={24} />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-800">
-              ARTÍCULOS MÁS VENDIDOS
-            </h2>
-          </div>
-          <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
-            Ver todos <FaChevronRight className="ml-1" size={14} />
-          </button>
-        </div>
+//   // Renderizado principal
+//   return (
+//     <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
+//       <div className="container mx-auto px-4">
+//         <div className="flex items-center justify-between mb-8">
+//           <div className="flex items-center">
+//             <div className="mr-4 bg-orange-500 text-white p-2 rounded-lg">
+//               <FaFire size={24} />
+//             </div>
+//             <h2 className="text-2xl font-bold text-gray-800">
+//               ARTÍCULOS MÁS VENDIDOS
+//             </h2>
+//           </div>
+//           <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
+//             Ver todos <FaChevronRight className="ml-1" size={14} />
+//           </button>
+//         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {masVendidos.map((producto) => (
-            <div
-              key={producto.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
-            >
-              {/* Área de imagen - MEJORADA para navegación */}
-              <div
-                className="relative cursor-pointer"
-                onClick={() => verDetalleProducto(producto.id)}
-              >
-                {producto.etiquetas?.length > 0 && (
-                  <div className="absolute top-3 left-3 z-10 flex flex-wrap gap-2">
-                    {producto.etiquetas.map((etiqueta, idx) => (
-                      <span
-                        key={idx}
-                        className={`text-white text-xs font-bold px-2 py-1 rounded-lg ${
-                          etiqueta === "Tendencia"
-                            ? "bg-purple-500"
-                            : etiqueta === "Oferta"
-                            ? "bg-red-500"
-                            : etiqueta === "Envío Gratis"
-                            ? "bg-green-500"
-                            : "bg-gray-500"
-                        }`}
-                      >
-                        {etiqueta}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
-                  {formatearNumeroVentas(producto.numeroVentas)}
-                </span>
-                <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
-                  <img
-                    src={producto.imagen}
-                    alt={producto.titulo}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              </div>
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+//           {masVendidos.map((producto) => (
+//             <div
+//               key={producto.id}
+//               className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+//             >
+//               {/* Área de imagen - MEJORADA para navegación */}
+//               <div
+//                 className="relative cursor-pointer"
+//                 onClick={() => verDetalleProducto(producto.id)}
+//               >
+//                 {producto.etiquetas?.length > 0 && (
+//                   <div className="absolute top-3 left-3 z-10 flex flex-wrap gap-2">
+//                     {producto.etiquetas.map((etiqueta, idx) => (
+//                       <span
+//                         key={idx}
+//                         className={`text-white text-xs font-bold px-2 py-1 rounded-lg ${
+//                           etiqueta === "Tendencia"
+//                             ? "bg-purple-500"
+//                             : etiqueta === "Oferta"
+//                             ? "bg-red-500"
+//                             : etiqueta === "Envío Gratis"
+//                             ? "bg-green-500"
+//                             : "bg-gray-500"
+//                         }`}
+//                       >
+//                         {etiqueta}
+//                       </span>
+//                     ))}
+//                   </div>
+//                 )}
+//                 <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
+//                   {formatearNumeroVentas(producto.numeroVentas)}
+//                 </span>
+//                 <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
+//                   <img
+//                     src={producto.imagen}
+//                     alt={producto.titulo}
+//                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+//                   />
+//                 </div>
+//               </div>
 
-              {/* Área de información - MEJORADA para navegación */}
-              <div
-                className="p-4 cursor-pointer"
-                onClick={() => verDetalleProducto(producto.id)}
-              >
-                <div className="text-xs text-blue-600 font-medium mb-1">
-                  {producto.categoria}
-                </div>
-                <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12 hover:text-blue-600 transition-colors">
-                  {producto.titulo}
-                </h3>
-                <div className="flex items-center text-sm text-gray-600 mb-2">
-                  <span className="mr-1">{producto.vendedor}</span>
-                  {producto.verificado && (
-                    <BsPatchCheck
-                      className="text-blue-500"
-                      size={16}
-                      title="Vendedor verificado"
-                    />
-                  )}
-                </div>
-                <EstrellaCalificacion calificacion={producto.calificacion} />
+//               {/* Área de información - MEJORADA para navegación */}
+//               <div
+//                 className="p-4 cursor-pointer"
+//                 onClick={() => verDetalleProducto(producto.id)}
+//               >
+//                 <div className="text-xs text-blue-600 font-medium mb-1">
+//                   {producto.categoria}
+//                 </div>
+//                 <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12 hover:text-blue-600 transition-colors">
+//                   {producto.titulo}
+//                 </h3>
+//                 <div className="flex items-center text-sm text-gray-600 mb-2">
+//                   <span className="mr-1">{producto.vendedor}</span>
+//                   {producto.verificado && (
+//                     <BsPatchCheck
+//                       className="text-blue-500"
+//                       size={16}
+//                       title="Vendedor verificado"
+//                     />
+//                   )}
+//                 </div>
+//                 <EstrellaCalificacion calificacion={producto.calificacion} />
 
-                <div className="mt-3 mb-4 flex justify-between items-center">
-                  <span className="text-xl font-bold text-gray-800">
-                    {formatoPrecio(producto.precio)}
-                  </span>
-                  {/* <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
-                      navigate(
-                        `/ComprarYa/${producto.id}`,
-                        "_blank",
-                        "noopener,noreferrer"
-                      );
-                    }}
-                    
-                  >
-                    Comprar ya
-                  </button> */}
+//                 <div className="mt-3 mb-4 flex justify-between items-center">
+//                   <span className="text-xl font-bold text-gray-800">
+//                     {formatoPrecio(producto.precio)}
+//                   </span>
+//                   {/* <button
+//                     onClick={(e) => {
+//                       e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
+//                       navigate(
+//                         `/ComprarYa/${producto.id}`,
+//                         "_blank",
+//                         "noopener,noreferrer"
+//                       );
+//                     }}
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/ComprarYa/${producto.id}`);
-                    }}
-                    className="ml-2 bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded-lg text-sm font-medium transition-colors duration-200"
-                  >
-                    Comprar Ya
-                  </button>
-                </div>
+//                   >
+//                     Comprar ya
+//                   </button> */}
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
-                    agregarAlCarrito(producto.id);
-                  }}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center mt-2"
-                >
-                  <FaShoppingCart className="mr-2" />
-                  Agregar al carrito
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+//                   <button
+//                     onClick={(e) => {
+//                       e.stopPropagation();
+//                       navigate(`/ComprarYa/${producto.id}`);
+//                     }}
+//                     className="ml-2 bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded-lg text-sm font-medium transition-colors duration-200"
+//                   >
+//                     Comprar Ya
+//                   </button>
+//                 </div>
 
-const OfertasDestacadas = () => {
-  const navigate = useNavigate();
-  const [cargando, setCargando] = useState(true);
+//                 <button
+//                   onClick={(e) => {
+//                     e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
+//                     agregarAlCarrito(producto.id);
+//                   }}
+//                   className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center mt-2"
+//                 >
+//                   <FaShoppingCart className="mr-2" />
+//                   Agregar al carrito
+//                 </button>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
 
-  // Componente de estrellas para calificación
-  const EstrellaCalificacion = ({ calificacion }) => {
-    const calif = Math.round(calificacion * 10) / 10;
-    return (
-      <div className="flex items-center mb-2">
-        <div className="flex text-yellow-400 mr-1">
-          {[1, 2, 3, 4, 5].map((estrella) => (
-            <FaStar
-              key={estrella}
-              className={
-                calif >= estrella
-                  ? "text-yellow-400"
-                  : calif >= estrella - 0.5
-                  ? "text-yellow-300"
-                  : "text-gray-300"
-              }
-              size={14}
-            />
-          ))}
-        </div>
-        <span className="text-sm text-gray-600">{calif}</span>
-      </div>
-    );
-  };
+// const OfertasDestacadas = () => {
+//   const navigate = useNavigate();
+//   const [cargando, setCargando] = useState(true);
 
-  // Datos de ejemplo para ofertas destacadas
-  const OFERTAS = [
-    {
-      id: 1,
-      imagen: "https://via.placeholder.com/200",
-      titulo: "Smartwatch último modelo",
-      precioOriginal: 3999,
-      precioOferta: 2499,
-      descuento: 38,
-      tiempoRestante: "2 días",
-      stock: 5,
-      categoria: "Electrónicos",
-      calificacion: 4.5,
-    },
-    {
-      id: 2,
-      imagen: "https://via.placeholder.com/200",
-      titulo: "Audífonos inalámbricos premium",
-      precioOriginal: 1899,
-      precioOferta: 999,
-      descuento: 47,
-      tiempoRestante: "12 horas",
-      stock: 8,
-      categoria: "Audio",
-      calificacion: 5.0,
-    },
-    {
-      id: 3,
-      imagen: "https://via.placeholder.com/200",
-      titulo: "Cámara deportiva 4K resistente al agua",
-      precioOriginal: 4599,
-      precioOferta: 2999,
-      descuento: 35,
-      tiempoRestante: "3 días",
-      stock: 3,
-      categoria: "Cámaras",
-      calificacion: 4.2,
-    },
-    {
-      id: 4,
-      imagen: "https://via.placeholder.com/200",
-      titulo: "Zapatos deportivos ultralivianos",
-      precioOriginal: 1299,
-      precioOferta: 799,
-      descuento: 40,
-      tiempoRestante: "1 día",
-      stock: 12,
-      categoria: "Deportes",
-      calificacion: 4.7,
-    },
-  ];
+//   // Componente de estrellas para calificación
+//   const EstrellaCalificacion = ({ calificacion }) => {
+//     const calif = Math.round(calificacion * 10) / 10;
+//     return (
+//       <div className="flex items-center mb-2">
+//         <div className="flex text-yellow-400 mr-1">
+//           {[1, 2, 3, 4, 5].map((estrella) => (
+//             <FaStar
+//               key={estrella}
+//               className={
+//                 calif >= estrella
+//                   ? "text-yellow-400"
+//                   : calif >= estrella - 0.5
+//                   ? "text-yellow-300"
+//                   : "text-gray-300"
+//               }
+//               size={14}
+//             />
+//           ))}
+//         </div>
+//         <span className="text-sm text-gray-600">{calif}</span>
+//       </div>
+//     );
+//   };
 
-  //   useEffect(() => {
-  //   const obtenerProductosMasVendidos = async () => {
-  //     try {
-  //       setCargando(true);
-  //       // En producción, reemplazar con tu endpoint real
-  //       // const respuesta = await axios.get('/api/productos/mas-vendidos');
-  //       // setMasVendidos(respuesta.data);
+//   // Datos de ejemplo para ofertas destacadas
+//   const OFERTAS = [
+//     {
+//       id: 1,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Smartwatch último modelo",
+//       precioOriginal: 3999,
+//       precioOferta: 2499,
+//       descuento: 38,
+//       tiempoRestante: "2 días",
+//       stock: 5,
+//       categoria: "Electrónicos",
+//       calificacion: 4.5,
+//     },
+//     {
+//       id: 2,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Audífonos inalámbricos premium",
+//       precioOriginal: 1899,
+//       precioOferta: 999,
+//       descuento: 47,
+//       tiempoRestante: "12 horas",
+//       stock: 8,
+//       categoria: "Audio",
+//       calificacion: 5.0,
+//     },
+//     {
+//       id: 3,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Cámara deportiva 4K resistente al agua",
+//       precioOriginal: 4599,
+//       precioOferta: 2999,
+//       descuento: 35,
+//       tiempoRestante: "3 días",
+//       stock: 3,
+//       categoria: "Cámaras",
+//       calificacion: 4.2,
+//     },
+//     {
+//       id: 4,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Zapatos deportivos ultralivianos",
+//       precioOriginal: 1299,
+//       precioOferta: 799,
+//       descuento: 40,
+//       tiempoRestante: "1 día",
+//       stock: 12,
+//       categoria: "Deportes",
+//       calificacion: 4.7,
+//     },
+//   ];
 
-  //       // Usando datos de ejemplo para el demo
-  //       setTimeout(() => {
-  //         setMasVendidos(DATOS_EJEMPLO_MAS_VENDIDOS);
-  //         setCargando(false);
-  //       }, 1000);
-  //     } catch (err) {
-  //       console.error("Error:", err);
-  //       setError("Error al cargar productos");
-  //       setMasVendidos(DATOS_EJEMPLO_MAS_VENDIDOS);
-  //       setCargando(false);
-  //     }
-  //   };
+//   //   useEffect(() => {
+//   //   const obtenerProductosMasVendidos = async () => {
+//   //     try {
+//   //       setCargando(true);
+//   //       // En producción, reemplazar con tu endpoint real
+//   //       // const respuesta = await axios.get('/api/productos/mas-vendidos');
+//   //       // setMasVendidos(respuesta.data);
 
-  //   obtenerProductosMasVendidos();
-  // }, []);
-  // Renderizado condicional
-  if (cargando) {
-    return (
-      <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center">
-              <div className="mr-4 bg-orange-500 text-white p-2 rounded-lg">
-                <FaFire size={24} />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-800">
-                ARTÍCULOS MÁS VENDIDOS
-              </h2>
-            </div>
-          </div>
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
-            <span className="ml-3 text-gray-600">Cargando productos...</span>
-          </div>
-        </div>
-      </section>
-    );
-  }
-  // Función para formatear precios en formato de moneda mexicana
-  const formatoPrecio = (precio) => {
-    return new Intl.NumberFormat("es-MX", {
-      style: "currency",
-      currency: "MXN",
-      minimumFractionDigits: 0,
-    }).format(precio);
-  };
+//   //       // Usando datos de ejemplo para el demo
+//   //       setTimeout(() => {
+//   //         setMasVendidos(DATOS_EJEMPLO_MAS_VENDIDOS);
+//   //         setCargando(false);
+//   //       }, 1000);
+//   //     } catch (err) {
+//   //       console.error("Error:", err);
+//   //       setError("Error al cargar productos");
+//   //       setMasVendidos(DATOS_EJEMPLO_MAS_VENDIDOS);
+//   //       setCargando(false);
+//   //     }
+//   //   };
 
-  // Función para ver detalle del producto - MEJORADA Y CORREGIDA
-  const verDetalleProducto = (productoId) => {
-    // Solo busca en OFERTAS ya que este componente solo maneja esos productos
-    const producto = OFERTAS.find((p) => p.id === productoId);
+//   //   obtenerProductosMasVendidos();
+//   // }, []);
+//   // Renderizado condicional
+//   if (cargando) {
+//     return (
+//       <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
+//         <div className="container mx-auto px-4">
+//           <div className="flex items-center justify-between mb-8">
+//             <div className="flex items-center">
+//               <div className="mr-4 bg-orange-500 text-white p-2 rounded-lg">
+//                 <FaFire size={24} />
+//               </div>
+//               <h2 className="text-2xl font-bold text-gray-800">
+//                 ARTÍCULOS MÁS VENDIDOS
+//               </h2>
+//             </div>
+//           </div>
+//           <div className="flex justify-center items-center py-20">
+//             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+//             <span className="ml-3 text-gray-600">Cargando productos...</span>
+//           </div>
+//         </div>
+//       </section>
+//     );
+//   }
+//   // Función para formatear precios en formato de moneda mexicana
+//   const formatoPrecio = (precio) => {
+//     return new Intl.NumberFormat("es-MX", {
+//       style: "currency",
+//       currency: "MXN",
+//       minimumFractionDigits: 0,
+//     }).format(precio);
+//   };
 
-    // Validación completa antes de navegar
-    if (!producto) {
-      console.error("Producto no encontrado");
-      return;
-    }
+//   // Función para ver detalle del producto - MEJORADA Y CORREGIDA
+//   const verDetalleProducto = (productoId) => {
+//     // Solo busca en OFERTAS ya que este componente solo maneja esos productos
+//     const producto = OFERTAS.find((p) => p.id === productoId);
 
-    navigate(`/VerArticulo/${productoId}`, {
-      state: {
-        producto: {
-          ...producto,
-          imagenes: producto.imagenes || [], // Asegura array de imágenes
-          especificaciones: producto.especificaciones || {},
-          titulo: producto.titulo || "Producto sin nombre",
-          precio: producto.precio || 0,
-        },
-      },
-    });
-  };
-  // Función para agregar al carrito
-  const agregarAlCarrito = (productoId) => {
-    const producto = OFERTAS.find((p) => p.id === productoId);
-    alert(`✅ ${producto.titulo} agregado al carrito`);
-    // Implementar lógica real de carrito aquí
-  };
+//     // Validación completa antes de navegar
+//     if (!producto) {
+//       console.error("Producto no encontrado");
+//       return;
+//     }
 
-  return (
-    <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
-      <div className="container mx-auto px-4">
-        {/* Encabezado de la sección */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
-            <div className="mr-4 bg-red-500 text-white p-2 rounded-lg">
-              <FaTag size={24} />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-800">
-              OFERTAS DESTACADAS
-            </h2>
-          </div>
-          <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
-            Ver todas <FaChevronRight className="ml-1" size={14} />
-          </button>
-        </div>
+//     navigate(`/VerArticulo/${productoId}`, {
+//       state: {
+//         producto: {
+//           ...producto,
+//           imagenes: producto.imagenes || [], // Asegura array de imágenes
+//           especificaciones: producto.especificaciones || {},
+//           titulo: producto.titulo || "Producto sin nombre",
+//           precio: producto.precio || 0,
+//         },
+//       },
+//     });
+//   };
+//   // Función para agregar al carrito
+//   const agregarAlCarrito = (productoId) => {
+//     const producto = OFERTAS.find((p) => p.id === productoId);
+//     alert(`✅ ${producto.titulo} agregado al carrito`);
+//     // Implementar lógica real de carrito aquí
+//   };
 
-        {/* Grid de ofertas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {OFERTAS.map((oferta) => (
-            <div
-              key={oferta.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
-            >
-              {/* Área de imagen - MEJORADA para navegación */}
-              <div
-                className="relative cursor-pointer"
-                onClick={() => verDetalleProducto(oferta.id)}
-              >
-                <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-bold px-2 py-1 rounded-lg z-10">
-                  -{oferta.descuento}%
-                </span>
+//   return (
+//     <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
+//       <div className="container mx-auto px-4">
+//         {/* Encabezado de la sección */}
+//         <div className="flex items-center justify-between mb-8">
+//           <div className="flex items-center">
+//             <div className="mr-4 bg-red-500 text-white p-2 rounded-lg">
+//               <FaTag size={24} />
+//             </div>
+//             <h2 className="text-2xl font-bold text-gray-800">
+//               OFERTAS DESTACADAS
+//             </h2>
+//           </div>
+//           <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
+//             Ver todas <FaChevronRight className="ml-1" size={14} />
+//           </button>
+//         </div>
 
-                {/* Badge de stock limitado si hay menos de 6 productos */}
-                {oferta.stock < 6 && (
-                  <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
-                    ¡Solo {oferta.stock} disponibles!
-                  </span>
-                )}
+//         {/* Grid de ofertas */}
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+//           {OFERTAS.map((oferta) => (
+//             <div
+//               key={oferta.id}
+//               className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+//             >
+//               {/* Área de imagen - MEJORADA para navegación */}
+//               <div
+//                 className="relative cursor-pointer"
+//                 onClick={() => verDetalleProducto(oferta.id)}
+//               >
+//                 <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-bold px-2 py-1 rounded-lg z-10">
+//                   -{oferta.descuento}%
+//                 </span>
 
-                {/* Imagen del producto */}
-                <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
-                  <img
-                    src={oferta.imagen}
-                    alt={oferta.titulo}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              </div>
+//                 {/* Badge de stock limitado si hay menos de 6 productos */}
+//                 {oferta.stock < 6 && (
+//                   <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
+//                     ¡Solo {oferta.stock} disponibles!
+//                   </span>
+//                 )}
 
-              {/* Área de información - MEJORADA para navegación */}
-              <div
-                className="p-4 cursor-pointer"
-                onClick={() => verDetalleProducto(oferta.id)}
-              >
-                <div className="text-xs text-blue-600 font-medium mb-1">
-                  {oferta.categoria}
-                </div>
-                <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12 hover:text-blue-600 transition-colors">
-                  {oferta.titulo}
-                </h3>
+//                 {/* Imagen del producto */}
+//                 <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
+//                   <img
+//                     src={oferta.imagen}
+//                     alt={oferta.titulo}
+//                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+//                   />
+//                 </div>
+//               </div>
 
-                {/* Estrellas de calificación */}
-                <EstrellaCalificacion calificacion={oferta.calificacion} />
+//               {/* Área de información - MEJORADA para navegación */}
+//               <div
+//                 className="p-4 cursor-pointer"
+//                 onClick={() => verDetalleProducto(oferta.id)}
+//               >
+//                 <div className="text-xs text-blue-600 font-medium mb-1">
+//                   {oferta.categoria}
+//                 </div>
+//                 <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12 hover:text-blue-600 transition-colors">
+//                   {oferta.titulo}
+//                 </h3>
 
-                {/* Precios */}
-                <div className="flex items-end mb-3">
-                  <span className="text-xl font-bold text-gray-800 mr-2">
-                    {formatoPrecio(oferta.precioOferta)}
-                  </span>
-                  <span className="text-sm text-gray-500 line-through">
-                    {formatoPrecio(oferta.precioOriginal)}
-                  </span>
-                </div>
+//                 {/* Estrellas de calificación */}
+//                 <EstrellaCalificacion calificacion={oferta.calificacion} />
 
-                {/* Temporizador */}
-                <div className="flex items-center text-xs text-gray-500 mb-4">
-                  <FaClock className="mr-1" />
-                  <span>Termina en: {oferta.tiempoRestante}</span>
-                </div>
+//                 {/* Precios */}
+//                 <div className="flex items-end mb-3">
+//                   <span className="text-xl font-bold text-gray-800 mr-2">
+//                     {formatoPrecio(oferta.precioOferta)}
+//                   </span>
+//                   <span className="text-sm text-gray-500 line-through">
+//                     {formatoPrecio(oferta.precioOriginal)}
+//                   </span>
+//                 </div>
 
-                {/* Botón de compra */}
-                <button
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
-                  onClick={(e) => {
-                    e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
-                    agregarAlCarrito(oferta.id);
-                  }}
-                >
-                  <FaShoppingCart className="mr-2" />
-                  Agregar al carrito
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+//                 {/* Temporizador */}
+//                 <div className="flex items-center text-xs text-gray-500 mb-4">
+//                   <FaClock className="mr-1" />
+//                   <span>Termina en: {oferta.tiempoRestante}</span>
+//                 </div>
 
+//                 {/* Botón de compra */}
+//                 <button
+//                   className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
+//                   onClick={(e) => {
+//                     e.stopPropagation(); // Detiene la propagación para que no se active verDetalleProducto
+//                     agregarAlCarrito(oferta.id);
+//                   }}
+//                 >
+//                   <FaShoppingCart className="mr-2" />
+//                   Agregar al carrito
+//                 </button>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
+
+// const OfertasDestacadas = () => {
+//   const navigate = useNavigate();
+//   const [cargando, setCargando] = useState(true);
+//   const { currency } = useCurrency();
+
+//   const tasasDeCambio = {
+//     MXN: 1,
+//     USD: 0.05,
+//     EUR: 0.045,
+//     COP: 200,
+//   };
+
+//   const OFERTAS = [
+//     {
+//       id: 1,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Smartwatch último modelo",
+//       precioOriginal: 3999,
+//       precioOferta: 2499,
+//       descuento: 38,
+//       tiempoRestante: "2 días",
+//       stock: 5,
+//       categoria: "Electrónicos",
+//       calificacion: 4.5,
+//     },
+//     {
+//       id: 2,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Audífonos inalámbricos premium",
+//       precioOriginal: 1899,
+//       precioOferta: 999,
+//       descuento: 47,
+//       tiempoRestante: "12 horas",
+//       stock: 8,
+//       categoria: "Audio",
+//       calificacion: 5.0,
+//     },
+//     {
+//       id: 3,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Cámara deportiva 4K resistente al agua",
+//       precioOriginal: 4599,
+//       precioOferta: 2999,
+//       descuento: 35,
+//       tiempoRestante: "3 días",
+//       stock: 3,
+//       categoria: "Cámaras",
+//       calificacion: 4.2,
+//     },
+//     {
+//       id: 4,
+//       imagen: "https://via.placeholder.com/200",
+//       titulo: "Zapatos deportivos ultralivianos",
+//       precioOriginal: 1299,
+//       precioOferta: 799,
+//       descuento: 40,
+//       tiempoRestante: "1 día",
+//       stock: 12,
+//       categoria: "Deportes",
+//       calificacion: 4.7,
+//     },
+//   ];
+
+//   const formatoPrecio = (precio) => {
+//     const precioConvertido = precio * tasasDeCambio[currency];
+//     return new Intl.NumberFormat("es-MX", {
+//       style: "currency",
+//       currency: currency,
+//       minimumFractionDigits: 2,
+//     }).format(precioConvertido);
+//   };
+
+//   const verDetalleProducto = (productoId) => {
+//     const producto = OFERTAS.find((p) => p.id === productoId);
+//     if (!producto) {
+//       console.error("Producto no encontrado");
+//       return;
+//     }
+//     navigate(`/VerArticulo/${productoId}`, {
+//       state: {
+//         producto: {
+//           ...producto,
+//           imagenes: producto.imagenes || [],
+//           especificaciones: producto.especificaciones || {},
+//           titulo: producto.titulo || "Producto sin nombre",
+//           precio: producto.precio || 0,
+//         },
+//       },
+//     });
+//   };
+
+//   const agregarAlCarrito = (productoId) => {
+//     const producto = OFERTAS.find((p) => p.id === productoId);
+//     alert(`✅ ${producto.titulo} agregado al carrito`);
+//   };
+
+//   const EstrellaCalificacion = ({ calificacion }) => {
+//     const calif = Math.round(calificacion * 10) / 10;
+//     return (
+//       <div className="flex items-center mb-2">
+//         <div className="flex text-yellow-400 mr-1">
+//           {[1, 2, 3, 4, 5].map((estrella) => (
+//             <FaStar
+//               key={estrella}
+//               className={
+//                 calif >= estrella
+//                   ? "text-yellow-400"
+//                   : calif >= estrella - 0.5
+//                   ? "text-yellow-300"
+//                   : "text-gray-300"
+//               }
+//               size={14}
+//             />
+//           ))}
+//         </div>
+//         <span className="text-sm text-gray-600">{calif}</span>
+//       </div>
+//     );
+//   };
+
+//   if (cargando) {
+//     return (
+//       <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
+//         <div className="container mx-auto px-4">
+//           <div className="flex items-center justify-between mb-8">
+//             <div className="flex items-center">
+//               <div className="mr-4 bg-orange-500 text-white p-2 rounded-lg">
+//                 <FaFire size={24} />
+//               </div>
+//               <h2 className="text-2xl font-bold text-gray-800">
+//                 ARTÍCULOS MÁS VENDIDOS
+//               </h2>
+//             </div>
+//           </div>
+//           <div className="flex justify-center items-center py-20">
+//             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+//             <span className="ml-3 text-gray-600">Cargando productos...</span>
+//           </div>
+//         </div>
+//       </section>
+//     );
+//   }
+
+//   return (
+//     <section className="py-2 bg-gradient-to-br rounded-2xl shadow-sm my-10">
+//       <div className="container mx-auto px-4">
+//         <div className="flex items-center justify-between mb-8">
+//           <div className="flex items-center">
+//             <div className="mr-4 bg-red-500 text-white p-2 rounded-lg">
+//               <FaTag size={24} />
+//             </div>
+//             <h2 className="text-2xl font-bold text-gray-800">
+//               OFERTAS DESTACADAS
+//             </h2>
+//           </div>
+//           <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
+//             Ver todas <FaChevronRight className="ml-1" size={14} />
+//           </button>
+//         </div>
+
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+//           {OFERTAS.map((oferta) => (
+//             <div
+//               key={oferta.id}
+//               className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+//             >
+//               <div
+//                 className="relative cursor-pointer"
+//                 onClick={() => verDetalleProducto(oferta.id)}
+//               >
+//                 <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-bold px-2 py-1 rounded-lg z-10">
+//                   -{oferta.descuento}%
+//                 </span>
+//                 {oferta.stock < 6 && (
+//                   <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
+//                     ¡Solo {oferta.stock} disponibles!
+//                   </span>
+//                 )}
+//                 <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
+//                   <img
+//                     src={oferta.imagen}
+//                     alt={oferta.titulo}
+//                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+//                   />
+//                 </div>
+//               </div>
+
+//               <div
+//                 className="p-4 cursor-pointer"
+//                 onClick={() => verDetalleProducto(oferta.id)}
+//               >
+//                 <div className="text-xs text-blue-600 font-medium mb-1">
+//                   {oferta.categoria}
+//                 </div>
+//                 <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12 hover:text-blue-600 transition-colors">
+//                   {oferta.titulo}
+//                 </h3>
+//                 <EstrellaCalificacion calificacion={oferta.calificacion} />
+//                 <div className="flex items-end mb-3">
+//                   <span className="text-xl font-bold text-gray-800 mr-2">
+//                     {formatoPrecio(oferta.precioOferta)}
+//                   </span>
+//                   <span className="text-sm text-gray-500 line-through">
+//                     {formatoPrecio(oferta.precioOriginal)}
+//                   </span>
+//                 </div>
+//                 <div className="flex items-center text-xs text-gray-500 mb-4">
+//                   <FaClock className="mr-1" />
+//                   <span>Termina en: {oferta.tiempoRestante}</span>
+//                 </div>
+//                 <button
+//                   className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
+//                   onClick={(e) => {
+//                     e.stopPropagation();
+//                     agregarAlCarrito(oferta.id);
+//                   }}
+//                 >
+//                   <FaShoppingCart className="mr-2" />
+//                   Agregar al carrito
+//                 </button>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
 const SLIDER_SETTINGS = {
   dots: true,
   infinite: true,

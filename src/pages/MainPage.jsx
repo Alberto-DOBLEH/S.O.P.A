@@ -262,10 +262,6 @@ const CATEGORIES = [
   },
 ];
 
-<<<<<<< HEAD
-
-=======
->>>>>>> bec4f5869c6f019ccbae539638bc6e0a49199eab
 // ANUNCIOS
 const ANUNCIOS = [
   {

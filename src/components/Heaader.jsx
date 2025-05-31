@@ -19,22 +19,35 @@ import {
   FaChevronDown,
   FaChevronLeft,
   FaChevronRight,
+  FaMobile,
+  FaKeyboard,
   FaLaptop,
+  FaCamera,
   FaTv,
   FaHome,
+  FaRunning,
+  FaCar,
   FaGamepad,
   FaTshirt,
   FaShoePrints,
+  FaChild,
+  FaGuitar,
   FaBook,
+  FaBaby,
+  FaPaw,
   FaUtensils,
   FaBath,
+  FaPlane,
+  FaTree,
+  FaDumbbell,
+  FaGlassWhiskey,
   FaGift,
+  FaHeadphones,
   FaTabletAlt,
-  FaClipboardList,
-  FaHeadset,
   FaDesktop,
-  FaMobileAlt,
+  FaMousePointer,
 } from "react-icons/fa";
+import { FaClipboardList, FaHeadset } from "react-icons/fa";
 import { IoMdHelp } from "react-icons/io";
 import { BsPatchCheck } from "react-icons/bs";
 import { RiCouponLine } from "react-icons/ri";
@@ -56,11 +69,9 @@ const Header = () => {
   const menuScrollRef = useRef(null);
   const menuRef = useRef(null);
 
-  // 🎛️ ESTADOS PARA CONTROL DE SCROLL Y VISIBILIDAD
+  // 🎛️ ESTADOS PARA CONTROL DE SCROLL DEL MENÚ
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const [headerVisible, setHeaderVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   // 🔄 EFECTO: Verificar si es posible hacer scroll en el menú horizontal
   useEffect(() => {
@@ -82,26 +93,6 @@ const Header = () => {
     };
   }, []);
 
-  // 👁️ EFECTO: Controlar visibilidad del header según scroll de la página
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > lastScrollY && currentScrollY > 150) {
-        // Scrolleando hacia abajo y pasó la altura del header - ocultar header
-        setHeaderVisible(false);
-      } else {
-        // Scrolleando hacia arriba o en la parte superior - mostrar header
-        setHeaderVisible(true);
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
   // ↔ FUNCIÓN: Desplazar menú horizontal
   const scrollMenu = (direction) => {
     if (menuScrollRef.current) {
@@ -119,7 +110,8 @@ const Header = () => {
     carrito: () => navigate("/carrito"),
     cuenta: () => navigate("/mi-cuenta"),
     notificaciones: () => navigate("/notificaciones"),
-    categoria: (path) => navigate(path),
+    categoria: (categoryValue) =>
+      navigate(`/buscar?category=${encodeURIComponent(categoryValue)}`),
     perfil: () => navigate("/mi-perfil"),
     favoritos: () => navigate("/favoritos"),
     venta: () => navigate("/vender-articulo"),
@@ -129,7 +121,7 @@ const Header = () => {
     cupones: () => navigate("/cupones-promociones"),
     listaDeseos: () => navigate("/lista-deseos"),
     listaCompras: () => navigate("/lista-compras"),
-    ayuda: () => navigate("/centro-ayuda"),
+    ayuda: () => navigate("/ayuda"),
     privacidad: () => navigate("/privacidad-seguridad"),
     soporte: () => navigate("/contactar-soporte"),
     configuracion: () => navigate("/configuracion"),
@@ -165,34 +157,156 @@ const Header = () => {
     {
       title: "Tecnología",
       categories: [
-        { icon: <FaMobileAlt />, label: "Smartphones", path: "/telefonos" },
-        { icon: <FaLaptop />, label: "Laptops", path: "/laptops" },
-        { icon: <FaDesktop />, label: "Computadoras", path: "/computadoras" },
-        { icon: <FaTabletAlt />, label: "Tablets", path: "/tablets" },
-        { icon: <FaTv />, label: "Televisores", path: "/televisores" },
+        {
+          icon: <FaMobile className="text-blue-500" />,
+          label: "Smartphones",
+          categoryValue: "TELEFONOS",
+        },
+        {
+          icon: <FaKeyboard className="text-purple-500" />,
+          label: "Periféricos",
+          categoryValue: "PERIFÉRICOS",
+        },
+        {
+          icon: <FaLaptop className="text-indigo-500" />,
+          label: "Laptops",
+          categoryValue: "LAPTOPS",
+        },
+        {
+          icon: <FaCamera className="text-yellow-500" />,
+          label: "Cámaras",
+          categoryValue: "CÁMARAS",
+        },
+        {
+          icon: <FaTv className="text-red-500" />,
+          label: "Televisores",
+          categoryValue: "TELEVISORES",
+        },
+        {
+          icon: <FaDesktop className="text-gray-800" />,
+          label: "Computadoras",
+          categoryValue: "COMPUTADORAS",
+        },
+        {
+          icon: <FaTabletAlt className="text-indigo-400" />,
+          label: "Tablets",
+          categoryValue: "TABLETS",
+        },
+        {
+          icon: <FaHeadphones className="text-blue-400" />,
+          label: "Audio",
+          categoryValue: "AUDIO",
+        },
       ],
     },
     {
-      title: "Hogar",
+      title: "Hogar y Vida",
       categories: [
-        { icon: <FaHome />, label: "Hogar", path: "/hogar" },
-        { icon: <FaUtensils />, label: "Cocina", path: "/cocina" },
-        { icon: <FaBath />, label: "Baño", path: "/bano" },
+        {
+          icon: <FaHome className="text-green-500" />,
+          label: "Hogar",
+          categoryValue: "HOGAR",
+        },
+        {
+          icon: <FaUtensils className="text-red-400" />,
+          label: "Cocina",
+          categoryValue: "COCINA",
+        },
+        {
+          icon: <FaBath className="text-blue-300" />,
+          label: "Baño",
+          categoryValue: "BAÑO",
+        },
+        {
+          icon: <FaTree className="text-green-600" />,
+          label: "Jardín",
+          categoryValue: "JARDÍN",
+        },
+        {
+          icon: <FaGlassWhiskey className="text-amber-600" />,
+          label: "Bebidas",
+          categoryValue: "BEBIDAS",
+        },
+        {
+          icon: <FaBaby className="text-pink-300" />,
+          label: "Bebés",
+          categoryValue: "BEBÉS",
+        },
+        {
+          icon: <FaPaw className="text-yellow-600" />,
+          label: "Mascotas",
+          categoryValue: "MASCOTAS",
+        },
       ],
     },
     {
-      title: "Moda",
+      title: "Moda y Estilo",
       categories: [
-        { icon: <FaTshirt />, label: "Ropa", path: "/ropa" },
-        { icon: <FaShoePrints />, label: "Zapatos", path: "/zapatos" },
+        {
+          icon: <FaTshirt className="text-teal-500" />,
+          label: "Ropa",
+          categoryValue: "ROPA",
+        },
+        {
+          icon: <FaShoePrints className="text-brown-500" />,
+          label: "Zapatos",
+          categoryValue: "ZAPATOS",
+        },
+        {
+          icon: <FaGift className="text-pink-500" />,
+          label: "Regalos",
+          categoryValue: "REGALOS",
+        },
       ],
     },
     {
-      title: "Otros",
+      title: "Entretenimiento",
       categories: [
-        { icon: <FaGamepad />, label: "Videojuegos", path: "/videojuegos" },
-        { icon: <FaBook />, label: "Libros", path: "/libros" },
-        { icon: <FaGift />, label: "Regalos", path: "/regalos" },
+        {
+          icon: <FaGamepad className="text-pink-500" />,
+          label: "Videojuegos",
+          categoryValue: "GAMING",
+        },
+        {
+          icon: <FaBook className="text-blue-600" />,
+          label: "Libros",
+          categoryValue: "LIBROS",
+        },
+        {
+          icon: <FaGuitar className="text-lime-500" />,
+          label: "Instrumentos",
+          categoryValue: "INSTRUMENTOS",
+        },
+        {
+          icon: <FaChild className="text-amber-500" />,
+          label: "Juguetes",
+          categoryValue: "JUGUETES",
+        },
+      ],
+    },
+    {
+      title: "Estilo de Vida",
+      categories: [
+        {
+          icon: <FaRunning className="text-orange-500" />,
+          label: "Deportes",
+          categoryValue: "DEPORTES",
+        },
+        {
+          icon: <FaCar className="text-gray-600" />,
+          label: "Vehículos",
+          categoryValue: "VEHÍCULOS",
+        },
+        {
+          icon: <FaPlane className="text-indigo-300" />,
+          label: "Viajes",
+          categoryValue: "VIAJE",
+        },
+        {
+          icon: <FaDumbbell className="text-gray-700" />,
+          label: "Fitness",
+          categoryValue: "FITNESS",
+        },
       ],
     },
   ];
@@ -221,14 +335,9 @@ const Header = () => {
   );
 
   return (
-    <header
-      className={`w-full transition-transform duration-300 ${
-        headerVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
-      style={{ position: "sticky", top: 0, zIndex: 50 }}
-    >
+    <header className="w-full relative">
       {/* 🎨 BARRA PRINCIPAL CON LOGO, BÚSQUEDA Y ACCIONES */}
-      <div className="bg-[#cae8ff] border-b border-blue-200 shadow-md">
+      <div className="bg-[#cae8ff] border-b border-blue-200 shadow-md opacity-80">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="w-full flex flex-col md:flex-row justify-between items-center py-4">
             {/* LOGO EN LA ESQUINA IZQUIERDA */}
@@ -272,7 +381,7 @@ const Header = () => {
       </div>
 
       {/* 🎨 BARRA DE CATEGORÍAS CON SCROLL HORIZONTAL */}
-      <div className="bg-yellow-400 text-blue-900 w-full">
+      <div className="bg-[#f4f6fc] text-blue-900 w-full opacity-80">
         <div className="w-full px-2 py-1">
           <div className="flex items-center space-x-2">
             {/* Botón de Categorías */}
@@ -336,7 +445,7 @@ const Header = () => {
               </button>
               <button
                 className="flex items-center text-s whitespace-nowrap"
-                onClick={() => navigateTo.categoria("/ofertas")}
+                onClick={() => navigateTo.categoria("OFERTAS")}
               >
                 <FaTag className="mr-1" size={12} /> Ofertas
               </button>
@@ -381,7 +490,7 @@ const Header = () => {
           className="absolute w-full shadow-2xl border border-gray-200 z-50 rounded-lg overflow-hidden"
           style={{ backgroundColor: "#f4f6fc" }}
         >
-          <div className="w-full px-6 py-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="w-full px-6 py-6 grid grid-cols-1 md:grid-cols-5 gap-8">
             {categoryGroups.map((group, index) => (
               <div
                 key={index}
@@ -396,7 +505,7 @@ const Header = () => {
                       <button
                         className="flex items-center w-full text-left py-2 px-3 rounded-lg hover:bg-gradient-to-r hover:from-blue-100 hover:to-indigo-100 hover:shadow-md transition-all duration-200 group"
                         onClick={() => {
-                          navigateTo.categoria(category.path);
+                          navigateTo.categoria(category.categoryValue);
                           setShowCategories(false);
                         }}
                       >

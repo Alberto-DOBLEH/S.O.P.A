@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
-  // Iconos de Font Awesome
   FaStar,
   FaStarHalfAlt,
   FaRegStar,
@@ -15,15 +14,12 @@ import {
   FaMapMarkerAlt,
   FaCheckCircle,
 } from "react-icons/fa";
-
 import { BsPatchCheck } from "react-icons/bs";
 import { RiCouponLine } from "react-icons/ri";
 import { toast } from "react-toastify";
-
+import { useCurrency } from "../CurrencyContext";
 import { backgroundImage } from "../assets/imagenes/imagenes";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
-// import Header from "../components/header.jsx";
 import Footer from "../components/Footer";
 import Header from "../components/Heaader";
 
@@ -169,8 +165,15 @@ const VerArticulo = () => {
   const { id } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
+  const {
+    currency,
+    conversionRate,
+    changeCurrency,
+    formatPrice,
+    getCurrencySymbol,
+    availableCurrencies,
+  } = useCurrency();
 
-  // Estados principales
   const [producto, setProducto] = useState(state?.producto || null);
   const [loading, setLoading] = useState(!state?.producto);
   const [cantidad, setCantidad] = useState(1);
@@ -182,18 +185,15 @@ const VerArticulo = () => {
   const [enCarrito, setEnCarrito] = useState(false);
   const [enFavoritos, setEnFavoritos] = useState(false);
 
-  // Cargar datos de ejemplo
   useEffect(() => {
     if (!state?.producto) {
       setLoading(true);
-      // Simular carga de API
       setTimeout(() => {
         const productoEncontrado = productosEjemplo.find((p) => p.id === id);
         if (productoEncontrado) {
           setProducto(productoEncontrado);
           setComentarios(comentariosEjemplo);
           setPreguntas(preguntasEjemplo);
-          // Simular productos relacionados (excluyendo el actual)
           setProductosRelacionados(
             productosEjemplo.filter((p) => p.id !== id).slice(0, 3)
           );
@@ -211,16 +211,6 @@ const VerArticulo = () => {
     }
   }, [id, state?.producto]);
 
-  // Formatear precio
-  const formatoPrecio = (precio) => {
-    return new Intl.NumberFormat("es-MX", {
-      style: "currency",
-      currency: "MXN",
-      minimumFractionDigits: 0,
-    }).format(precio);
-  };
-
-  // Funciones de interacción
   const handleAgregarCarrito = () => {
     setEnCarrito(true);
     toast.success(`Se agregó ${cantidad} ${producto.titulo} al carrito`);
@@ -240,7 +230,6 @@ const VerArticulo = () => {
     toast.info(!enFavoritos ? "Agregado a favoritos" : "Removido de favoritos");
   };
 
-  // Renderizar estrellas de calificación
   const renderEstrellas = (calificacion) => {
     const estrellas = [];
     const estrellasLlenas = Math.floor(calificacion);
@@ -255,11 +244,9 @@ const VerArticulo = () => {
         estrellas.push(<FaRegStar key={i} className="text-yellow-400" />);
       }
     }
-
     return estrellas;
   };
 
-  // Estados de carga y error
   if (loading) {
     return (
       <>
@@ -306,15 +293,12 @@ const VerArticulo = () => {
     <>
       <Header />
       <div className="relative w-full">
-        {/* Imagen de fondo decorativa */}
         <img
           src={backgroundImage}
           alt="Flor decorativa"
           className="absolute left-0 w-1/3 md:w-1/4 z-0 opacity-15"
         />
-
-        {/* Breadcrumb funcional */}
-        <div className="relative  bg-white/80 backdrop-blur-sm shadow-sm w-full border-b border-gray-200/30">
+        <div className="relative bg-white/80 backdrop-blur-sm shadow-sm w-full border-b border-gray-200/30">
           <div className="container mx-auto px-4">
             <nav className="text-sm py-1">
               <ol className="flex items-center space-x-2 text-gray-700">
@@ -326,9 +310,8 @@ const VerArticulo = () => {
                     Inicio
                   </button>
                 </li>
-
                 <li className="flex items-center">
-                  <span className="mx-2 text-gray-400/80">&gt;</span>
+                  <span className="mx-2 text-gray-400/80">></span>
                   <button
                     onClick={() =>
                       navigate(`/categoria/${producto.categoria.toLowerCase()}`)
@@ -338,9 +321,8 @@ const VerArticulo = () => {
                     {producto.categoria}
                   </button>
                 </li>
-
                 <li className="flex items-center">
-                  <span className="mx-2 text-gray-400/80">&gt;</span>
+                  <span className="mx-2 text-gray-400/80">></span>
                   <span className="text-gray-800/90 font-medium truncate max-w-[160px] md:max-w-[240px]">
                     {producto.titulo}
                   </span>
@@ -352,21 +334,31 @@ const VerArticulo = () => {
       </div>
       <div className="bg-gray-50 py-4">
         <div className="container mx-auto px-4">
-          {/* Breadcrumbs */}
-
-          {/* Contenido principal */}
           <div className="bg-white rounded-lg shadow-sm p-4 md:p-8">
+            {/* Selector de moneda */}
+            <div className="flex justify-end mb-4">
+              <select
+                value={currency}
+                onChange={(e) => changeCurrency(e.target.value)}
+                className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {availableCurrencies.map((curr) => (
+                  <option key={curr.code} value={curr.code}>
+                    {curr.name} ({curr.symbol})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Columna izquierda: Galería de imágenes */}
+              {/* Galería de imágenes */}
               <div>
-                {/* Imagen principal */}
                 <div className="relative mb-4 rounded-lg overflow-hidden border border-gray-200">
                   <img
-                    // src={logoCompleto}   imagen del producto
+                    src={producto.imagenes[imagenSeleccionada]}
                     alt={producto.titulo}
                     className="w-full h-auto object-contain aspect-square"
                   />
-                  {/* Badges */}
                   <div className="absolute top-4 left-4 flex flex-col gap-2">
                     {producto.descuento > 0 && (
                       <span className="bg-red-600 text-white text-sm font-bold py-1 px-3 rounded-full">
@@ -385,8 +377,6 @@ const VerArticulo = () => {
                     )}
                   </div>
                 </div>
-
-                {/* Miniaturas */}
                 <div className="flex space-x-2 relative">
                   <button
                     onClick={() =>
@@ -396,9 +386,8 @@ const VerArticulo = () => {
                   >
                     <FaChevronLeft className="text-gray-600" />
                   </button>
-
                   <div className="flex space-x-2 overflow-x-auto px-6">
-                    {[...Array(4)].map((_, idx) => (
+                    {producto.imagenes.map((img, idx) => (
                       <div
                         key={idx}
                         onClick={() => setImagenSeleccionada(idx)}
@@ -409,25 +398,27 @@ const VerArticulo = () => {
                         }`}
                       >
                         <img
-                          src="/api/placeholder/150/150"
+                          src={img}
                           alt={`${producto.titulo} - vista ${idx + 1}`}
                           className="w-16 h-16 object-cover"
                         />
                       </div>
                     ))}
                   </div>
-
                   <button
                     onClick={() =>
-                      setImagenSeleccionada(Math.min(3, imagenSeleccionada + 1))
+                      setImagenSeleccionada(
+                        Math.min(
+                          producto.imagenes.length - 1,
+                          imagenSeleccionada + 1
+                        )
+                      )
                     }
                     className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-full p-1 shadow-md"
                   >
                     <FaChevronRight className="text-gray-600" />
                   </button>
                 </div>
-
-                {/* Compartir y favoritos (móvil) */}
                 <div className="flex justify-between mt-6 md:hidden">
                   <button
                     onClick={toggleFavoritos}
@@ -447,9 +438,8 @@ const VerArticulo = () => {
                 </div>
               </div>
 
-              {/* Columna derecha: Información del producto */}
+              {/* Información del producto */}
               <div>
-                {/* Título y vendedor */}
                 <div className="mb-4">
                   <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
                     {producto.titulo}
@@ -470,7 +460,6 @@ const VerArticulo = () => {
                   </div>
                 </div>
 
-                {/* Calificaciones */}
                 <div className="flex items-center mb-6">
                   <div className="flex mr-2">
                     {renderEstrellas(producto.calificacion)}
@@ -483,15 +472,14 @@ const VerArticulo = () => {
                   </span>
                 </div>
 
-                {/* Precio */}
                 <div className="mb-6">
                   <div className="flex items-center">
                     <span className="text-2xl md:text-3xl font-bold text-gray-900">
-                      {formatoPrecio(producto.precio)}
+                      {formatPrice(producto.precio)}
                     </span>
                     {producto.descuento > 0 && (
                       <span className="ml-3 text-lg text-gray-500 line-through">
-                        {formatoPrecio(producto.precioOriginal)}
+                        {formatPrice(producto.precioOriginal)}
                       </span>
                     )}
                   </div>
@@ -501,13 +489,11 @@ const VerArticulo = () => {
                       Envío gratis
                     </p>
                   )}
-
-                  {/* Cuotas */}
                   <div className="mt-2 text-sm">
                     <p className="text-gray-600">
                       Hasta 12 meses sin intereses de{" "}
                       <span className="font-semibold">
-                        {formatoPrecio(Math.round(producto.precio / 12))}
+                        {formatPrice(Math.round(producto.precio / 12))}
                       </span>
                     </p>
                     <button className="text-blue-600 font-medium hover:text-blue-700 mt-1">
@@ -516,7 +502,6 @@ const VerArticulo = () => {
                   </div>
                 </div>
 
-                {/* Stock */}
                 <div className="mb-6">
                   <p className="text-sm text-gray-600 mb-1">
                     Stock disponible:
@@ -533,7 +518,6 @@ const VerArticulo = () => {
                   </div>
                 </div>
 
-                {/* Cantidad */}
                 <div className="mb-6">
                   <p className="text-sm text-gray-600 mb-2">Cantidad:</p>
                   <div className="flex items-center">
@@ -557,7 +541,6 @@ const VerArticulo = () => {
                   </div>
                 </div>
 
-                {/* Botones de acción */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                   <button
                     onClick={handleComprarAhora}
@@ -578,7 +561,6 @@ const VerArticulo = () => {
                   </button>
                 </div>
 
-                {/* Compartir y favoritos (escritorio) */}
                 <div className="hidden md:flex justify-between mt-4 mb-6">
                   <button
                     onClick={toggleFavoritos}
@@ -597,7 +579,6 @@ const VerArticulo = () => {
                   </button>
                 </div>
 
-                {/* Beneficios */}
                 <div className="bg-gray-50 rounded-lg p-4 mb-6">
                   <h3 className="font-semibold text-gray-800 mb-3">
                     Beneficios de tu compra
@@ -606,7 +587,8 @@ const VerArticulo = () => {
                     <li className="flex items-start">
                       <FaTruck className="text-green-600 mt-1 mr-3" />
                       <span className="text-sm text-gray-600">
-                        Envío gratis a todo México en compras mayores a $499
+                        Envío gratis a todo México en compras mayores a{" "}
+                        {formatPrice(499)}
                       </span>
                     </li>
                     <li className="flex items-start">
@@ -631,7 +613,6 @@ const VerArticulo = () => {
                   </ul>
                 </div>
 
-                {/* Tiendas con stock */}
                 <div>
                   <h3 className="font-semibold text-gray-800 mb-3">
                     Disponible en tiendas físicas
@@ -659,7 +640,7 @@ const VerArticulo = () => {
               </div>
             </div>
 
-            {/* Tabs de información adicional */}
+            {/* Tabs para descripción, especificaciones, opiniones y preguntas */}
             <div className="mt-10 border-t border-gray-200 pt-8">
               <div className="flex overflow-x-auto scrollbar-hide">
                 <button
@@ -705,7 +686,6 @@ const VerArticulo = () => {
               </div>
 
               <div className="mt-6">
-                {/* Descripción */}
                 {activeTab === "descripcion" && (
                   <div className="prose max-w-none">
                     <p className="text-gray-700 leading-relaxed">
@@ -747,7 +727,6 @@ const VerArticulo = () => {
                   </div>
                 )}
 
-                {/* Especificaciones */}
                 {activeTab === "especificaciones" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -812,7 +791,6 @@ const VerArticulo = () => {
                   </div>
                 )}
 
-                {/* Opiniones */}
                 {activeTab === "opiniones" && (
                   <div>
                     <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
@@ -836,7 +814,6 @@ const VerArticulo = () => {
                         Escribir una opinión
                       </button>
                     </div>
-
                     <div className="space-y-6">
                       {comentarios.map((comentario) => (
                         <div
@@ -867,8 +844,6 @@ const VerArticulo = () => {
                           <p className="text-gray-700 mt-3">
                             {comentario.comentario}
                           </p>
-
-                          {/* Respuestas */}
                           {comentario.respuestas.length > 0 && (
                             <div className="mt-4 pl-6 border-l-2 border-gray-200">
                               {comentario.respuestas.map((respuesta) => (
@@ -889,8 +864,6 @@ const VerArticulo = () => {
                         </div>
                       ))}
                     </div>
-
-                    {/* Ver más comentarios */}
                     {comentarios.length > 0 && (
                       <div className="mt-6 text-center">
                         <button className="text-blue-600 font-medium hover:text-blue-700">
@@ -901,7 +874,6 @@ const VerArticulo = () => {
                   </div>
                 )}
 
-                {/* Preguntas */}
                 {activeTab === "preguntas" && (
                   <div>
                     <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
@@ -912,8 +884,6 @@ const VerArticulo = () => {
                         Hacer una pregunta
                       </button>
                     </div>
-
-                    {/* Preguntas */}
                     <div className="space-y-6">
                       {preguntas.map((pregunta) => (
                         <div
@@ -929,8 +899,6 @@ const VerArticulo = () => {
                               Por {pregunta.usuario} - {pregunta.fecha}
                             </p>
                           </div>
-
-                          {/* Respuestas */}
                           {pregunta.respuestas.length > 0 ? (
                             <div className="mt-4">
                               {pregunta.respuestas.map((respuesta) => (
@@ -963,8 +931,6 @@ const VerArticulo = () => {
                         </div>
                       ))}
                     </div>
-
-                    {/* Ver más preguntas */}
                     {preguntas.length > 0 && (
                       <div className="mt-6 text-center">
                         <button className="text-blue-600 font-medium hover:text-blue-700">
@@ -976,131 +942,132 @@ const VerArticulo = () => {
                 )}
               </div>
             </div>
-          </div>
 
-          {/* Productos relacionados */}
-          <div className="mt-12">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">
-              Productos relacionados
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {productosRelacionados.map((producto) => (
-                <div
-                  key={producto.id}
-                  className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow overflow-hidden"
-                >
-                  <div className="relative">
-                    <img
-                      src="/api/placeholder/300/300"
-                      alt={producto.titulo}
-                      className="w-full h-48 object-contain"
-                    />
-                    {producto.descuento > 0 && (
-                      <span className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold py-1 px-2 rounded-full">
-                        -{producto.descuento}%
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-sm font-medium text-gray-800 line-clamp-2 h-10">
-                      {producto.titulo}
-                    </h3>
-                    <div className="flex items-center mt-2">
-                      <div className="flex text-xs">
-                        {renderEstrellas(producto.calificacion)}
-                      </div>
-                      <span className="text-xs text-gray-600 ml-1">
-                        ({producto.numCalificaciones})
-                      </span>
-                    </div>
-                    <div className="mt-2">
-                      <span className="text-lg font-bold text-gray-900">
-                        {formatoPrecio(producto.precio)}
-                      </span>
-                      {producto.precioOriginal && (
-                        <span className="ml-2 text-sm text-gray-500 line-through">
-                          {formatoPrecio(producto.precioOriginal)}
+            {/* Productos relacionados */}
+            <div className="mt-12">
+              <h2 className="text-xl font-bold text-gray-800 mb-6">
+                Productos relacionados
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {productosRelacionados.map((producto) => (
+                  <div
+                    key={producto.id}
+                    className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow overflow-hidden"
+                  >
+                    <div className="relative">
+                      <img
+                        src={producto.imagenes[0]}
+                        alt={producto.titulo}
+                        className="w-full h-48 object-contain"
+                      />
+                      {producto.descuento > 0 && (
+                        <span className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold py-1 px-2 rounded-full">
+                          -{producto.descuento}%
                         </span>
                       )}
                     </div>
-                    {producto.envioGratis && (
-                      <p className="text-xs text-green-600 mt-1 flex items-center">
-                        <FaTruck className="mr-1" />
-                        Envío gratis
-                      </p>
-                    )}
-                    <div className="mt-3 flex justify-between">
-                      <button
-                        onClick={() =>
-                          navigate(`/articulo/${producto.id}`, {
-                            state: { producto },
-                          })
-                        }
-                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                      >
-                        Ver detalles
-                      </button>
-                      <button
-                        onClick={() => {
-                          toast.success(
-                            `"${producto.titulo}" agregado al carrito`
-                          );
-                        }}
-                        className="text-gray-700 hover:text-gray-900"
-                      >
-                        <FaShoppingCart />
-                      </button>
+                    <div className="p-4">
+                      <h3 className="text-sm font-medium text-gray-800 line-clamp-2 h-10">
+                        {producto.titulo}
+                      </h3>
+                      <div className="flex items-center mt-2">
+                        <div className="flex text-xs">
+                          {renderEstrellas(producto.calificacion)}
+                        </div>
+                        <span className="text-xs text-gray-600 ml-1">
+                          ({producto.numCalificaciones})
+                        </span>
+                      </div>
+                      <div className="mt-2">
+                        <span className="text-lg font-bold text-gray-900">
+                          {formatPrice(producto.precio)}
+                        </span>
+                        {producto.precioOriginal && (
+                          <span className="ml-2 text-sm text-gray-500 line-through">
+                            {formatPrice(producto.precioOriginal)}
+                          </span>
+                        )}
+                      </div>
+                      {producto.envioGratis && (
+                        <p className="text-xs text-green-600 mt-1 flex items-center">
+                          <FaTruck className="mr-1" />
+                          Envío gratis
+                        </p>
+                      )}
+                      <div className="mt-3 flex justify-between">
+                        <button
+                          onClick={() =>
+                            navigate(`/articulo/${producto.id}`, {
+                              state: { producto },
+                            })
+                          }
+                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        >
+                          Ver detalles
+                        </button>
+                        <button
+                          onClick={() => {
+                            toast.success(
+                              `"${producto.titulo}" agregado al carrito`
+                            );
+                          }}
+                          className="text-gray-700 hover:text-gray-900"
+                        >
+                          <FaShoppingCart />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Garantías y seguridad */}
-          <div className="mt-12 bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">
-              Compra con confianza
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="flex items-start">
-                <div className="bg-blue-100 p-3 rounded-full mr-4">
-                  <FaShieldAlt className="text-blue-600 text-xl" />
+            {/* Compra con confianza */}
+            <div className="mt-12 bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-6">
+                Compra con confianza
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="flex items-start">
+                  <div className="bg-blue-100 p-3 rounded-full mr-4">
+                    <FaShieldAlt className="text-blue-600 text-xl" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-1">
+                      Garantía protegida
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Todos nuestros productos incluyen garantía de fábrica y
+                      soporte técnico.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">
-                    Garantía protegida
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Todos nuestros productos incluyen garantía de fábrica y
-                    soporte técnico.
-                  </p>
+                <div className="flex items-start">
+                  <div className="bg-green-100 p-3 rounded-full mr-4">
+                    <FaCreditCard className="text-green-600 text-xl" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-1">
+                      Pago seguro
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Tus pagos están protegidos con encriptación SSL de 256
+                      bits.
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start">
-                <div className="bg-green-100 p-3 rounded-full mr-4">
-                  <FaCreditCard className="text-green-600 text-xl" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">
-                    Pago seguro
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Tus pagos están protegidos con encriptación SSL de 256 bits.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <div className="bg-purple-100 p-3 rounded-full mr-4">
-                  <FaTruck className="text-purple-600 text-xl" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">
-                    Envíos confiables
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Rastreo en tiempo real y protección contra extravíos.
-                  </p>
+                <div className="flex items-start">
+                  <div className="bg-purple-100 p-3 rounded-full mr-4">
+                    <FaTruck className="text-purple-600 text-xl" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-1">
+                      Envíos confiables
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Rastreo en tiempo real y protección contra extravíos.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

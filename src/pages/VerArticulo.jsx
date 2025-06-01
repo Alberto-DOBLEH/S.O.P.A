@@ -219,8 +219,37 @@ const VerArticulo = () => {
   const handleComprarAhora = () => {
     navigate("/checkout", {
       state: {
-        productos: [{ ...producto, cantidad }],
+        productos: [
+          {
+            ...producto,
+            cantidad,
+            precioDescuento: producto.descuento > 0 ? producto.precio : null,
+            discount: producto.descuento,
+          },
+        ],
         modoCompraRapida: true,
+        direccion: {
+          calle: "Calle Constitución",
+          ciudad: "Culiacán",
+          estado: "Sinaloa",
+          codigoPostal: "81893",
+          pais: "México",
+        },
+        opcionEnvioSeleccionada: "estandar",
+        opcionesEnvio: [
+          {
+            id: "estandar",
+            nombre: "Envío Estándar",
+            precio: 99,
+            dias: "3-5 días",
+          },
+          {
+            id: "express",
+            nombre: "Envío Express",
+            precio: 199,
+            dias: "1-2 días",
+          },
+        ],
       },
     });
   };
@@ -335,21 +364,6 @@ const VerArticulo = () => {
       <div className="bg-gray-50 py-4">
         <div className="container mx-auto px-4">
           <div className="bg-white rounded-lg shadow-sm p-4 md:p-8">
-            {/* Selector de moneda */}
-            <div className="flex justify-end mb-4">
-              <select
-                value={currency}
-                onChange={(e) => changeCurrency(e.target.value)}
-                className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {availableCurrencies.map((curr) => (
-                  <option key={curr.code} value={curr.code}>
-                    {curr.name} ({curr.symbol})
-                  </option>
-                ))}
-              </select>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Galería de imágenes */}
               <div>
@@ -544,7 +558,7 @@ const VerArticulo = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                   <button
                     onClick={handleComprarAhora}
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-4 rounded-lg transition-colors transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
                   >
                     Comprar ahora
                   </button>

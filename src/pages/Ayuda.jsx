@@ -1,24 +1,29 @@
 import React from "react";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
-import { backgroundImage } from "../assets/imagenes/imagenes";
+import {
+  backgroundImage,
+  LoginVideo,
+  VentaVideo,
+  CompraVideo,
+} from "../assets/imagenes/imagenes";
 
 const Ayuda = () => {
   const videitos = [
     {
       titulo: "Video de como crear una cuenta",
-      url: "URL_DEL_VIDEO_1",
-      thumbnail: "URL_IMAGEN_MINATURA_1",
+      url: "https://www.youtube.com/watch?v=q-0KMO57wJc",
+      thumbnail: LoginVideo,
     },
     {
       titulo: "Video de como comprar un producto",
-      url: "URL_DEL_VIDEO_2",
-      thumbnail: "URL_IMAGEN_MINATURA_2",
+      url: "https://youtu.be/xv2ynDSgzP0",
+      thumbnail: CompraVideo,
     },
     {
       titulo: "Video de como poner un producto a la venta",
-      url: "URL_DEL_VIDEO_3",
-      thumbnail: "URL_IMAGEN_MINATURA_3",
+      url: "https://youtu.be/n6cVMzGs-Ho",
+      thumbnail: VentaVideo,
     },
   ];
 

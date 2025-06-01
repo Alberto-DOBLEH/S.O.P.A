@@ -12,7 +12,9 @@ import {
   alanSombrero,
   hotsale,
   Anuncio01,
-  Anuncio02,
+  i3,
+  i1,
+  i2,
 } from "../assets/imagenes/imagenesslider";
 import {
   ChevronLeft,
@@ -265,7 +267,7 @@ const CATEGORIES = [
 // ANUNCIOS
 const ANUNCIOS = [
   {
-    imagen: Anuncio01,
+    imagen: i1,
     alt: "Oferta de productos de oficina",
     tag: "FULL",
     tagColor: "bg-green-500",
@@ -273,13 +275,13 @@ const ANUNCIOS = [
     badge: "ENVÍOS RÁPIDOS",
   },
   {
-    imagen: Anuncio02,
+    imagen: i2,
     alt: "Ventiladores y productos para el calor",
     tag: "OFERTA",
     tagColor: "bg-red-500",
   },
   {
-    imagen: losFondo,
+    imagen: i3,
     alt: "Productos para mascotas",
     tag: "NUEVO",
     tagColor: "bg-blue-500",
@@ -1312,14 +1314,13 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
         setuserName(usuario);
         setIsAuthenticated(true);
       }
-      
     }, []);
     const logout = () => {
-      if(!isAuthenticated) {
+      if (!isAuthenticated) {
         toast.error("No hay sesión iniciada", {
           toastId: "logout-error",
         });
-      }else{
+      } else {
         localStorage.removeItem("usuario");
         setIsAuthenticated(false);
         toast.success("Sesión cerrada exitosamente", {
@@ -1327,7 +1328,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
         });
         navigate("/");
       }
-    }
+    };
     const handleCarritoClick = () => {
       navigateTo.carrito();
       setShowOpciones(false);
@@ -1550,14 +1551,14 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
                       </MenuSection>
 
                       <div className="p-2 bg-gray-50">
-                      {isAuthenticated && (
-                        <MenuItem
-                          icon={<FaSignOutAlt className="text-red-500" />}
-                          text="Cerrar sesión"
-                          onClick={logout}
-                          className="hover:bg-red-50"
-                        />
-                      )}
+                        {isAuthenticated && (
+                          <MenuItem
+                            icon={<FaSignOutAlt className="text-red-500" />}
+                            text="Cerrar sesión"
+                            onClick={logout}
+                            className="hover:bg-red-50"
+                          />
+                        )}
                       </div>
                     </div>
                   </div>

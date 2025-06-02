@@ -22,7 +22,16 @@ const VentanaPago = ({
   finalizarCompra,
   loading,
   setCurrentStep,
+  numeroTarjeta,
+  setNumeroTarjeta,
+  FechaExpiracion,
+  setFechaExpiracion,
+  cvv,
+  setCvv,
+  NombreTitular,
+  setNombreTitular,
 }) => {
+
   // 🔥 API ENDPOINT: POST /api/pagos/procesar (para procesar el pago)
   // 🔥 API ENDPOINT: POST /api/descuentos/aplicar (para aplicar códigos de descuento)
   // 🔥 API ENDPOINT: GET /api/metodos-pago (para obtener métodos de pago disponibles)
@@ -82,23 +91,31 @@ const VentanaPago = ({
                     type="text"
                     placeholder="1234 5678 9012 3456"
                     className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={numeroTarjeta}
+                    onChange={(e) => setNumeroTarjeta(e.target.value)}
                   />
                   <div className="grid grid-cols-2 gap-4">
                     <input
                       type="text"
                       placeholder="MM/AA"
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      value={FechaExpiracion}
+                      onChange={(e) => setFechaExpiracion(e.target.value)}
                     />
                     <input
                       type="text"
                       placeholder="CVV"
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      value={cvv}
+                      onChange={(e) => setCvv(e.target.value)}
                     />
                   </div>
                   <input
                     type="text"
                     placeholder="Nombre del titular"
                     className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={NombreTitular}
+                    onChange={(e) => setNombreTitular(e.target.value)}
                   />
                 </div>
               )}

@@ -1043,6 +1043,7 @@ import CompraExitosa from "../pages/CompraExitosa";
 import VentanaEnvio from "../pages/VentanaEnvio";
 import VentanaPago from "../pages/VentanaPago";
 import { useCurrency } from "../CurrencyContext"; // Importamos el contexto de moneda
+import { toast } from "react-toastify";
 
 const CarritoCompras = () => {
   // Obtenemos el contexto de moneda
@@ -1057,6 +1058,7 @@ const CarritoCompras = () => {
   const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState("carrito");
   const [showSuccess, setShowSuccess] = useState(false);
+  const [aprobarCompra, setAprobarCompra] = useState(false);
 
   // Estados para información de envío
   const [direccion, setDireccion] = useState({
@@ -1084,6 +1086,13 @@ const CarritoCompras = () => {
   const [metodoPago, setMetodoPago] = useState("tarjeta");
   const [codigoDescuento, setCodigoDescuento] = useState("");
   const [terminosAceptados, setTerminosAceptados] = useState(false);
+
+  //Estados para manejo de compra con tarjeta
+  const [numeroTarjeta, setNumeroTarjeta] = useState("");
+  const [fechaExpiracion, setFechaExpiracion] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [nombreTitular, setNombreTitular] = useState("");
+  const [datosTarjetaValidos, setDatosTarjetaValidos] = useState(false);
 
   // Opciones de envío
   const opcionesEnvio = [
@@ -1334,6 +1343,61 @@ const CarritoCompras = () => {
     }
   };
 
+  //Validacion de tarjetas
+  const validarNumeroTarjeta = (numero) => {
+    const limpio = numero.replace(/\s+/g, "");
+
+    // Verifica que tenga entre 13 y 19 dígitos
+    if (!/^\d{13,19}$/.test(limpio)) return false;
+
+    // Algoritmo de Luhn (verifica si es una tarjeta válida)
+    let suma = 0;
+    let alternar = false;
+
+    for (let i = limpio.length - 1; i >= 0; i--) {
+      let n = parseInt(limpio[i], 10);
+      if (alternar) {
+        n *= 2;
+        if (n > 9) n -= 9;
+      }
+      suma += n;
+      alternar = !alternar;
+    }
+
+    if (suma % 10 !== 0) return false;
+
+    // Validar si pertenece a algún emisor (Visa, MasterCard, etc.)
+    const patrones = {
+      visa: /^4/,
+      mastercard: /^5[1-5]/,
+      amex: /^3[47]/,
+      discover: /^6(?:011|5)/,
+    };
+
+    return Object.values(patrones).some((patron) => patron.test(limpio));
+  };
+
+  const validarFechaExpiracion = (fecha) => {
+    if (!/^\d{2}\/\d{2}$/.test(fecha)) return false;
+
+    const [mes, anio] = fecha.split("/").map(Number);
+    if (mes < 1 || mes > 12) return false;
+
+    const ahora = new Date();
+    const anioActual = ahora.getFullYear() % 100;
+    const mesActual = ahora.getMonth() + 1;
+
+    // Verifica que no esté en el pasado
+    if (anio < anioActual || (anio === anioActual && mes < mesActual)) return false;
+
+    return true;
+  };
+
+  const validarCVV = (cvv) => {
+    return /^\d{3,4}$/.test(cvv);
+  };
+
+  // Función para finalizar la compra
   const finalizarCompra = async () => {
     if (!terminosAceptados) {
       alert("Debes aceptar los términos y condiciones");
@@ -1364,8 +1428,71 @@ const CarritoCompras = () => {
       if (!response.ok) {
         throw new Error("Error al procesar el pago");
       }
-      setLoading(false);
-      setShowSuccess(true);
+      setLoading(true);
+      if (metodoPago === "tarjeta") {
+        //validar campos vacios de tarjeta
+        if (
+          !numeroTarjeta ||
+          !fechaExpiracion ||
+          !cvv ||
+          !nombreTitular
+        ) {
+          toast.error("Por favor, completa todos los campos de la tarjeta correctamente.");
+          setLoading(false);
+          return;
+        }
+        //Validar tarjeta de credito
+        if (!validarNumeroTarjeta(numeroTarjeta)) {
+          toast.error("Número de tarjeta inválido. Por favor, verifica e intenta nuevamente.");
+          setLoading(false);
+          return;
+        }
+        if (!validarFechaExpiracion(fechaExpiracion)) {
+          toast.error("Fecha de expiración inválida. Por favor, verifica e intenta nuevamente.");
+          setLoading(false);
+          return;
+        }
+        if (!validarCVV(cvv)) {
+          toast.error("CVV inválido. Por favor, verifica e intenta nuevamente.");
+          setLoading(false);
+          return;
+        }
+
+        // Simular validación de tarjeta
+        setDatosTarjetaValidos(true);
+      }
+
+      if(!datosTarjetaValidos) {
+        setAprobarCompra(true);
+      }
+
+      if(!aprobarCompra){
+        setShowSuccess(true);
+        try{
+          const idusuario = localStorage.getItem("idusuario");
+          const estatusresponse = await fetch(`http://localhost:3001/api/carrito/update?userId=${idusuario}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+              estatus: "P",
+              productos: cartItems.map((item) => ({
+                id_producto: item.id_producto
+              }))
+            }),
+          });
+          if (!estatusresponse.ok) {
+            throw new Error("Error al actualizar el estatus del carrito");
+          }
+          setLoading(false);
+        }catch (error) {
+          console.error("Error al actualizar el estatus del carrito:", error);
+        }
+      }else {
+        toast.error("Error al procesar el pago, por favor intenta nuevamente");
+      }
     } catch (error) {
       console.error("Error al finalizar compra:", error);
       alert("Ocurrió un error al procesar tu pago");
@@ -1772,6 +1899,14 @@ const CarritoCompras = () => {
                     finalizarCompra={finalizarCompra}
                     loading={loading}
                     setCurrentStep={setCurrentStep}
+                    numeroTarjeta={numeroTarjeta}
+                    setNumeroTarjeta={setNumeroTarjeta}
+                    fechaExpiracion={fechaExpiracion}
+                    setFechaExpiracion={setFechaExpiracion}
+                    cvv={cvv}
+                    setCvv={setCvv}
+                    nombreTitular={nombreTitular}
+                    setNombreTitular={setNombreTitular}
                   />
                 )}
               </>

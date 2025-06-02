@@ -6,6 +6,7 @@ const {
   addToCart,
   updateCartItem,
   removeCartItem,
+  updateCartStatus,
 } = require("../controllers/cartController");
 
 // GET   /api/carrito          → obtener ítems
@@ -16,5 +17,6 @@ router.get("/", getCartItems);
 router.post("/", addToCart);
 router.put("/:id_carrito", updateCartItem);
 router.delete("/:id_carrito", removeCartItem);
+router.post("/update", updateCartStatus);
 
 module.exports = router;

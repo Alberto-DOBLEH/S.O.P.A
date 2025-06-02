@@ -94,9 +94,48 @@ const removeCartItem = (req, res) => {
   );
 };
 
+const updateCartStatus = (req, res) => {
+  const userId = req.userId;
+  const { productos, estatus } = req.body;
+
+  if (!productos || !Array.isArray(productos) || productos.length === 0) {
+    return res.status(400).json({ error: "Lista de productos requerida" });
+  }
+
+  if (!estatus) {
+    return res.status(400).json({ error: "Estatus requerido" });
+  }
+
+  // Creamos un array de promesas para ejecutar múltiples queries
+  const queries = productos.map((item) => {
+    return new Promise((resolve, reject) => {
+      db.query(
+        `UPDATE carrito SET estatus = ? WHERE id_producto = ? AND id_usuario = ?`,
+        [estatus, item.id_producto, userId],
+        (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        }
+      );
+    });
+  });
+
+  // Ejecutamos todas las actualizaciones
+  Promise.all(queries)
+    .then(() => {
+      res.json({ mensaje: "Estatus de productos actualizado con éxito" });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Error al actualizar los productos del carrito" });
+    });
+};
+
+
 module.exports = {
   getCartItems,
   addToCart,
   updateCartItem,
   removeCartItem,
+  updateCartStatus
 };

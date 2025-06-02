@@ -6,10 +6,8 @@ const db = require("../db");
 const crearVenta = (req, res) => {
   const { productos, metodo_pago } = req.body;
   const id_usuario = req.userId || req.body.id_usuario;
+  const estado = "Aprobado"
 
-  console.log("Datos de la venta:", req.body);
-  console.log("ID de usuario:", id_usuario);
-  
   if (!productos || productos.length === 0) {
     return res.status(400).json({ error: "Faltan productos para la venta" });
   }
@@ -38,8 +36,8 @@ const crearVenta = (req, res) => {
 
       // 1.3 Insertar cabecera de la venta
       db.query(
-        "INSERT INTO ventas (id_usuario, total, metodo_pago) VALUES (?, ?, ?)",
-        [id_usuario, total, metodo_pago],
+        "INSERT INTO ventas (id_usuario, total, metodo_pago, estado) VALUES (?, ?, ?, ?)",
+        [id_usuario, total, metodo_pago, estado],
         (err2, result) => {
           if (err2) {
             console.error("Error al crear venta (cabecera):", err2);

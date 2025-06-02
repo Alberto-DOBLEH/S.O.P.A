@@ -289,17 +289,6 @@ const ArticulosMasVendidos = () => {
             </h2>
           </div>
           <div className="flex items-center space-x-4">
-            <select
-              value={currency}
-              onChange={(e) => changeCurrency(e.target.value)}
-              className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {availableCurrencies.map((curr) => (
-                <option key={curr.code} value={curr.code}>
-                  {curr.name} ({curr.symbol})
-                </option>
-              ))}
-            </select>
             <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
               Ver todos <FaChevronRight className="ml-1" size={14} />
             </button>

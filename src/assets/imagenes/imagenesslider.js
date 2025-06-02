@@ -5,3 +5,6 @@ export { default as alanSombrero } from "./Alan-Sombreron.jpg";
 export { default as hotsale } from "./Hot-Sale.png";
 export { default as Anuncio01 } from "./Anuncio01.png";
 export { default as Anuncio02 } from "./Anuncio02.png";
+export { default as i1 } from "./i1.png";
+export { default as i2 } from "./i2.png";
+export { default as i3 } from "./i3.png";

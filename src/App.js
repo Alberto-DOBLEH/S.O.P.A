@@ -33,6 +33,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import BusquedaProducto from "./pages/BusquedaProductos";
 import ComprarYa from "./pages/ComprarYa";
 import { CurrencyProvider } from "./CurrencyContext";
+import Checkout from "../src/components/Checkout";
 const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Router>
           <ScrollToTop />
           <Routes>
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="/" element={<MainPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Registro />} />

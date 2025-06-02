@@ -8,7 +8,7 @@ const getCartItems = (req, res) => {
     `SELECT c.id_carrito, p.id_producto, p.nombre, p.precio, c.cantidad
      FROM carrito c
      JOIN productos p ON c.id_producto = p.id_producto
-     WHERE c.id_usuario = ?`,
+     WHERE c.id_usuario = ? and c.estatus = 'A'`,
     [userId],
     (err, results) => {
       if (err) return res.status(500).json({ error: "Error al obtener carrito" });

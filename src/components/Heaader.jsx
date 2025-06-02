@@ -54,12 +54,13 @@ import { RiCouponLine } from "react-icons/ri";
 import { FaTag, FaListUl } from "react-icons/fa";
 import { toast } from "react-toastify";
 import logoCompleto from "../assets/imagenes/logo-completo.png";
+import { use } from "react";
 
 const Header = () => {
   // 🚀 HOOKS DE NAVEGACIÓN Y ESTADO
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [cartCount, setCartCount] = useState(3);
+  const [cartCount, setCartCount] = useState(0);
   const [showCategories, setShowCategories] = useState(false);
   const [showOpciones, setShowOpciones] = useState(false);
   const [userName] = useState("Usuario Ejemplo");
@@ -91,7 +92,33 @@ const Header = () => {
       window.removeEventListener("resize", checkScroll);
       menuScrollRef.current?.removeEventListener("scroll", checkScroll);
     };
+    
   }, []);
+  useEffect(() => {
+      const cartcheck = async ()  => {
+      try{
+        const id = localStorage.getItem("idusuario")
+          const response = await fetch(`http://localhost:3001/api/carrito?userId=${id}`,{
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+        if (!response.ok) {
+          throw new Error("Error al obtener el carrito");
+        }
+        const data = await response.json();
+        setCartCount(data.length);
+
+      }catch (error) {
+        console.error("Error al verificar el carrito:", error);
+      }
+    }
+    cartcheck();
+  }, []);
+
+
 
   // ↔ FUNCIÓN: Desplazar menú horizontal
   const scrollMenu = (direction) => {
@@ -112,7 +139,7 @@ const Header = () => {
     notificaciones: () => navigate("/notificaciones"),
     categoria: (categoryValue) =>
       navigate(`/buscar?category=${encodeURIComponent(categoryValue)}`),
-    perfil: () => navigate("/mi-perfil"),
+    perfil: () => navigate("/perfil"),
     favoritos: () => navigate("/favoritos"),
     venta: () => navigate("/vender-articulo"),
     historial: () => navigate("/historial-compras"),

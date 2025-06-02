@@ -55,6 +55,24 @@ const Login = ({ onClose }) => {
           // Usamos el contexto para iniciar sesión
           login({ nombre: data.usuario.nombre, token: data.token });
           localStorage.setItem("usuario", data.usuario.nombre);
+
+          try{
+            const response2 = await fetch("http://localhost:3001/api/auth/informacion-usuario", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                nombre: data.usuario.nombre,
+              }),
+            });
+            const userData = await response2.json();
+            console.log("Información del usuario:", userData);
+            localStorage.setItem("idusuario", userData.id);  
+          } catch (error) {
+            console.error("Error al obtener información del usuario:", error);
+          }
+
           if (onClose) onClose();
           navigate("/");  // Redirige a la página principal
         } else {

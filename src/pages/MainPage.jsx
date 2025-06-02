@@ -262,10 +262,6 @@ const CATEGORIES = [
   },
 ];
 
-<<<<<<< HEAD
-
-=======
->>>>>>> bec4f5869c6f019ccbae539638bc6e0a49199eab
 // ANUNCIOS
 const ANUNCIOS = [
   {
@@ -1310,6 +1306,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
   const Header = () => {
     const [userName, setuserName] = useState();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [cartcount, setCartCount] = useState(0);
     useEffect(() => {
       const usuario = localStorage.getItem("usuario");
       if (usuario) {
@@ -1318,6 +1315,30 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       }
       
     }, []);
+    useEffect(() => {
+          const cartcheck = async ()  => {
+          try{
+            const id = localStorage.getItem("idusuario")
+              const response = await fetch(`http://localhost:3001/api/carrito?userId=${id}`,{
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              });
+            if (!response.ok) {
+              throw new Error("Error al obtener el carrito");
+            }
+            const data = await response.json();
+            setCartCount(data.length);
+    
+          }catch (error) {
+            console.error("Error al verificar el carrito:", error);
+          }
+        }
+        cartcheck();
+      }, []);
+    
     const logout = () => {
       if(!isAuthenticated) {
         toast.error("No hay sesión iniciada", {
@@ -1415,7 +1436,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
               >
                 <FaShoppingCart className="w-6 h-6" />
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center">
-                  0
+                  {cartcount}
                 </span>
               </button>
               {/* B O T O N   L O G I N */}

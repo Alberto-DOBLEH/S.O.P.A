@@ -7,6 +7,9 @@ const crearVenta = (req, res) => {
   const { productos, metodo_pago } = req.body;
   const id_usuario = req.userId || req.body.id_usuario;
 
+  console.log("Datos de la venta:", req.body);
+  console.log("ID de usuario:", id_usuario);
+  
   if (!productos || productos.length === 0) {
     return res.status(400).json({ error: "Faltan productos para la venta" });
   }

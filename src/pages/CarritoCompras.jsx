@@ -79,41 +79,28 @@ const CarritoCompras = () => {
     const fetchCart = async () => {
       setLoading(true);
       try {
-        // 🔥 API ENDPOINT: GET /api/carrito
-        const data = hasItems
-          ? [
-              {
-                id: 1,
-                nombre: "Auriculares Bluetooth Premium",
-                precio: 4299,
-                precioDescuento: 3439,
-                cantidad: 1,
-                imagen:
-                  "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
-                stock: 10,
-                discount: 20,
-                descripcion: "Cancelación de ruido activa - Negro mate",
-                rating: 4.8,
-                reviews: 2847,
-              },
-              {
-                id: 2,
-                nombre: "Tablet Android Pro",
-                precio: 999,
-                precioDescuento: 849,
-                cantidad: 1,
-                imagen:
-                  "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=400&fit=crop",
-                stock: 5,
-                discount: 15,
-                descripcion: '10.1" OLED - 128GB - WiFi + 5G',
-                rating: 4.6,
-                reviews: 1523,
-              },
-            ]
-          : [];
+        const id = localStorage.getItem("idusuario")
+        const response = await fetch(`http://localhost:3001/api/carrito?userId=${id}`,{
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
-        setCartItems(data);
+        if (!response.ok) {
+          throw new Error("Error al cargar el carrito");
+        }
+
+        const data = await response.json();
+
+        const datosprocesados = data.map(item => ({
+          ...item,
+          precio: parseFloat(item.precio), // convierte el string a número decimal
+        }));
+        console.log("Datos del carrito:",datosprocesados );
+        
+        setCartItems(datosprocesados);
 
         // Datos de ejemplo para direcciones
         setSavedAddresses([
@@ -148,22 +135,41 @@ const CarritoCompras = () => {
 
   // Funciones del carrito
   const actualizarCantidad = (id, nuevaCantidad) => {
-    if (nuevaCantidad < 1) return;
+    console.log("Actualizando cantidad de producto:", id, "Nueva cantidad:", nuevaCantidad);
 
-    const item = cartItems.find((item) => item.id === id);
-    if (nuevaCantidad > item.stock) return;
-
-    // 🔥 API ENDPOINT: PUT /api/carrito/${id}
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, cantidad: nuevaCantidad } : item
-      )
-    );
+    try{
+      const idusuario = localStorage.getItem("idusuario")
+      const response = fetch(`http://localhost:3001/api/carrito/${id}?userId=${idusuario}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ cantidad: nuevaCantidad }),
+      });
+    }catch (error) {
+      console.error("Error al actualizar cantidad:", error);
+    }
   };
 
   const eliminarProducto = (id) => {
-    // 🔥 API ENDPOINT: DELETE /api/carrito/${id}
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    const idusuario = localStorage.getItem("idusuario")
+
+    try {
+      const response = fetch(`http://localhost:3001/api/carrito/${id}?userId=${idusuario}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) {
+        console.error("Error al eliminar producto del carrito");
+        return;
+      }
+    } catch (error) {
+      console.error("Error al eliminar producto del carrito:", error);
+    }
   };
 
   const saveForLater = (id) => {
@@ -316,12 +322,30 @@ const CarritoCompras = () => {
 
     setLoading(true);
     try {
-      // 🔥 API ENDPOINT: POST /api/pagos/procesar (para procesar el pago)
-      setTimeout(() => {
-        setShowSuccess(true);
-        setLoading(false);
-        setCartItems([]);
-      }, 1500);
+      const idusuario = localStorage.getItem("idusuario");
+      const response = await fetch(`http://localhost:3001/api/ventas`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          id_usuario: idusuario,
+          productos: cartItems.map((item) => ({
+            id_producto: item.id_producto,
+            cantidad: item.cantidad,
+            precio: item.precioDescuento || item.precio,
+          })),
+          metodo_pago: metodoPago,
+          direccion_envio: direccion,
+          opcion_envio: opcionEnvioSeleccionada,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Error al procesar el pago");
+      }
+      setLoading(false);
+      setShowSuccess(true);
     } catch (error) {
       console.error("Error al finalizar compra:", error);
       alert("Ocurrió un error al procesar tu pago");
@@ -332,39 +356,6 @@ const CarritoCompras = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
       <Header />
-
-      {/* Panel de testing mejorado */}
-      <div className="bg-gradient-to-r from-yellow-400 to-orange-400 border-b border-yellow-300 shadow-sm">
-        <div className="container mx-auto flex items-center justify-between px-4 py-3">
-          <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-            <span className="text-sm font-semibold text-gray-800">
-              🧪 Modo Testing - Eliminar en producción
-            </span>
-          </div>
-          <button
-            onClick={() => setHasItems(!hasItems)}
-            className={`flex items-center px-5 py-2 rounded-full text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
-              hasItems
-                ? "bg-red-500 hover:bg-red-600 hover:shadow-red-200"
-                : "bg-green-500 hover:bg-green-600 hover:shadow-green-200"
-            }`}
-          >
-            {hasItems ? (
-              <>
-                <Trash2 size={16} className="mr-2" />
-                Vaciar Carrito
-              </>
-            ) : (
-              <>
-                <Plus size={16} className="mr-2" />
-                Llenar Carrito
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-
       <main className="container mx-auto py-8 px-4">
         {showSuccess ? (
           <CompraExitosa
@@ -476,7 +467,7 @@ const CarritoCompras = () => {
                         {/* Productos del carrito */}
                         {cartItems.map((item) => (
                           <div
-                            key={item.id}
+                            key={item.id_carrito}
                             className="group bg-gradient-to-r from-white to-gray-50 border border-gray-200 rounded-2xl p-6 mb-4 hover:shadow-lg transition-all duration-300 hover:border-blue-200"
                           >
                             <div className="flex flex-col sm:flex-row gap-6">
@@ -500,41 +491,17 @@ const CarritoCompras = () => {
                                     <p className="text-gray-600 mb-3">
                                       {item.descripcion}
                                     </p>
-
-                                    {/* Rating */}
-                                    <div className="flex items-center space-x-2 mb-3">
-                                      <div className="flex items-center">
-                                        {[...Array(5)].map((_, i) => (
-                                          <Star
-                                            key={i}
-                                            size={16}
-                                            className={`${
-                                              i < Math.floor(item.rating)
-                                                ? "text-yellow-400 fill-current"
-                                                : "text-gray-300"
-                                            }`}
-                                          />
-                                        ))}
-                                      </div>
-                                      <span className="text-sm text-gray-600">
-                                        {item.rating} (
-                                        {item.reviews.toLocaleString()} reseñas)
-                                      </span>
-                                    </div>
                                   </div>
 
                                   <div className="text-right">
                                     <div className="text-2xl font-bold text-gray-900">
                                       {formatPrice(
-                                        item.precioDescuento || item.precio
+                                        item.precio
                                       )}
                                     </div>
                                     <div className="flex items-center space-x-2 mt-1">
                                       <span className="text-gray-500 line-through text-sm">
                                         {formatPrice(item.precio)}
-                                      </span>
-                                      <span className="bg-gradient-to-r from-red-500 to-red-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                                        -{item.discount}%
                                       </span>
                                     </div>
                                   </div>
@@ -544,10 +511,11 @@ const CarritoCompras = () => {
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center space-x-3">
                                     <div className="flex items-center border border-gray-300 rounded-lg">
+                                      {item.cantidad > 1 ? (
                                       <button
                                         onClick={() =>
                                           actualizarCantidad(
-                                            item.id,
+                                            item.id_carrito,
                                             item.cantidad - 1
                                           )
                                         }
@@ -555,13 +523,14 @@ const CarritoCompras = () => {
                                       >
                                         <Minus size={16} />
                                       </button>
+                                      ) : null}
                                       <span className="px-4 py-2 font-semibold">
                                         {item.cantidad}
                                       </span>
                                       <button
                                         onClick={() =>
                                           actualizarCantidad(
-                                            item.id,
+                                            item.id_carrito,
                                             item.cantidad + 1
                                           )
                                         }
@@ -570,9 +539,6 @@ const CarritoCompras = () => {
                                         <Plus size={16} />
                                       </button>
                                     </div>
-                                    <span className="text-sm text-gray-500">
-                                      {item.stock} disponibles
-                                    </span>
                                   </div>
 
                                   <div className="flex items-center space-x-3">
@@ -584,7 +550,7 @@ const CarritoCompras = () => {
                                       Guardar
                                     </button>
                                     <button
-                                      onClick={() => eliminarProducto(item.id)}
+                                      onClick={() => eliminarProducto(item.id_carrito)}
                                       className="flex items-center text-red-600 hover:text-red-800 text-sm font-medium transition-colors"
                                     >
                                       <Trash2 size={16} className="mr-1" />

@@ -736,19 +736,21 @@ const VentanaEnvio = ({
                     </div>
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center border rounded">
+                        {item.cantidad > 1 ? (
                         <button
                           onClick={() =>
-                            actualizarCantidad(item.id, item.cantidad - 1)
+                            actualizarCantidad(item.id_carrito, item.cantidad - 1)
                           }
                           className="px-2 py-1 disabled:opacity-50"
                           disabled={item.cantidad <= 1}
                         >
                           <Minus size={16} />
                         </button>
+                        ) : null}
                         <span className="px-2">{item.cantidad}</span>
                         <button
                           onClick={() =>
-                            actualizarCantidad(item.id, item.cantidad + 1)
+                            actualizarCantidad(item.id_carrito, item.cantidad + 1)
                           }
                           className="px-2 py-1 disabled:opacity-50"
                           disabled={item.cantidad >= item.stock}
@@ -757,7 +759,7 @@ const VentanaEnvio = ({
                         </button>
                       </div>
                       <button
-                        onClick={() => eliminarProducto(item.id)}
+                        onClick={() => eliminarProducto(item.id_carrito)}
                         className="text-red-500 hover:text-red-700"
                       >
                         <Trash2 size={18} />

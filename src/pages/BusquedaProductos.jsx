@@ -1009,7 +1009,7 @@ const BusquedaProducto = () => {
         id: product.id_producto,
         title: product.nombre,
         brand: product.marca || "Genérico",
-        type: product.categoría.split(" ")[0].toLowerCase(), // Derivado de categoría
+        type: product.categoría, // Derivado de categoría
         category: product.categoría,
         categoryColor: product.color
           ? `bg-${product.color.toLowerCase()}-500`
@@ -1316,8 +1316,12 @@ const BusquedaProducto = () => {
   const ProductCard = ({ product }) => (
     <Link to={`/producto/${product.id}`} className="block">
       <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-3 cursor-pointer hover:-translate-y-1 h-full">
-        <div className="w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-3xl">
-          {product.image}
+        <div className="w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-xs">
+          <img
+              src={product.image}
+              alt={product.title}
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
         </div>
         <div
           className={`inline-block px-2 py-1 rounded-full text-xs font-medium text-white mb-1 ${product.categoryColor}`}

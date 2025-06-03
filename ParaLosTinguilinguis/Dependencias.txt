@@ -1,0 +1,3 @@
+npm install @craco/craco --save-dev
+
+npm install crypto-browserify os-browserify stream-browserify

@@ -1,11 +1,110 @@
+// import React from "react";
+// import Header from "../components/Heaader";
+// import Footer from "../components/Footer";
+// import { useNavigate } from "react-router-dom";
+// import { FaClock } from "react-icons/fa"; // Ícono para "Coming Soon"
+// import {
+//   Cristina,
+//   dobleh2023,
+//   guillem,
+//   Julia,
+// } from "../assets/imagenes/imagenesslider";
+
+// const Soporte = () => {
+//   const navigate = useNavigate();
+
+//   const autores = [
+//     {
+//       nombre: "Luis Alberto Hernandez Hernandez",
+//       alias: "Dobhe H",
+//       fotoPerfil: dobleh2023,
+//       correo: "luis.alberto.hdez.hdez245@gmail.com",
+//       github: "https://github.com/Alberto-DOBLEH",
+//     },
+//     {
+//       nombre: "Guillermo Enrique Ayala Castro",
+//       alias: "Guillem",
+//       fotoPerfil: guillem,
+//       correo: "guillermoayalawas@gmail.com",
+//       github: "https://github.com/GuillermoEAC",
+//     },
+//     {
+//       nombre: "Julio Cesar Lugo Franco",
+//       alias: "Stepro",
+//       fotoPerfil: Julia,
+//       correo: "stepro61831@gmail.com",
+//       github: "https://github.com/JulioCfy5",
+//     },
+//     {
+//       nombre: "Cristhian Manuel Marquez Verdugo",
+//       alias: "Furry facktos",
+//       fotoPerfil: Cristina,
+//       correo: "cristianverdugo965@gmail.com",
+//       github: "https://github.com/cristhianM965",
+//     },
+//   ];
+
+//   const navigateTo = {
+//     home: () => navigate("/"),
+//   };
+
+//   const perfilAutor = {};
+
+//   return (
+//     <div className="bg-gray-50 min-h-screen flex flex-col">
+//       <Header />
+
+//       <Footer />
+//     </div>
+//   );
+// };
+
+// export default Soporte;
 import React from "react";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { FaClock } from "react-icons/fa"; // Ícono para "Coming Soon"
+import {
+  Cristina,
+  dobleh2023,
+  guillem,
+  Julia,
+} from "../assets/imagenes/imagenesslider";
 
 const Soporte = () => {
   const navigate = useNavigate();
+
+  const autores = [
+    {
+      nombre: "Luis Alberto Hernandez Hernandez",
+      alias: "Dobhe H",
+      fotoPerfil: dobleh2023,
+      correo: "luis.alberto.hdez.hdez245@gmail.com",
+      github: "https://github.com/Alberto-DOBLEH",
+    },
+    {
+      nombre: "Guillermo Enrique Ayala Castro",
+      alias: "Guillem",
+      fotoPerfil: guillem,
+      correo: "guillermoayalawas@gmail.com",
+      github: "https://github.com/GuillermoEAC",
+    },
+    {
+      nombre: "Julio Cesar Lugo Franco",
+      alias: "Stepro",
+      fotoPerfil: Julia,
+      correo: "stepro61831@gmail.com",
+      github: "https://github.com/JulioCfy5",
+    },
+    {
+      nombre: "Cristhian Manuel Marquez Verdugo",
+      alias: "Furry facktos",
+      fotoPerfil: Cristina,
+      correo: "cristianverdugo965@gmail.com",
+      github: "https://github.com/cristhianM965",
+    },
+  ];
 
   const navigateTo = {
     home: () => navigate("/"),
@@ -14,31 +113,56 @@ const Soporte = () => {
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
       <Header />
+
       <main className="max-w-7xl mx-auto px-4 py-8 flex-grow">
-        <div className="text-center">
+        <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Lista de Deseos
+            Soporte y Equipo, tilín
           </h1>
-          <div className="flex flex-col items-center justify-center space-y-6">
-            <div className="flex items-center space-x-2 text-yellow-600">
-              <FaClock className="w-6 h-6" />
-              <p className="text-lg font-medium">Coming Soon</p>
-            </div>
-            <p className="text-gray-600 max-w-md">
-              Estamos trabajando para traerte esta funcionalidad. ¡Vuelve pronto
-              para gestionar tu lista de deseos!
-            </p>
-            <button
-              type="button"
-              aria-label="Regresar al inicio"
-              onClick={navigateTo.home}
-              className="transform -translate-y-1/2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-full font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Regresar al Inicio
-            </button>
-          </div>
         </div>
+
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {autores.map((autor, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow duration-200 text-center"
+            >
+              <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
+                <img
+                  src={autor.fotoPerfil}
+                  alt={autor.alias}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800">
+                {autor.nombre}
+              </h3>
+              <p className="text-sm text-gray-600 mb-2">Alias: {autor.alias}</p>
+              <p className="text-sm text-gray-500 mb-2">
+                Correo:{" "}
+                <a
+                  href={`mailto:${autor.correo}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {autor.correo}
+                </a>
+              </p>
+              <p className="text-sm text-gray-500 mb-4">
+                GitHub:{" "}
+                <a
+                  href={autor.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  Perfil
+                </a>
+              </p>
+            </div>
+          ))}
+        </section>
       </main>
+
       <Footer />
     </div>
   );

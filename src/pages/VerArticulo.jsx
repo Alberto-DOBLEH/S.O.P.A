@@ -211,9 +211,38 @@ const VerArticulo = () => {
     }
   }, [id, state?.producto]);
 
-  const handleAgregarCarrito = () => {
-    setEnCarrito(true);
-    toast.success(`Se agregó ${cantidad} ${producto.titulo} al carrito`);
+  const handleAgregarCarrito = async () => {
+    try{
+          console.log("Agregando al carrito:", producto.id);
+
+          if (!producto.id) {
+            console.error("Producto no encontrado");
+            return;
+          }
+    
+          const id_usuario = localStorage.getItem("idusuario");
+          const response = await fetch(`http://localhost:3001/api/carrito/?userId=${id_usuario}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+              id_producto: producto.id,
+              cantidad: 1,
+            }),
+          });
+          if (!response.ok) {
+            throw new Error("Error al agregar al carrito");
+          }
+          const data = await response.json();
+          toast.success(`✅ ${producto.title} agregado al carrito`);
+    
+        }catch (error) {
+          console.error("Error al agregar al carrito:", error);
+          toast.error("Error al agregar al carrito");
+          return;
+        }
   };
 
   const handleComprarAhora = () => {
@@ -391,6 +420,7 @@ const VerArticulo = () => {
                     )}
                   </div>
                 </div>
+                {producto.imagenes == "" ? (
                 <div className="flex space-x-2 relative">
                   <button
                     onClick={() =>
@@ -417,7 +447,7 @@ const VerArticulo = () => {
                           className="w-16 h-16 object-cover"
                         />
                       </div>
-                    ))}
+                  ))}
                   </div>
                   <button
                     onClick={() =>
@@ -433,6 +463,7 @@ const VerArticulo = () => {
                     <FaChevronRight className="text-gray-600" />
                   </button>
                 </div>
+                ) : null}  
                 <div className="flex justify-between mt-6 md:hidden">
                   <button
                     onClick={toggleFavoritos}
@@ -456,14 +487,14 @@ const VerArticulo = () => {
               <div>
                 <div className="mb-4">
                   <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
-                    {producto.titulo}
+                    {producto.title}
                   </h1>
                   <div className="flex items-center">
                     <span className="text-sm text-gray-600 mr-2">
                       Vendido por:
                     </span>
                     <span className="text-sm font-medium text-gray-700 mr-1">
-                      {producto.vendidoPor}
+                      {producto.brand}
                     </span>
                     {producto.verificado && (
                       <BsPatchCheck
@@ -476,24 +507,24 @@ const VerArticulo = () => {
 
                 <div className="flex items-center mb-6">
                   <div className="flex mr-2">
-                    {renderEstrellas(producto.calificacion)}
+                    {renderEstrellas(producto.rating)}
                   </div>
                   <span className="text-lg font-bold text-gray-800 mr-2">
-                    {producto.calificacion.toFixed(1)}
+                    {producto.rating.toFixed(1)}
                   </span>
                   <span className="text-sm text-gray-500">
-                    ({producto.numCalificaciones} calificaciones)
+                    ({producto.reviewCount} calificaciones)
                   </span>
                 </div>
 
                 <div className="mb-6">
                   <div className="flex items-center">
                     <span className="text-2xl md:text-3xl font-bold text-gray-900">
-                      {formatPrice(producto.precio)}
+                      {formatPrice(producto.price)}
                     </span>
                     {producto.descuento > 0 && (
                       <span className="ml-3 text-lg text-gray-500 line-through">
-                        {formatPrice(producto.precioOriginal)}
+                        {formatPrice(producto.originalPrice)}
                       </span>
                     )}
                   </div>
@@ -507,7 +538,7 @@ const VerArticulo = () => {
                     <p className="text-gray-600">
                       Hasta 12 meses sin intereses de{" "}
                       <span className="font-semibold">
-                        {formatPrice(Math.round(producto.precio / 12))}
+                        {formatPrice(Math.round(producto.price / 12))}
                       </span>
                     </p>
                     <button className="text-blue-600 font-medium hover:text-blue-700 mt-1">
@@ -705,6 +736,7 @@ const VerArticulo = () => {
                     <p className="text-gray-700 leading-relaxed">
                       {producto.descripcion}
                     </p>
+                    {producto.especificaciones &&
                     <div className="mt-6">
                       <h3 className="text-lg font-semibold text-gray-800 mb-3">
                         Características destacadas
@@ -738,6 +770,7 @@ const VerArticulo = () => {
                         </li>
                       </ul>
                     </div>
+                    } 
                   </div>
                 )}
 

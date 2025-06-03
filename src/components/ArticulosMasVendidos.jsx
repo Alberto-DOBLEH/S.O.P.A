@@ -762,7 +762,7 @@ const ArticulosMasVendidos = () => {
                     }}
                     className="ml-2 bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded-lg text-sm font-medium transition-colors duration-200"
                   >
-                    Comprar Ya, tilín
+                    Comprar Ya
                   </button>
                   {producto.discount > 0 && (
                     <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -779,7 +779,7 @@ const ArticulosMasVendidos = () => {
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center mt-2"
                 >
                   <FaShoppingCart className="mr-2" />
-                  Agregar al carrito, tilín
+                  Agregar al carrito
                 </button>
               </div>
             </div>

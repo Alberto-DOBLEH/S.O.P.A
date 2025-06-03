@@ -533,7 +533,7 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
     const navigateTo = {
       home: () => navigate("/"),
       carrito: () => navigate("/carrito"),
-      cuenta: () => navigate("/mi-cuenta"),
+      // cuenta: () => navigate("/perfil"),
       notificaciones: () => navigate("/notificaciones"),
       // categoria: (path) => navigate(path),
       perfil: () => navigate("/perfil"),
@@ -541,13 +541,13 @@ const MainPage = ({ onLoginClick, userName = "Usuario" }) => {
       venta: () => navigate("/venta"),
       historial: () => navigate("/historial"),
       pedido: () => navigate("/pedido"),
-      tarjetas: () => navigate("/mis-tarjetas"),
+      tarjetas: () => navigate("/tarjetas"),
       cupones: () => navigate("/cupones"),
       listadeseos: () => navigate("/listadeseos"),
       listaCompras: () => navigate("/lista-compras"),
       ayuda: () => navigate("/ayuda"),
-      privacidad: () => navigate("/privacidad-seguridad"),
-      soporte: () => navigate("/contactar-soporte"),
+      privacidad: () => navigate("/privacidad"),
+      soporte: () => navigate("/soporte"),
       configuracion: () => navigate("/configuracion"),
     };
 

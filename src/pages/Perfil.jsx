@@ -484,7 +484,7 @@ import {
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
 
-const VentanaPerfil = () => {
+const Perfil = () => {
   // Estados para la información del usuario
   const [userInfo, setUserInfo] = useState({
     nombre: "Juan Pérez",
@@ -530,7 +530,6 @@ const VentanaPerfil = () => {
             pais: "México",
           },
         });
-
       } catch (error) {
         console.error("Error al cargar datos del perfil:", error);
       } finally {
@@ -544,31 +543,34 @@ const VentanaPerfil = () => {
   useEffect(() => {
     const cargarPedidos = async () => {
       try {
-          const idusuario = localStorage.getItem("idusuario")
-          const response = await fetch(`http://localhost:3001/api/ventas/usuario/${idusuario}`, {
+        const idusuario = localStorage.getItem("idusuario");
+        const response = await fetch(
+          `http://localhost:3001/api/ventas/usuario/${idusuario}`,
+          {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          });
-          if (!response.ok) {
-            throw new Error("Error al cargar los pedidos");
           }
+        );
+        if (!response.ok) {
+          throw new Error("Error al cargar los pedidos");
+        }
 
-          const data = await response.json();
-          console.log("Pedidos cargados:", data.length);
-          console.log("Pedidos cargados:", data);
+        const data = await response.json();
+        console.log("Pedidos cargados:", data.length);
+        console.log("Pedidos cargados:", data);
 
-          const datosprocesados = data.map(item => ({
+        const datosprocesados = data.map((item) => ({
           ...item,
           total: parseFloat(item.total), // convierte el string a número decimal
         }));
 
-          setPedidos(datosprocesados);
-        }catch (error) {
-          console.error("Error al cargar los pedidos:", error);
-        }
+        setPedidos(datosprocesados);
+      } catch (error) {
+        console.error("Error al cargar los pedidos:", error);
+      }
     };
     cargarPedidos();
   }, []);
@@ -948,4 +950,4 @@ const VentanaPerfil = () => {
   );
 };
 
-export default VentanaPerfil;
+export default Perfil;

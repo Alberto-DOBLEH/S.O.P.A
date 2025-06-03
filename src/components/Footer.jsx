@@ -25,8 +25,7 @@ const Footer = () => {
               className="h-10 w-24 mb-4"
             />
             <p className="text-sm text-gray-300 mb-4">
-              Tu tienda de tecnología de confianza con los mejores precios y
-              servicio.
+              Tu tienda de confianza con los mejores precios y servicio.
             </p>
             <div className="flex space-x-4">
               {/* Iconos de redes sociales */}

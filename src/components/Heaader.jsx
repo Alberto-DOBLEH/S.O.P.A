@@ -143,9 +143,9 @@ const Header = () => {
     venta: () => navigate("/venta"),
     historial: () => navigate("/historial"),
     pedido: () => navigate("/pedido"),
-    tarjetas: () => navigate("/mis-tarjetas"),
-    cupones: () => navigate("/cupone"),
-    listaDeseos: () => navigate("/lista-deseos"),
+    tarjetas: () => navigate("/tarjetas"),
+    cupones: () => navigate("/cupones"),
+    listadeseos: () => navigate("/listadeseos"),
     listaCompras: () => navigate("/lista-compras"),
     ayuda: () => navigate("/ayuda"),
     privacidad: () => navigate("/privacidad"),
@@ -477,7 +477,7 @@ const Header = () => {
               </button>
               <button
                 className="flex items-center text-s whitespace-nowrap"
-                onClick={navigateTo.listaDeseos}
+                onClick={navigateTo.listadeseos}
               >
                 <FaListUl className="mr-1" size={12} /> Deseos
               </button>

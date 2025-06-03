@@ -26,8 +26,8 @@ import VerArticulo from "./pages/VerArticulo";
 import Historial from "./pages/Historial";
 // import PedidosActivos from "./pages/PedidosActivos";
 import Cupones from "./pages/Cupones";
-// import Privacidad from "./pages/Privacidad";
-// import Soporte from "./pages/Soporte";
+import Privacidad from "./pages/Privacidad";
+import Soporte from "./pages/Soporte";
 // import BuscarResultados from "./pages/BuscarResultados";
 import ScrollToTop from "./components/ScrollToTop";
 import BusquedaProducto from "./pages/BusquedaProductos";
@@ -35,6 +35,8 @@ import ComprarYa from "./pages/ComprarYa";
 import Pedido from "./pages/Pedido";
 import { CurrencyProvider } from "./CurrencyContext";
 import Checkout from "../src/components/Checkout";
+import Favoritos from "./pages/Favoritos";
+import Notificationes from "./pages/Notificaciones";
 // import ListaDeseos from "./pages/ListaDeseos";
 const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
 
@@ -62,7 +64,44 @@ function App() {
             <Route path="/venta" element={<Venta />} />
             <Route path="/historial" element={<Historial />} />
             <Route path="/pedido" element={<Pedido />} />
-
+            <Route path="/soporte" element={<Soporte />} />
+            <Route path="/privacidad" element={<Privacidad />} />
+            <Route
+              path="/tarjetas"
+              element={
+                MODO_DESARROLLO ? (
+                  <Tarjeta />
+                ) : (
+                  <RutaPrivada>
+                    <Tarjeta />
+                  </RutaPrivada>
+                )
+              }
+            />
+            <Route
+              path="/favoritos"
+              element={
+                MODO_DESARROLLO ? (
+                  <Favoritos />
+                ) : (
+                  <RutaPrivada>
+                    <Favoritos />
+                  </RutaPrivada>
+                )
+              }
+            />
+            <Route
+              path="/notificaciones"
+              element={
+                MODO_DESARROLLO ? (
+                  <Notificationes />
+                ) : (
+                  <RutaPrivada>
+                    <Notificationes />
+                  </RutaPrivada>
+                )
+              }
+            />
             <Route
               path="/cupones"
               element={

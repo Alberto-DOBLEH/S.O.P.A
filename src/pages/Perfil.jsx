@@ -516,9 +516,10 @@ const VentanaPerfil = () => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
+        const user = localStorage.getItem("usuario");
         setUserInfo({
-          nombre: "Juan Pérez",
-          correo: "juan.perez@example.com",
+          nombre: user,
+          correo: `${user}@example.com`,
           fotoPerfil:
             "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
           direccionPrincipal: {
@@ -530,25 +531,6 @@ const VentanaPerfil = () => {
           },
         });
 
-        setPedidos([
-          {
-            id: 1,
-            fecha: "2025-05-20",
-            total: 1803,
-            estado: "Entregado",
-            productos: [
-              { nombre: "Auriculares Bluetooth Premium", cantidad: 1 },
-              { nombre: "Tablet Android Pro", cantidad: 1 },
-            ],
-          },
-          {
-            id: 2,
-            fecha: "2025-05-15",
-            total: 999,
-            estado: "En camino",
-            productos: [{ nombre: "Tablet Android Pro", cantidad: 1 }],
-          },
-        ]);
       } catch (error) {
         console.error("Error al cargar datos del perfil:", error);
       } finally {
@@ -557,6 +539,38 @@ const VentanaPerfil = () => {
     };
 
     fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const cargarPedidos = async () => {
+      try {
+          const idusuario = localStorage.getItem("idusuario")
+          const response = await fetch(`http://localhost:3001/api/ventas/usuario/${idusuario}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Error al cargar los pedidos");
+          }
+
+          const data = await response.json();
+          console.log("Pedidos cargados:", data.length);
+          console.log("Pedidos cargados:", data);
+
+          const datosprocesados = data.map(item => ({
+          ...item,
+          total: parseFloat(item.total), // convierte el string a número decimal
+        }));
+
+          setPedidos(datosprocesados);
+        }catch (error) {
+          console.error("Error al cargar los pedidos:", error);
+        }
+    };
+    cargarPedidos();
   }, []);
 
   // Abrir el modal de edición
@@ -718,13 +732,13 @@ const VentanaPerfil = () => {
                 <div className="space-y-4">
                   {pedidos.map((pedido) => (
                     <div
-                      key={pedido.id}
+                      key={pedido.id_venta}
                       className="border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 hover:border-blue-200"
                     >
                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                         <div className="mb-4 md:mb-0">
                           <p className="font-medium text-gray-900">
-                            Pedido #{pedido.id} - {pedido.fecha}
+                            Pedido #{pedido.id_venta} - {pedido.fecha}
                           </p>
                           <p className="text-gray-600">
                             {pedido.productos
@@ -736,7 +750,7 @@ const VentanaPerfil = () => {
                           <div className="flex items-center mt-2">
                             <span
                               className={`text-sm font-medium px-2 py-1 rounded-full ${
-                                pedido.estado === "Entregado"
+                                pedido.estado === "Aprobado"
                                   ? "bg-green-100 text-green-800"
                                   : "bg-yellow-100 text-yellow-800"
                               }`}

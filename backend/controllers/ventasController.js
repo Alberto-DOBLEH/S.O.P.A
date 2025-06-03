@@ -104,7 +104,7 @@ const obtenerVentasPorUsuario = (req, res) => {
             v.total,
             v.metodo_pago,
             v.estado,
-            v.fecha_creacion,
+            v.fecha_creacion AS fecha,
             dv.id_producto,
             dv.cantidad,
             dv.precio_unitario,
@@ -120,7 +120,32 @@ const obtenerVentasPorUsuario = (req, res) => {
         console.error("Error al obtener ventas:", err);
         return res.status(500).json({ error: "Error al obtener ventas" });
       }
-      res.json(results);
+
+      // Agrupar ventas
+      const ventasMap = new Map();
+
+      results.forEach((row) => {
+        if (!ventasMap.has(row.id_venta)) {
+          ventasMap.set(row.id_venta, {
+            id_venta: row.id_venta,
+            total: row.total,
+            metodo_pago: row.metodo_pago,
+            estado: row.estado,
+            fecha: row.fecha,
+            productos: []
+          });
+        }
+
+        ventasMap.get(row.id_venta).productos.push({
+          id_producto: row.id_producto,
+          nombre: row.nombre_producto,
+          cantidad: row.cantidad,
+          precio_unitario: row.precio_unitario
+        });
+      });
+
+      const ventasAgrupadas = Array.from(ventasMap.values());
+      res.json(ventasAgrupadas);
     }
   );
 };

@@ -1624,9 +1624,6 @@ const CarritoCompras = () => {
                                   alt={item.nombre}
                                   className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
                                 />
-                                <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                  -{item.discount}%
-                                </div>
                               </div>
 
                               <div className="flex-grow space-y-4">
@@ -1645,11 +1642,6 @@ const CarritoCompras = () => {
                                       {formatPrice(
                                         item.precio
                                       )}
-                                    </div>
-                                    <div className="flex items-center space-x-2 mt-1">
-                                      <span className="text-gray-500 line-through text-sm">
-                                        {formatPrice(item.precio)}
-                                      </span>
                                     </div>
                                   </div>
                                 </div>

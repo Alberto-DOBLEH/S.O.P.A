@@ -5,7 +5,7 @@ const db = require("../db");
 const getCartItems = (req, res) => {
   const userId = req.userId;
   db.query(
-    `SELECT c.id_carrito, p.id_producto, p.nombre, p.precio, c.cantidad
+    `SELECT c.id_carrito, p.id_producto, p.nombre, p.precio, c.cantidad, p.imagen
      FROM carrito c
      JOIN productos p ON c.id_producto = p.id_producto
      WHERE c.id_usuario = ? and c.estatus = 'A'`,

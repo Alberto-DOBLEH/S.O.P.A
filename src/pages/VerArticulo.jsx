@@ -166,12 +166,12 @@ const VerArticulo = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const {
-    currency,
-    conversionRate,
-    changeCurrency,
+//    currency,
+//    conversionRate,
+//    changeCurrency,
     formatPrice,
-    getCurrencySymbol,
-    availableCurrencies,
+//    getCurrencySymbol,
+//    availableCurrencies,
   } = useCurrency();
 
   const [producto, setProducto] = useState(state?.producto || null);
@@ -235,8 +235,8 @@ const VerArticulo = () => {
           if (!response.ok) {
             throw new Error("Error al agregar al carrito");
           }
-          const data = await response.json();
           toast.success(`✅ ${producto.title} agregado al carrito`);
+          setEnCarrito(true);
     
         }catch (error) {
           console.error("Error al agregar al carrito:", error);
@@ -420,7 +420,7 @@ const VerArticulo = () => {
                     )}
                   </div>
                 </div>
-                {producto.imagenes == "" ? (
+                {producto.imagenes === "" ? (
                 <div className="flex space-x-2 relative">
                   <button
                     onClick={() =>

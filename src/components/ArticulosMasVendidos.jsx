@@ -635,14 +635,14 @@ const ArticulosMasVendidos = () => {
                 <FaFire size={24} />
               </div>
               <h2 className="text-2xl font-bold text-gray-800">
-                COSITAS MÁS VENDIDAS, TILÍN
+                COSITAS MÁS VENDIDAS
               </h2>
             </div>
           </div>
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
             <span className="ml-3 text-gray-600">
-              Cargando productos, tilín...
+              Cargando productos
             </span>
           </div>
         </div>
@@ -674,7 +674,7 @@ const ArticulosMasVendidos = () => {
           </div>
           <div className="flex items-center space-x-4">
             <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
-              Ver todos, tilín <FaChevronRight className="ml-1" size={14} />
+              Ver todos <FaChevronRight className="ml-1" size={14} />
             </button>
           </div>
         </div>

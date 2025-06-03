@@ -374,12 +374,14 @@ const OfertasDestacadas = () => {
   const agregarAlCarrito = async (productoId) => {
     try{
       console.log("Agregando al carrito:", productoId);
+
       const producto = ofertas.find((p) => p.id === productoId);
-      if (!productoId) {
+      if (producto === null) {
         console.error("Producto no encontrado");
         return;
       }
 
+      console.log("Producto encontrado:", productoId);
       const id_usuario = localStorage.getItem("idusuario");
       const response = await fetch(`http://localhost:3001/api/carrito/?userId=${id_usuario}`, {
         method: "POST",

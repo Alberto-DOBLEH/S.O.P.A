@@ -24,9 +24,10 @@ const addToCart = (req, res) => {
 
   console.log("Datos recibidos:", req.body);
   
-  if (!id_producto || !cantidad)
+  if (id_producto == null || cantidad == null) 
     return res.status(400).json({ error: "Falta id_producto o cantidad" });
 
+  
   // Verificar si ya existe en carrito
   db.query(
     `SELECT * FROM carrito WHERE id_usuario = ? AND id_producto = ?`,

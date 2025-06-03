@@ -6,13 +6,13 @@ import {
   ShoppingCart as CartIcon,
   ChevronRight,
   MapPin,
-  Edit3,
+//  Edit3,
   Check,
   X,
-  Star,
+//  Star,
   Truck,
   Shield,
-  ArrowLeft,
+//  ArrowLeft,
   Heart,
   Gift,
   Tag,
@@ -32,7 +32,7 @@ const CarritoCompras = () => {
   console.log("Currency:", currency, "Conversion Rate:", conversionRate); // Debug log to verify values
 
   // *** INTERRUPTOR MANUAL PARA TESTING ***
-  const [hasItems, setHasItems] = useState(true);
+//  const [hasItems, setHasItems] = useState(true);
 
   // Estados principales
   const [cartItems, setCartItems] = useState([]);
@@ -40,6 +40,8 @@ const CarritoCompras = () => {
   const [currentStep, setCurrentStep] = useState("carrito");
   const [showSuccess, setShowSuccess] = useState(false);
   const [aprobarCompra, setAprobarCompra] = useState(false);
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
 
   // Estados para información de envío
   const [direccion, setDireccion] = useState({
@@ -85,68 +87,67 @@ const CarritoCompras = () => {
 
   // Simular carga inicial del carrito
   useEffect(() => {
-    const fetchCart = async () => {
-      setLoading(true);
-      try {
-        const id = localStorage.getItem("idusuario");
-        const response = await fetch(
-          `http://localhost:3001/api/carrito?userId=${id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Error al cargar el carrito");
-        }
-
-        const data = await response.json();
-
-        const datosprocesados = data.map((item) => ({
-          ...item,
-          precio: parseFloat(item.precio), // convierte el string a número decimal
-        }));
-        console.log("Datos del carrito:", datosprocesados);
-
-        setCartItems(datosprocesados);
-
-        // Datos de ejemplo para direcciones
-        setSavedAddresses([
-          {
-            id: 1,
-            street: "Calle Constitución 123",
-            city: "Culiacán",
-            state: "Sinaloa",
-            zipCode: "81893",
-            country: "México",
-            isDefault: true,
-          },
-          {
-            id: 2,
-            street: "Av. Álvaro Obregón 456",
-            city: "Culiacán",
-            state: "Sinaloa",
-            zipCode: "80020",
-            country: "México",
-            isDefault: false,
-          },
-        ]);
-      } catch (error) {
-        console.error("Error al cargar carrito:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCart();
-  }, [hasItems]);
+  }, []);
 
   // Funciones del carrito
-  const actualizarCantidad = (id, nuevaCantidad) => {
+  const fetchCart = async () => {
+    setLoading(true);
+    try {
+      const id = localStorage.getItem("idusuario");
+      const response = await fetch(
+        `http://localhost:3001/api/carrito?userId=${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al cargar el carrito");
+      }
+
+      const data = await response.json();
+
+      const datosprocesados = data.map((item) => ({
+        ...item,
+        precio: parseFloat(item.precio), // convierte el string a número decimal
+      }));
+
+      setCartItems(datosprocesados);
+
+      // Datos de ejemplo para direcciones
+      setSavedAddresses([
+        {
+          id: 1,
+          street: "Calle Constitución 123",
+          city: "Culiacán",
+          state: "Sinaloa",
+          zipCode: "81893",
+          country: "México",
+          isDefault: true,
+        },
+        {
+          id: 2,
+          street: "Av. Álvaro Obregón 456",
+          city: "Culiacán",
+          state: "Sinaloa",
+          zipCode: "80020",
+          country: "México",
+          isDefault: false,
+        },
+      ]);
+    } catch (error) {
+      console.error("Error al cargar carrito:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const actualizarCantidad = async (id, nuevaCantidad) => {
     console.log(
       "Actualizando cantidad de producto:",
       id,
@@ -156,7 +157,7 @@ const CarritoCompras = () => {
 
     try {
       const idusuario = localStorage.getItem("idusuario");
-      const response = fetch(
+      fetch(
         `http://localhost:3001/api/carrito/${id}?userId=${idusuario}`,
         {
           method: "PUT",
@@ -167,16 +168,20 @@ const CarritoCompras = () => {
           body: JSON.stringify({ cantidad: nuevaCantidad }),
         }
       );
+
+      await delay(500);
+      
+      await fetchCart(); // Refrescar el carrito después de actualizar
     } catch (error) {
       console.error("Error al actualizar cantidad:", error);
     }
   };
 
-  const eliminarProducto = (id) => {
+  const eliminarProducto = async (id) => {
     const idusuario = localStorage.getItem("idusuario");
 
     try {
-      const response = fetch(
+      fetch(
         `http://localhost:3001/api/carrito/${id}?userId=${idusuario}`,
         {
           method: "DELETE",
@@ -186,10 +191,8 @@ const CarritoCompras = () => {
           },
         }
       );
-      if (!response.ok) {
-        console.error("Error al eliminar producto del carrito");
-        return;
-      }
+
+      await fetchCart(); // Refrescar el carrito después de eliminar
     } catch (error) {
       console.error("Error al eliminar producto del carrito:", error);
     }

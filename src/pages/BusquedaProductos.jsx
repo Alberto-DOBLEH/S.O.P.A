@@ -967,6 +967,7 @@ import Categorias from "../components/Categorias";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
 import { useCurrency } from "../CurrencyContext";
+import { parse } from "dotenv";
 
 const BusquedaProducto = () => {
   const { currency, conversionRate } = useCurrency();
@@ -1002,6 +1003,8 @@ const BusquedaProducto = () => {
         throw new Error("Error al obtener productos, tilín");
       }
       const data = await response.json();
+
+      console.log("Datos obtenidos de la API:", data);
       const mappedProducts = data.map((product) => ({
         id: product.id_producto,
         title: product.nombre,
@@ -1021,7 +1024,7 @@ const BusquedaProducto = () => {
         image: product.imagen,
         stock: parseInt(product.stock) || 0,
         description: product.descripción || "Sin descripción, tilín",
-        quantity: 1,
+        quantity: parseInt(product.conteo_ventas) || 1,
         numeroVentas: parseInt(product.conteo_vendidos) || 0,
         condicion: product.NU || "Nuevo",
       }));
@@ -1350,7 +1353,7 @@ const BusquedaProducto = () => {
           </span>
           {product.discount > 0 && (
             <span className="text-xs font-semibold text-red-600">
-              {product.discount}% OFF, tilín
+              {product.discount}% OFF
             </span>
           )}
           <span className="text-xs text-gray-500">
@@ -1382,7 +1385,7 @@ const BusquedaProducto = () => {
         {isLoading ? (
           <div className="text-center py-10">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent mb-2"></div>
-            <p className="text-gray-600">Cargando productos, tilín...</p>
+            <p className="text-gray-600">Cargando productos</p>
           </div>
         ) : (
           <div className="flex gap-4">
@@ -1427,7 +1430,7 @@ const BusquedaProducto = () => {
                       onClick={clearAllFilters}
                       className="w-full mt-2 px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 text-sm"
                     >
-                      Limpiar Filtros, tilín
+                      Limpiar Filtros
                     </button>
                   </div>
                 </div>
@@ -1488,7 +1491,7 @@ const BusquedaProducto = () => {
                 onClick={clearAllFilters}
                 className="w-full mt-2 px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 text-sm"
               >
-                Limpiar Filtros, tilín
+                Limpiar Filtros
               </button>
             </div>
 
@@ -1516,16 +1519,16 @@ const BusquedaProducto = () => {
                   onChange={(e) => setSortBy(e.target.value)}
                 >
                   <option value="featured">
-                    Ordenar por: Más chidos, tilín
+                    Ordenar por: Más chidos
                   </option>
                   <option value="price-low">
-                    Precio: de baratito a carito
+                    Precio: de barato a caro
                   </option>
                   <option value="price-high">
-                    Precio: de carito a baratito
+                    Precio: de caro a barato
                   </option>
-                  <option value="rating">Mejor calificados, tilín</option>
-                  <option value="newest">Más nuevos, tilín</option>
+                  <option value="rating">Mejor calificados</option>
+                  <option value="newest">Más nuevos</option>
                 </select>
               </div>
 
@@ -1539,23 +1542,23 @@ const BusquedaProducto = () => {
                 <div className="text-center py-10">
                   <div className="text-4xl mb-2">😔</div>
                   <p className="text-gray-500 text-md mb-1">
-                    No encontramos nada con esos filtros, tilín.
+                    No encontramos nada con esos filtros
                   </p>
                   <p className="text-gray-400 text-sm mb-3">
-                    Cambia los filtros o busca otra cosita, ¿va?
+                    Cambia los filtros o busca otra cosa
                   </p>
                   <div className="flex flex-col sm:flex-row gap-2 justify-center">
                     <button
                       onClick={clearAllFilters}
                       className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
                     >
-                      Limpiar Filtros, tilín
+                      Limpiar Filtros
                     </button>
                     <Link
                       to="/categorias"
                       className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm"
                     >
-                      Ver todas las categorías, tilín
+                      Ver todas las categorías
                     </Link>
                   </div>
                 </div>

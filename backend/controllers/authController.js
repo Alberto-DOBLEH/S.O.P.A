@@ -92,9 +92,25 @@ const informacionUsuario = (req, res) => {
     res.status(200).json({
       id: user.id_usuario,
       nombre: user.nombre,
-      telefono: user.telefono
+      telefono: user.telefono,
+      correo: user.correo
     });
   });
 };
 
-module.exports = { verificarUsuario, verificarTelefono, registrar, login, informacionUsuario };
+const editarUsuario = (req, res) => {
+  const { id_usuario, nombre, telefono, correo } = req.body;
+
+  if (!id_usuario || !nombre || !telefono || !correo) {
+    return res.status(400).send("Todos los campos son obligatorios");
+  }
+
+  db.query("UPDATE usuarios SET nombre = ?, telefono = ?, correo = ? WHERE id_usuario = ?", [nombre, telefono, correo, id_usuario], (err, results) => {
+    if (err) return res.status(500).send("Error en la BD");
+    if (results.affectedRows === 0) return res.status(404).send("Usuario no encontrado");
+
+    res.status(200).send("Usuario actualizado correctamente");
+  });
+}
+
+module.exports = { verificarUsuario, verificarTelefono, registrar, login, informacionUsuario, editarUsuario };

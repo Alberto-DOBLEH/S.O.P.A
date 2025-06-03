@@ -369,7 +369,7 @@ const VerArticulo = () => {
               <div>
                 <div className="relative mb-4 rounded-lg overflow-hidden border border-gray-200">
                   <img
-                    src={producto.imagenes[imagenSeleccionada]}
+                    src={producto.imagen}
                     alt={producto.titulo}
                     className="w-full h-auto object-contain aspect-square"
                   />

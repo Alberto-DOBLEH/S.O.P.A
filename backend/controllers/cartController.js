@@ -21,6 +21,9 @@ const getCartItems = (req, res) => {
 const addToCart = (req, res) => {
   const userId     = req.userId;
   const { id_producto, cantidad } = req.body;
+
+  console.log("Datos recibidos:", req.body);
+  
   if (!id_producto || !cantidad)
     return res.status(400).json({ error: "Falta id_producto o cantidad" });
 
@@ -45,8 +48,8 @@ const addToCart = (req, res) => {
       } else {
         // No existe: insertamos nuevo registro
         db.query(
-          `INSERT INTO carrito (id_usuario, id_producto, cantidad) VALUES (?, ?, ?)`,
-          [userId, id_producto, cantidad],
+          `INSERT INTO carrito (id_usuario, id_producto, cantidad, estatus) VALUES (?, ?, ?, ?)`,
+          [userId, id_producto, cantidad, estatus = 'A'],
           (err, result) => {
             if (err) return res.status(500).json({ error: "Error al agregar al carrito" });
             res.status(201).json({ mensaje: "Producto agregado al carrito", id_carrito: result.insertId });

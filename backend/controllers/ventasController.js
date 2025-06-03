@@ -6,7 +6,7 @@ const db = require("../db");
 const crearVenta = (req, res) => {
   const { productos, metodo_pago } = req.body;
   const id_usuario = req.userId || req.body.id_usuario;
-  const estado = "Aprobado"
+  const estado = "A"
 
   if (!productos || productos.length === 0) {
     return res.status(400).json({ error: "Faltan productos para la venta" });
@@ -36,7 +36,7 @@ const crearVenta = (req, res) => {
 
       // 1.3 Insertar cabecera de la venta
       db.query(
-        "INSERT INTO ventas (id_usuario, total, metodo_pago, estado) VALUES (?, ?, ?, ?)",
+        "INSERT INTO ventas (id_usuario, total, metodo_pago, estatus) VALUES (?, ?, ?, ?)",
         [id_usuario, total, metodo_pago, estado],
         (err2, result) => {
           if (err2) {
@@ -55,7 +55,7 @@ const crearVenta = (req, res) => {
           ]);
 
           db.query(
-            "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES ?",
+            "INSERT INTO detalles_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES ?",
             [valores],
             (err3) => {
               if (err3) {
@@ -81,7 +81,7 @@ const actualizarEstadoVenta = (req, res) => {
   }
 
   db.query(
-    "UPDATE ventas SET estado = ? WHERE id_venta = ?",
+    "UPDATE ventas SET estatus = ? WHERE id_venta = ?",
     [estado, id_venta],
     (err, result) => {
       if (err) {
@@ -103,14 +103,14 @@ const obtenerVentasPorUsuario = (req, res) => {
     `SELECT v.id_venta,
             v.total,
             v.metodo_pago,
-            v.estado,
+            v.estatus,
             v.fecha_creacion AS fecha,
             dv.id_producto,
             dv.cantidad,
             dv.precio_unitario,
             p.nombre AS nombre_producto
      FROM ventas v
-     JOIN detalle_ventas dv ON v.id_venta = dv.id_venta
+     JOIN detalles_ventas dv ON v.id_venta = dv.id_venta
      JOIN productos p ON dv.id_producto = p.id_producto
      WHERE v.id_usuario = ?
      ORDER BY v.fecha_creacion DESC`,
@@ -130,7 +130,7 @@ const obtenerVentasPorUsuario = (req, res) => {
             id_venta: row.id_venta,
             total: row.total,
             metodo_pago: row.metodo_pago,
-            estado: row.estado,
+            estado: row.estatus,
             fecha: row.fecha,
             productos: []
           });

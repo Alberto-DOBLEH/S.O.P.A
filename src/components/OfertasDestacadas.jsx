@@ -264,36 +264,43 @@ const OfertasDestacadas = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Error al obtener ofertas, tilín");
+        throw new Error("Error al obtener ofertas");
       }
 
       const data = await response.json();
+
       const mappedProducts = data.map((product) => ({
         id: product.id_producto || product.id,
         title: product.nombre || product.title,
-        brand: product.brand || "Genérico",
+        brand: product.marca || "Genérico",
         type: product.type || "Producto",
         category: product.categoria || "Sin categoría",
-        categoryColor: product.categoryColor || "bg-gray-500",
+        categoryColor: product.color || "bg-gray-500",
         price: parseFloat(product.precio),
-        originalPrice: product.precioOriginal
-          ? parseFloat(product.precioOriginal)
+        originalPrice: product.precio_original
+          ? parseFloat(product.precio_original)
           : null,
         discount: product.descuento || 0,
-        rating: product.calificacion || 0,
+        rating: product.reseñas || 0,
         reviewCount:
-          product.numCalificaciones || Math.floor(Math.random() * 1000) + 100,
-        image: product.imagen || "https://via.placeholder.com/150",
+          product.conteo_reseñas || Math.floor(Math.random() * 1000) + 100,
+        image: product.imagen,
         connectivity: product.connectivity || null,
         description: product.descripcion || "Sin descripción, tilín",
-        quantity: product.quantity || 1,
+        quantity: product.stock || 1,
         stock: product.stock || 10,
         tiempoRestante: product.tiempoRestante || "Sin límite",
       }));
+      // 🟨 Filtrar productos con más del 50% de descuento
+      const productosConDescuento = mappedProducts.filter(
+        (p) => p.discount >= 50
+      );
 
-      const productosAleatorios = mappedProducts
-        .sort(() => 0.5 - Math.random())
-        .slice(0, 4);
+      // 🟩 Mezclar y tomar 4 aleatorios
+      const productosAleatorios = productosConDescuento
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 4);
+
       return productosAleatorios;
     } catch (error) {
       console.error("Error al cargar ofertas:", error);
@@ -326,7 +333,7 @@ const OfertasDestacadas = () => {
       setCargando(true);
       const ofertasCargadas = await obtenerOfertas();
       setOfertas(ofertasCargadas);
-      console.log("Ofertas cargadas:", ofertasCargadas);
+    
       setCargando(false);
     };
     cargarOfertas();
@@ -364,10 +371,37 @@ const OfertasDestacadas = () => {
     });
   };
 
-  const agregarAlCarrito = (productoId) => {
-    const producto = ofertas.find((p) => p.id === productoId);
-    if (producto) {
-      toast.success(`✅ ${producto.title} agregado al carrito, tilín`);
+  const agregarAlCarrito = async (productoId) => {
+    try{
+      console.log("Agregando al carrito:", productoId);
+      const producto = ofertas.find((p) => p.id === productoId);
+      if (!productoId) {
+        console.error("Producto no encontrado");
+        return;
+      }
+
+      const id_usuario = localStorage.getItem("idusuario");
+      const response = await fetch(`http://localhost:3001/api/carrito/?userId=${id_usuario}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          id_producto: productoId,
+          cantidad: 1,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Error al agregar al carrito");
+      }
+      const data = await response.json();
+      toast.success(`✅ ${producto.title} agregado al carrito`);
+
+    }catch (error) {
+      console.error("Error al agregar al carrito:", error);
+      toast.error("Error al agregar al carrito");
+      return;
     }
   };
 
@@ -405,14 +439,14 @@ const OfertasDestacadas = () => {
                 <FaTag size={24} />
               </div>
               <h2 className="text-2xl font-bold text-gray-800">
-                OFERTAS SÚPER CHIDAS, TILÍN
+                OFERTAS SÚPER CHIDAS
               </h2>
             </div>
           </div>
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
             <span className="ml-3 text-gray-600">
-              Cargando ofertitas, tilín...
+              Cargando ofertitas
             </span>
           </div>
         </div>
@@ -439,11 +473,11 @@ const OfertasDestacadas = () => {
               <FaTag size={24} />
             </div>
             <h2 className="text-2xl font-bold text-gray-800">
-              OFERTAS SÚPER CHIDAS, TILÍN
+              OFERTAS SÚPER CHIDAS
             </h2>
           </div>
           <button className="text-blue-600 font-medium hover:text-blue-800 flex items-center">
-            Ver todas las ofertitas{" "}
+            Ver todas las ofertas{" "}
             <FaChevronRight className="ml-1" size={14} />
           </button>
         </div>
@@ -463,7 +497,7 @@ const OfertasDestacadas = () => {
                 </span>
                 {oferta.stock < 6 && (
                   <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
-                    ¡Solo {oferta.stock} disponibles, tilín!
+                    ¡Solo {oferta.stock} disponibles!
                   </span>
                 )}
                 <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
@@ -508,7 +542,7 @@ const OfertasDestacadas = () => {
                   }}
                 >
                   <FaShoppingCart className="mr-2" />
-                  Agregar al carrito, tilín
+                  Agregar al carrito
                 </button>
               </div>
             </div>

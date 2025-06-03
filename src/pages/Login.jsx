@@ -69,6 +69,7 @@ const Login = ({ onClose }) => {
             const userData = await response2.json();
             console.log("Información del usuario:", userData);
             localStorage.setItem("idusuario", userData.id);  
+            localStorage.setItem("correo", userData.correo);
           } catch (error) {
             console.error("Error al obtener información del usuario:", error);
           }

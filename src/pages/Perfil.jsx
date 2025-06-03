@@ -517,9 +517,10 @@ const Perfil = () => {
       setLoading(true);
       try {
         const user = localStorage.getItem("usuario");
+        const correo = localStorage.getItem("correo");
         setUserInfo({
           nombre: user,
-          correo: `${user}@example.com`,
+          correo: correo,
           fotoPerfil:
             "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
           direccionPrincipal: {
@@ -699,7 +700,7 @@ const Perfil = () => {
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Mail size={20} className="mr-2 text-blue-600" />
-                    <p>{userInfo.correo}</p>
+                    {userInfo.correo === "" ? (<p>{userInfo.correo}</p>) : (<p>Ingrese un correo</p>)}
                   </div>
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
                     <h3 className="font-bold text-lg text-gray-900 mb-2 flex items-center">

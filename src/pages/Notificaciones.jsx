@@ -16,7 +16,6 @@ const Notificationes = () => {
       <Header />
       <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
         <img
-          src={backgroundImage}
           alt="Flor decorativa"
           className="absolute left-0 w-1/3 md:w-1/4"
         />

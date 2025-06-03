@@ -424,83 +424,124 @@ const ArticulosMasVendidos = () => {
   const navigate = useNavigate();
   const { currency, formatPrice } = useCurrency();
 
-  useEffect(() => {
-    const fetchProductos = async () => {
-      try {
-        setCargando(true);
-        const productos = await obtenerProductosMasVendidos();
-        const mappedProducts = productos.map((product) => ({
-          id: product.id,
-          title: product.titulo || product.title,
-          brand: product.brand || "Genérico",
-          type: product.type || "Producto",
-          category: product.categoria || "Sin categoría",
-          categoryColor: product.categoryColor || "bg-gray-500",
-          price: parseFloat(product.precio),
-          originalPrice: product.precioOriginal
-            ? parseFloat(product.precioOriginal)
-            : null,
-          discount: product.descuento || 0,
-          rating: product.calificacion || 0,
-          reviewCount: product.numCalificaciones || product.numeroVentas || 0,
-          image: product.imagen || "https://via.placeholder.com/150",
-          connectivity: product.connectivity || null,
-          description: product.descripcion || "Sin descripción, tilín",
-          quantity: product.quantity || 1,
-          vendedor: product.vendedor || "Desconocido",
-          verificado: product.verificado || false,
-          envioGratis: product.envioGratis || false,
-          etiquetas: product.etiquetas || [],
-          numeroVentas: product.numeroVentas || 0,
-        }));
-        setMasVendidos(mappedProducts);
-        setCargando(false);
-      } catch (err) {
-        console.error("Error:", err);
-        setError("Error al cargar productos, tilín");
-        setMasVendidos([
-          {
-            id: 1,
-            title: "Juego de Construcción LEGO Ciudad",
-            brand: "LEGO",
-            type: "Juguete",
-            category: "JUGUETES",
-            categoryColor: "bg-yellow-500",
-            price: 899,
-            originalPrice: 1099,
-            discount: 18,
-            rating: 4.7,
-            reviewCount: 1200,
-            image: "🧱",
-            description: "Un jueguito genial para armar, tilín",
-            quantity: 1,
-            vendedor: "Tienda Oficial",
-            verificado: true,
-            envioGratis: true,
-            etiquetas: ["Oferta", "Envío Gratis"],
-            numeroVentas: 1800,
-          },
-        ]);
-        setCargando(false);
-      }
-    };
-    fetchProductos();
-  }, []);
+  const obtenerMayoresVendidos = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/productos`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-  const agregarAlCarrito = (productoId) => {
-    const producto = masVendidos.find((p) => p.id === productoId);
-    setCarrito((prev) => {
-      const existe = prev.find((item) => item.id === productoId);
-      if (existe) {
-        return prev.map((item) =>
-          item.id === productoId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
+      if (!response.ok) {
+        throw new Error("Error al obtener ofertas");
       }
-      return [...prev, { ...producto, quantity: 1 }];
-    });
-    toast.success(`✅ ${producto.title} agregado al carrito, tilín`);
+
+      const data = await response.json();
+
+      const mappedProducts = data.map((product) => ({
+        id: product.id_producto || product.id,
+        title: product.nombre || product.title,
+        brand: product.marca || "Genérico",
+        type: product.type || "Producto",
+        category: product.categoria || "Sin categoría",
+        categoryColor: product.color || "bg-gray-500",
+        price: parseFloat(product.precio),
+        originalPrice: product.precio_original
+          ? parseFloat(product.precio_original)
+          : null,
+        discount: product.descuento || 0,
+        rating: product.reseñas || 0,
+        reviewCount:
+          product.conteo_reseñas || Math.floor(Math.random() * 1000) + 100,
+        image: product.imagen,
+        connectivity: product.connectivity || null,
+        description: product.descripcion || "Sin descripción, tilín",
+        quantity: product.conteo_vendidos || 1,
+        stock: product.stock || 10,
+        tiempoRestante: product.tiempoRestante || "Sin límite",
+      }));
+      // 🟨 Filtrar productos con más del 50% de descuento
+      const productosmasvendidos = mappedProducts.filter(
+        (p) => p.quantity >= 400
+      );
+
+      // 🟩 Mezclar y tomar 4 aleatorios
+      const productosAleatorios = productosmasvendidos
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 4);
+
+      return productosAleatorios;
+    } catch (error) {
+      console.error("Error al cargar ofertas:", error);
+      setError("Error al cargar ofertas");
+      return [
+        {
+          id: 1,
+          title: "Camiseta Adidas Original",
+          brand: "Adidas",
+          type: "Ropa",
+          category: "MODA",
+          categoryColor: "bg-red-500",
+          price: 499,
+          originalPrice: 699,
+          discount: 29,
+          rating: 4.3,
+          reviewCount: 600,
+          image: "👕",
+          description: "Camiseta cómoda y estilosa, tilín",
+          quantity: 1,
+          stock: 8,
+          tiempoRestante: "10h 15m",
+        },
+      ];
+    }
+  };
+  
+  useEffect(() => {
+    const cargarProductos = async () => {
+      setCargando(true);
+      const ProductosCargados = await obtenerMayoresVendidos();
+      setMasVendidos(ProductosCargados);
+    
+      setCargando(false);
+    };
+    cargarProductos();
+  }, []);
+  
+  const agregarAlCarrito = async (productoId) => {
+    try{
+      console.log("Agregando al carrito:", productoId);
+      const producto = masVendidos.find((p) => p.id === productoId);
+      if (!productoId) {
+        console.error("Producto no encontrado");
+        return;
+      }
+
+      const id_usuario = localStorage.getItem("idusuario");
+      const response = await fetch(`http://localhost:3001/api/carrito/?userId=${id_usuario}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          id_producto: productoId,
+          cantidad: 1,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Error al agregar al carrito");
+      }
+      const data = await response.json();
+      toast.success(`✅ ${producto.title} agregado al carrito`);
+
+    }catch (error) {
+      console.error("Error al agregar al carrito:", error);
+      toast.error("Error al agregar al carrito");
+      return;
+    }
   };
 
   const verDetalleProducto = (productoId) => {
@@ -628,7 +669,7 @@ const ArticulosMasVendidos = () => {
               <FaFire size={24} />
             </div>
             <h2 className="text-2xl font-bold text-gray-800">
-              COSITAS MÁS VENDIDAS, TILÍN
+              COSITAS MÁS VENDIDAS
             </h2>
           </div>
           <div className="flex items-center space-x-4">

@@ -15,117 +15,45 @@ const OfertasDestacadas = () => {
   const navigate = useNavigate();
   const [cargando, setCargando] = useState(true);
   const { currency, formatPrice, getCurrencySymbol } = useCurrency();
+  const [OFERTAS, setOfertas] = useState([]);
 
-  const OFERTAS = [
-    {
-      id: 1,
-      imagen: "https://via.placeholder.com/200",
-      imagenes: [
-        "https://via.placeholder.com/200",
-        "https://via.placeholder.com/200/0000FF",
-        "https://via.placeholder.com/200/FF0000",
-      ],
-      titulo: "Smartwatch último modelo",
-      precioOriginal: 3999,
-      precioOferta: 2499,
-      descuento: 38,
-      tiempoRestante: "2 días",
-      stock: 5,
-      categoria: "Electrónicos",
-      calificacion: 4.5,
-      especificaciones: {
-        pantalla: "AMOLED 1.4''",
-        bateria: "7 días",
-        resistencia: "IP68",
-        color: "Negro",
+  const obtenerOfertas = async () => {
+  try {
+    const response = await fetch(`http://localhost:3001/api/productos`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      descripcion: "Smartwatch con monitor de ritmo cardíaco y GPS integrado.",
-      envioGratis: true,
-      garantia: "12 meses",
-      devolucion: "30 días",
-    },
-    {
-      id: 2,
-      imagen: "https://via.placeholder.com/200",
-      imagenes: [
-        "https://via.placeholder.com/200",
-        "https://via.placeholder.com/200/FFFF00",
-      ],
-      titulo: "Audífonos inalámbricos premium",
-      precioOriginal: 1899,
-      precioOferta: 999,
-      descuento: 47,
-      tiempoRestante: "12 horas",
-      stock: 8,
-      categoria: "Audio",
-      calificacion: 5.0,
-      especificaciones: {
-        tipo: "Inalámbrico",
-        bateria: "30 horas",
-        cancelacionRuido: true,
-        color: "Blanco",
-      },
-      descripcion:
-        "Audífonos con cancelación activa de ruido y sonido premium.",
-      envioGratis: true,
-      garantia: "12 meses",
-      devolucion: "30 días",
-    },
-    {
-      id: 3,
-      imagen: "https://via.placeholder.com/200",
-      imagenes: [
-        "https://via.placeholder.com/200",
-        "https://via.placeholder.com/200/00FF00",
-      ],
-      titulo: "Cámara deportiva 4K resistente al agua",
-      precioOriginal: 4599,
-      precioOferta: 2999,
-      descuento: 35,
-      tiempoRestante: "3 días",
-      stock: 3,
-      categoria: "Cámaras",
-      calificacion: 4.2,
-      especificaciones: {
-        resolucion: "4K 60fps",
-        resistencia: "10m",
-        bateria: "2 horas",
-        peso: "120g",
-      },
-      descripcion:
-        "Cámara deportiva para capturar tus aventuras en alta calidad.",
-      envioGratis: false,
-      garantia: "6 meses",
-      devolucion: "15 días",
-    },
-    {
-      id: 4,
-      imagen: "https://via.placeholder.com/200",
-      imagenes: [
-        "https://via.placeholder.com/200",
-        "https://via.placeholder.com/200/FF00FF",
-      ],
-      titulo: "Zapatos deportivos ultralivianos",
-      precioOriginal: 1299,
-      precioOferta: 799,
-      descuento: 40,
-      tiempoRestante: "1 día",
-      stock: 12,
-      categoria: "Deportes",
-      calificacion: 4.7,
-      especificaciones: {
-        material: "Malla transpirable",
-        peso: "220g",
-        tallas: "22-30",
-        color: "Azul/Negro",
-      },
-      descripcion:
-        "Zapatos ideales para correr con máxima comodidad y ligereza.",
-      envioGratis: true,
-      garantia: "3 meses",
-      devolucion: "15 días",
-    },
-  ];
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al obtener ofertas");
+    }
+
+    const data = await response.json();
+
+    // Mezclar y tomar 4 productos aleatorios
+    const productosAleatorios = data
+      .sort(() => 0.5 - Math.random()) // Mezcla aleatoria
+      .slice(0, 4); // Toma los primeros 4
+
+    return productosAleatorios;
+
+    } catch (error) {
+      console.error("Error al cargar ofertas:", error);
+      return [];
+    }
+  };
+  useEffect(() => {
+    const cargarOfertas = async () => {
+      const ofertasCargadas = await obtenerOfertas();
+      setOfertas(ofertasCargadas);
+      console.log("Ofertas cargadas:", ofertasCargadas);
+      setCargando(false);
+    };
+    cargarOfertas();
+  }, []);
 
   useEffect(() => {
     // Simulación de carga de datos
@@ -238,12 +166,12 @@ const OfertasDestacadas = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {OFERTAS.map((oferta) => (
             <div
-              key={oferta.id}
+              key={oferta.id_producto}
               className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
             >
               <div
                 className="relative cursor-pointer"
-                onClick={() => verDetalleProducto(oferta.id)}
+                onClick={() => verDetalleProducto(oferta.id_producto)}
               >
                 <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-bold px-2 py-1 rounded-lg z-10">
                   -{oferta.descuento}%
@@ -264,21 +192,21 @@ const OfertasDestacadas = () => {
 
               <div
                 className="p-4 cursor-pointer"
-                onClick={() => verDetalleProducto(oferta.id)}
+                onClick={() => verDetalleProducto(oferta.id_producto)}
               >
                 <div className="text-xs text-blue-600 font-medium mb-1">
                   {oferta.categoria}
                 </div>
                 <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 h-12 hover:text-blue-600 transition-colors">
-                  {oferta.titulo}
+                  {oferta.nombre}
                 </h3>
                 <EstrellaCalificacion calificacion={oferta.calificacion} />
                 <div className="flex items-end mb-3">
                   <span className="text-xl font-bold text-gray-800 mr-2">
-                    {formatPrice(oferta.precioOferta)}
+                    {formatPrice(oferta.precio)}
                   </span>
                   <span className="text-sm text-gray-500 line-through">
-                    {formatPrice(oferta.precioOriginal)}
+                    {formatPrice(oferta.precio)}
                   </span>
                 </div>
                 <div className="flex items-center text-xs text-gray-500 mb-4">
@@ -289,7 +217,7 @@ const OfertasDestacadas = () => {
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
                   onClick={(e) => {
                     e.stopPropagation();
-                    agregarAlCarrito(oferta.id);
+                    agregarAlCarrito(oferta.id_producto);
                   }}
                 >
                   <FaShoppingCart className="mr-2" />

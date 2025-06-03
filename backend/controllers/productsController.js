@@ -62,10 +62,29 @@ const subirImagenProducto = (req, res) => {
   );
 };
 
+const productosPorCategoria = (req, res) => {
+  const { categoria } = req.params;
+  db.query('SELECT * FROM productos WHERE categoria = ?', [categoria], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Error al obtener productos por categoría' });
+    res.json(results);
+  });
+};
+
+const obtenerProductoPorId = (req, res) => {
+  const { id } = req.params;
+  db.query('SELECT * FROM productos WHERE id_producto = ?', [id], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Error al obtener producto' });
+    if (results.length === 0) return res.status(404).json({ error: 'Producto no encontrado' });
+    res.json(results[0]);
+  });
+}
+
 module.exports = {
   getProductos,
   crearProducto,
   actualizarProducto,
   eliminarProducto,
   subirImagenProducto,
+  productosPorCategoria,
+  obtenerProductoPorId
 };

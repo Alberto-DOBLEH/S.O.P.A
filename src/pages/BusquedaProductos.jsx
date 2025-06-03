@@ -38,11 +38,23 @@ const BusquedaProducto = () => {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      // AQUÍ SE DEBE HACER LA LLAMADA A LA API
-      // Ejemplo:
-      // const response = await fetch('https://api.tutienda.com/productos');
-      // const data = await response.json();
-      // setAllProducts(data);
+      try {
+        const respone = await fetch(`http://localhost:3001/api/productos`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+        );
+        if (!respone.ok) {
+          throw new Error("Error al obtener productos");
+        }
+        const data = await respone.json();
+        setAllProducts(data);
+      }catch (error) { 
+        console.error("Error fetching products from API:", error);
+      }
 
       // Datos de ejemplo mientras se implementa la API
       const mockProducts = [

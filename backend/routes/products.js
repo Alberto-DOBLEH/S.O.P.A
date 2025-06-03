@@ -9,10 +9,14 @@ const {
   crearProducto,
   actualizarProducto,
   eliminarProducto,
-  subirImagenProducto 
+  subirImagenProducto,
+  productosPorCategoria,
+  obtenerProductoPorId
 } = require("../controllers/productsController");
 
 router.get("/", getProductos);
+router.get("/categoria/:categoria", productosPorCategoria);
+router.get("/:id", obtenerProductoPorId); // Nueva ruta para obtener producto por ID
 router.post("/", crearProducto);
 router.put("/:id", actualizarProducto);
 router.delete("/:id", eliminarProducto);

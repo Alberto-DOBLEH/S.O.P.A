@@ -7,7 +7,16 @@ function ListaProductos() {
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/productos");
+        const res = await fetch("http://localhost:3001/api/productos", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        if (!res.ok) {
+          throw new Error("Error al obtener productos");
+        }
         const data = await res.json();
         setProductos(data);
       } catch (err) {

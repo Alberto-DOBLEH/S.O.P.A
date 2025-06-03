@@ -92,33 +92,32 @@ const Header = () => {
       window.removeEventListener("resize", checkScroll);
       menuScrollRef.current?.removeEventListener("scroll", checkScroll);
     };
-    
   }, []);
   useEffect(() => {
-      const cartcheck = async ()  => {
-      try{
-        const id = localStorage.getItem("idusuario")
-          const response = await fetch(`http://localhost:3001/api/carrito?userId=${id}`,{
+    const cartcheck = async () => {
+      try {
+        const id = localStorage.getItem("idusuario");
+        const response = await fetch(
+          `http://localhost:3001/api/carrito?userId=${id}`,
+          {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          });
+          }
+        );
         if (!response.ok) {
           throw new Error("Error al obtener el carrito");
         }
         const data = await response.json();
         setCartCount(data.length);
-
-      }catch (error) {
+      } catch (error) {
         console.error("Error al verificar el carrito:", error);
       }
-    }
+    };
     cartcheck();
   }, []);
-
-
 
   // ↔ FUNCIÓN: Desplazar menú horizontal
   const scrollMenu = (direction) => {
@@ -141,16 +140,16 @@ const Header = () => {
       navigate(`/buscar?category=${encodeURIComponent(categoryValue)}`),
     perfil: () => navigate("/perfil"),
     favoritos: () => navigate("/favoritos"),
-    venta: () => navigate("/vender-articulo"),
-    historial: () => navigate("/historial-compras"),
-    pedidos: () => navigate("/pedidos-activos"),
+    venta: () => navigate("/venta"),
+    historial: () => navigate("/historial"),
+    pedido: () => navigate("/pedido"),
     tarjetas: () => navigate("/mis-tarjetas"),
-    cupones: () => navigate("/cupones-promociones"),
+    cupones: () => navigate("/cupone"),
     listaDeseos: () => navigate("/lista-deseos"),
     listaCompras: () => navigate("/lista-compras"),
     ayuda: () => navigate("/ayuda"),
-    privacidad: () => navigate("/privacidad-seguridad"),
-    soporte: () => navigate("/contactar-soporte"),
+    privacidad: () => navigate("/privacidad"),
+    soporte: () => navigate("/soporte"),
     configuracion: () => navigate("/configuracion"),
     logout: () => navigate("/logout"),
   };
@@ -424,7 +423,7 @@ const Header = () => {
             <div className="flex items-center space-x-3 overflow-x-auto">
               <button
                 className="flex items-center text-s whitespace-nowrap"
-                onClick={navigateTo.cuenta}
+                onClick={navigateTo.perfil}
               >
                 <FaUser className="mr-1" size={12} /> Mi Cuenta
               </button>
@@ -448,7 +447,7 @@ const Header = () => {
               </button>
               <button
                 className="flex items-center text-s whitespace-nowrap"
-                onClick={navigateTo.pedidos}
+                onClick={navigateTo.pedido}
               >
                 <FaStore className="mr-1" size={12} /> Pedidos
               </button>

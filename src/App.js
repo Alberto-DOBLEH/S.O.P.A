@@ -23,17 +23,19 @@ import ZonaPrivada from "./pages/ZonaPrivada";
 import VerArticulo from "./pages/VerArticulo";
 // Comenta temporalmente estas importaciones si no existen aún
 // import Notificaciones from "./pages/Notificaciones";
-// import HistorialCompras from "./pages/HistorialCompras";
+import Historial from "./pages/Historial";
 // import PedidosActivos from "./pages/PedidosActivos";
-// import Cupones from "./pages/Cupones";
+import Cupones from "./pages/Cupones";
 // import Privacidad from "./pages/Privacidad";
 // import Soporte from "./pages/Soporte";
 // import BuscarResultados from "./pages/BuscarResultados";
 import ScrollToTop from "./components/ScrollToTop";
 import BusquedaProducto from "./pages/BusquedaProductos";
 import ComprarYa from "./pages/ComprarYa";
+import Pedido from "./pages/Pedido";
 import { CurrencyProvider } from "./CurrencyContext";
 import Checkout from "../src/components/Checkout";
+// import ListaDeseos from "./pages/ListaDeseos";
 const MODO_DESARROLLO = true; // Cambia a false para volver a proteger
 
 function App() {
@@ -57,6 +59,23 @@ function App() {
             <Route path="/ComprarYa/:id" element={<ComprarYa />} />
             <Route path="/perfil" element={<Perfil />} />
             <Route path="/configuracion" element={<Configuracion />} />
+            <Route path="/venta" element={<Venta />} />
+            <Route path="/historial" element={<Historial />} />
+            <Route path="/pedido" element={<Pedido />} />
+
+            <Route
+              path="/cupones"
+              element={
+                MODO_DESARROLLO ? (
+                  <Cupones />
+                ) : (
+                  <RutaPrivada>
+                    <Cupones />
+                  </RutaPrivada>
+                )
+              }
+            />
+
             <Route
               path="/tarjeta"
               element={
@@ -78,18 +97,51 @@ function App() {
               }
             />
             <Route
+              path="/listadeseos"
+              element={
+                MODO_DESARROLLO ? (
+                  <ListaDeseos />
+                ) : (
+                  <RutaPrivada>
+                    <ListaDeseos />
+                  </RutaPrivada>
+                )
+              }
+            />
+
+            <Route
+              path="/lista-compras"
+              element={
+                MODO_DESARROLLO ? (
+                  <ListaCompras />
+                ) : (
+                  <RutaPrivada>
+                    <ListaCompras />
+                  </RutaPrivada>
+                )
+              }
+            />
+            {/* <Route
               path="/lista-deseos"
               element={
                 <RutaPrivada>
                   <ListaDeseos />
                 </RutaPrivada>
               }
-            />
-            <Route
+            /> */}
+            {/* <Route
               path="/lista-compras"
               element={
                 <RutaPrivada>
                   <ListaCompras />
+                </RutaPrivada>
+              }
+            /> */}
+            <Route
+              path="/venta-articulo"
+              element={
+                <RutaPrivada>
+                  <VentaArticulo />
                 </RutaPrivada>
               }
             />

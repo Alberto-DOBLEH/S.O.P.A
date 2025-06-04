@@ -303,11 +303,11 @@ const VerArticulo = () => {
     toast.info(!enFavoritos ? "Agregado a favoritos" : "Removido de favoritos");
   };
 
-    const agregarAFavoritos = async (id) => {
+  const agregarAFavoritos = async (id) => {
     console.log("Agregando a favoritos:", id);
     try{
       const id_usuario = localStorage.getItem("idusuario");
-      await fetch(`http://localhost:3001/api/favs/?userId=${id_usuario}`, {
+      const response = await fetch(`http://localhost:3001/api/favs/?userId=${id_usuario}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -317,8 +317,13 @@ const VerArticulo = () => {
           id_producto: id,
         }),
       });
-
-      navigate("/favoritos");
+      if (response.status === 400) {
+        toast.error("El producto ya está en favoritos");
+        return;
+      } else {
+        toast.success("Producto agregado a favoritos");
+        navigate("/favoritos");
+      }
     } catch (error) {
       console.error("Error al agregar a favoritos:", error);
     }

@@ -192,6 +192,7 @@ const CarritoCompras = () => {
           },
         }
       );
+      await delay(200);
 
       await fetchCart(); // Refrescar el carrito después de eliminar
     } catch (error) {

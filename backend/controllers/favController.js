@@ -36,17 +36,17 @@ const addToFavs = (req, res) => {
       if (rows.length > 0) {
         // Ya existe: no se puede agregar a favoritos
         return res.status(400).json({ error: "El producto ya está en favoritos" });
+      }else {
+        db.query(
+          `INSERT INTO favoritos (id_usuario, id_producto) VALUES (?, ?)`,
+          [userId, id_producto],
+          (err, result) => {
+          if (err) return res.status(500).json({ error: "Error al agregar a favoritos" });
+              res.status(201).json({ mensaje: "Producto agregado a favoritos", id_carrito: result.insertId });
+          }
+        );    
       }
-    });
-
-    db.query(
-        `INSERT INTO favoritos (id_usuario, id_producto) VALUES (?, ?)`,
-        [userId, id_producto],
-        (err, result) => {
-        if (err) return res.status(500).json({ error: "Error al agregar a favoritos" });
-            res.status(201).json({ mensaje: "Producto agregado a favoritos", id_carrito: result.insertId });
-        }
-    );    
+  });
 };
 
 //  Eliminar un producto de favoritos

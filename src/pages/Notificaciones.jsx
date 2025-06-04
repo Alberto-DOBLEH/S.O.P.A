@@ -15,10 +15,7 @@ const Notificationes = () => {
     <div className="bg-gray-50 min-h-screen flex flex-col">
       <Header />
       <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
-        <img
-          alt="Flor decorativa"
-          className="absolute left-0 w-1/3 md:w-1/4"
-        />
+        <img alt="Flor decorativa" className="absolute left-0 w-1/3 md:w-1/4" />
       </div>
       <main className="max-w-7xl mx-auto px-4 py-8 flex-grow">
         <div className="text-center">

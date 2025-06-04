@@ -1,11 +1,10 @@
 // import React, { useState, useMemo, useEffect } from "react";
 // import { ChevronDown, Filter, Star, X } from "lucide-react";
-// import { useLocation, useNavigate, Link } from "react-router-dom";
+// import { useLocation, Link } from "react-router-dom";
 // import Categorias from "../components/Categorias";
-// import Header from "../components/Heaader";
+// import Header from "../components/Heaader"; // Note: Fix typo in import (Heaader -> Header)
 // import Footer from "../components/Footer";
 // import { useCurrency } from "../CurrencyContext";
-// import { parse } from "dotenv";
 
 // const BusquedaProducto = () => {
 //   const { currency, conversionRate } = useCurrency();
@@ -42,13 +41,12 @@
 //       }
 //       const data = await response.json();
 
-//       console.log("Datos obtenidos de la API:", data);
 //       const mappedProducts = data.map((product) => ({
 //         id: product.id_producto,
 //         title: product.nombre,
 //         brand: product.marca || "Genérico",
-//         type: product.categoría.split(" ")[0].toLowerCase(), // Derivado de categoría
-//         category: product.categoría,
+//         type: product.categoria.split(" ")[0].toLowerCase(),
+//         category: product.categoria,
 //         categoryColor: product.color
 //           ? `bg-${product.color.toLowerCase()}-500`
 //           : "bg-gray-500",
@@ -65,6 +63,11 @@
 //         quantity: parseInt(product.conteo_ventas) || 1,
 //         numeroVentas: parseInt(product.conteo_vendidos) || 0,
 //         condicion: product.NU || "Nuevo",
+//         vendedor: product.vendedor || "Vendedor Desconocido", // Added for VerArticulo
+//         verificado: product.verificado || false, // Added for VerArticulo
+//         envioGratis: product.envioGratis || false, // Added for VerArticulo
+//         garantia: product.garantia || "1 año", // Added for VerArticulo
+//         devolucion: product.devolucion || "30 días", // Added for VerArticulo
 //       }));
 //       setAllProducts(mappedProducts);
 //     } catch (error) {
@@ -86,6 +89,11 @@
 //           stock: 15,
 //           conteo_vendidos: 1200,
 //           NU: "Nuevo",
+//           vendedor: "Nike Oficial",
+//           verificado: true,
+//           envioGratis: true,
+//           garantia: "1 año",
+//           devolucion: "30 días",
 //         },
 //         {
 //           id_producto: 2,
@@ -103,6 +111,11 @@
 //           stock: 20,
 //           conteo_vendidos: 500,
 //           NU: "Nuevo",
+//           vendedor: "Tefal Store",
+//           verificado: true,
+//           envioGratis: false,
+//           garantia: "2 años",
+//           devolucion: "15 días",
 //         },
 //       ];
 //       const mappedMock = mockProducts.map((product) => ({
@@ -123,10 +136,15 @@
 //         reviewCount: parseInt(product.conteo_reseñas) || 0,
 //         image: product.imagen,
 //         stock: parseInt(product.stock) || 0,
-//         description: product.descripción || "Sin descripción, tilín",
+//         description: product.descripción || "Sin descripción",
 //         quantity: 1,
 //         numeroVentas: parseInt(product.conteo_vendidos) || 0,
 //         condicion: product.NU || "Nuevo",
+//         vendedor: product.vendedor || "Vendedor Desconocido",
+//         verificado: product.verificado || false,
+//         envioGratis: product.envioGratis || false,
+//         garantia: product.garantia || "1 año",
+//         devolucion: product.devolucion || "30 días",
 //       }));
 //       setAllProducts(mappedMock);
 //     } finally {
@@ -223,19 +241,22 @@
 
 //   const filteredProducts = useMemo(() => {
 //     let filtered = allProducts;
+
 //     if (categoryFilter) {
 //       filtered = filtered.filter(
 //         (product) =>
+//           product.category &&
 //           product.category.toLowerCase() === categoryFilter.toLowerCase()
 //       );
 //     }
+
 //     if (searchFilter) {
 //       const searchTerm = searchFilter.toLowerCase();
 //       filtered = filtered.filter(
 //         (product) =>
-//           product.title.toLowerCase().includes(searchTerm) ||
-//           product.brand.toLowerCase().includes(searchTerm) ||
-//           product.type.toLowerCase().includes(searchTerm)
+//           (product.title && product.title.toLowerCase().includes(searchTerm)) ||
+//           (product.brand && product.brand.toLowerCase().includes(searchTerm)) ||
+//           (product.type && product.type.toLowerCase().includes(searchTerm))
 //       );
 //     }
 //     if (selectedFilters.brands.length > 0) {
@@ -296,6 +317,7 @@
 //           );
 //       }
 //     }
+
 //     return filtered;
 //   }, [
 //     allProducts,
@@ -314,6 +336,7 @@
 //       priceRanges: [],
 //       categories: [],
 //     });
+
 //     setPriceRange({ min: "", max: "" });
 //   };
 
@@ -352,13 +375,42 @@
 //   );
 
 //   const ProductCard = ({ product }) => (
-//     <Link to={`/producto/${product.id}`} className="block">
+//     <Link
+//       to={`/VerArticulo/${product.id}`}
+//       state={{
+//         producto: {
+//           id: product.id,
+//           title: product.title,
+//           price: product.price,
+//           originalPrice: product.originalPrice,
+//           discount: product.discount,
+//           rating: product.rating,
+//           reviewCount: product.reviewCount,
+//           stock: product.stock,
+//           vendidoPor: product.vendedor,
+//           verificado: product.verificado,
+//           envioGratis: product.envioGratis,
+//           full: false, // Adjust based on your requirements
+//           garantia: product.garantia,
+//           devolucion: product.devolucion,
+//           image: product.image,
+//           connectivity: product.connectivity || null,
+//           description: product.description,
+//           category: product.category,
+//         },
+//       }}
+//       className="block"
+//     >
 //       <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-3 cursor-pointer hover:-translate-y-1 h-full">
-//         <div className="w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-3xl">
-//           {product.image}
+//         <div className="w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-xs">
+//           <img
+//             src={product.image}
+//             alt={product.title}
+//             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+//           />
 //         </div>
 //         <div
-//           className={`inline-block px-2 py-1 rounded-full text-xs font-medium text-white mb-1 ${product.categoryColor}`}
+//           className={`inlinebytes-block px-2 py-1 rounded-full text-xs font-medium text-white mb-1 ${product.categoryColor}`}
 //         >
 //           {product.category}
 //         </div>
@@ -413,7 +465,9 @@
 //             </Link>
 //             <span className="mx-1">›</span>
 //             <span className="font-medium text-gray-900">
-//               {getCategoryName(categoryFilter) || "Todo lo que quieras, tilín"}
+//               {getCategoryName(categoryFilter) ||
+//                 searchFilter ||
+//                 "Todos los productos disponibles"}
 //             </span>
 //           </nav>
 //         </div>
@@ -547,7 +601,8 @@
 //                   <strong>
 //                     "
 //                     {getCategoryName(categoryFilter) ||
-//                       "Todo lo que quieras, tilín"}
+//                       searchFilter ||
+//                       "Todos los productos disponibles"}
 //                     "
 //                   </strong>
 //                 </div>
@@ -608,9 +663,12 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { ChevronDown, Filter, Star, X } from "lucide-react";
+import { FaHeart } from "react-icons/fa"; // Importar ícono de corazón
 import { useLocation, Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify"; // Importar react-toastify
+import "react-toastify/dist/ReactToastify.css"; // Importar estilos de react-toastify
 import Categorias from "../components/Categorias";
-import Header from "../components/Heaader"; // Note: Fix typo in import (Heaader -> Header)
+import Header from "../components/Heaader"; // Corregido el typo
 import Footer from "../components/Footer";
 import { useCurrency } from "../CurrencyContext";
 
@@ -633,7 +691,9 @@ const BusquedaProducto = () => {
   const [categoryFilter, setCategoryFilter] = useState(categoryParam);
   const [searchFilter, setSearchFilter] = useState(searchQuery);
   const [allProducts, setAllProducts] = useState([]);
+  const [favorites, setFavorites] = useState([]); // Nuevo estado para favoritos
 
+  // Cargar productos
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
@@ -671,11 +731,11 @@ const BusquedaProducto = () => {
         quantity: parseInt(product.conteo_ventas) || 1,
         numeroVentas: parseInt(product.conteo_vendidos) || 0,
         condicion: product.NU || "Nuevo",
-        vendedor: product.vendedor || "Vendedor Desconocido", // Added for VerArticulo
-        verificado: product.verificado || false, // Added for VerArticulo
-        envioGratis: product.envioGratis || false, // Added for VerArticulo
-        garantia: product.garantia || "1 año", // Added for VerArticulo
-        devolucion: product.devolucion || "30 días", // Added for VerArticulo
+        vendedor: product.vendedor || "Vendedor Desconocido",
+        verificado: product.verificado || false,
+        envioGratis: product.envioGratis || false,
+        garantia: product.garantia || "1 año",
+        devolucion: product.devolucion || "30 días",
       }));
       setAllProducts(mappedProducts);
     } catch (error) {
@@ -760,15 +820,24 @@ const BusquedaProducto = () => {
     }
   };
 
+  // Cargar favoritos desde localStorage al montar el componente
+  useEffect(() => {
+    const favoriteIds = JSON.parse(localStorage.getItem("favorites")) || [];
+    setFavorites(favoriteIds);
+  }, []);
+
+  // Cargar productos al montar el componente
   useEffect(() => {
     fetchProducts();
   }, []);
 
+  // Actualizar filtros de categoría y búsqueda
   useEffect(() => {
     setCategoryFilter(categoryParam);
     setSearchFilter(searchQuery);
   }, [location.search]);
 
+  // Formatear precio según la moneda
   const formatPrice = (price) => {
     const rate =
       typeof conversionRate === "number" && conversionRate > 0
@@ -784,6 +853,7 @@ const BusquedaProducto = () => {
       : `$${convertedPrice.toFixed(2)}`;
   };
 
+  // Opciones de filtros
   const filterOptions = useMemo(() => {
     const rate =
       typeof conversionRate === "number" && conversionRate > 0
@@ -838,6 +908,7 @@ const BusquedaProducto = () => {
     };
   }, [currency, conversionRate]);
 
+  // Manejar cambio de filtros
   const handleFilterChange = (category, filterId) => {
     setSelectedFilters((prev) => ({
       ...prev,
@@ -847,16 +918,18 @@ const BusquedaProducto = () => {
     }));
   };
 
+  // Filtrar productos
   const filteredProducts = useMemo(() => {
     let filtered = allProducts;
 
     if (categoryFilter) {
       filtered = filtered.filter(
         (product) =>
-          product.category && product.category.toLowerCase() === categoryFilter.toLowerCase()
+          product.category &&
+          product.category.toLowerCase() === categoryFilter.toLowerCase()
       );
     }
-    
+
     if (searchFilter) {
       const searchTerm = searchFilter.toLowerCase();
       filtered = filtered.filter(
@@ -936,6 +1009,7 @@ const BusquedaProducto = () => {
     conversionRate,
   ]);
 
+  // Limpiar todos los filtros
   const clearAllFilters = () => {
     setSelectedFilters({
       brands: [],
@@ -943,15 +1017,31 @@ const BusquedaProducto = () => {
       priceRanges: [],
       categories: [],
     });
-
     setPriceRange({ min: "", max: "" });
   };
 
+  // Obtener nombre de la categoría
   const getCategoryName = (categoryValue) => {
     const category = Categorias.find(
       (cat) => cat.categoryValue.toLowerCase() === categoryValue.toLowerCase()
     );
     return category ? category.label : categoryValue;
+  };
+
+  // Función para manejar el clic en el botón de favoritos
+  const toggleFavorite = (id) => {
+    const favoriteIds = JSON.parse(localStorage.getItem("favorites")) || [];
+    if (favoriteIds.includes(id)) {
+      const updatedIds = favoriteIds.filter((favId) => favId !== id);
+      localStorage.setItem("favorites", JSON.stringify(updatedIds));
+      setFavorites(updatedIds);
+      toast.success("Producto eliminado de favoritos");
+    } else {
+      favoriteIds.push(id);
+      localStorage.setItem("favorites", JSON.stringify(favoriteIds));
+      setFavorites(favoriteIds);
+      toast.success("Producto agregado a favoritos");
+    }
   };
 
   const FilterSection = ({ title, category, options }) => (
@@ -979,86 +1069,98 @@ const BusquedaProducto = () => {
         ))}
       </div>
     </div>
-  );  
+  );
 
   const ProductCard = ({ product }) => (
-    <Link
-      to={`/VerArticulo/${product.id}`}
-      state={{
-        producto: {
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          originalPrice: product.originalPrice,
-          discount: product.discount,
-          rating: product.rating,
-          reviewCount: product.reviewCount,
-          stock: product.stock,
-          vendidoPor: product.vendedor,
-          verificado: product.verificado,
-          envioGratis: product.envioGratis,
-          full: false, // Adjust based on your requirements
-          garantia: product.garantia,
-          devolucion: product.devolucion,
-          image: product.image,
-          connectivity: product.connectivity || null,
-          description: product.description,
-          category: product.category,
-        },
-      }}
-      className="block"
-    >
-      <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-3 cursor-pointer hover:-translate-y-1 h-full">
-        <div className="w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-xs">
-          <img
-            src={product.image}
-            alt={product.title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-        <div
-          className={`inlinebytes-block px-2 py-1 rounded-full text-xs font-medium text-white mb-1 ${product.categoryColor}`}
-        >
-          {product.category}
-        </div>
-        <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-2 leading-tight">
-          {product.title}
-        </h3>
-        <div className="flex items-center mb-1">
-          <div className="flex text-yellow-400">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-3 h-3 ${
-                  i < product.rating ? "fill-current" : ""
-                }`}
-              />
-            ))}
+    <div className="relative">
+      <Link
+        to={`/VerArticulo/${product.id}`}
+        state={{
+          producto: {
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            originalPrice: product.originalPrice,
+            discount: product.discount,
+            rating: product.rating,
+            reviewCount: product.reviewCount,
+            stock: product.stock,
+            vendidoPor: product.vendedor,
+            verificado: product.verificado,
+            envioGratis: product.envioGratis,
+            full: false,
+            garantia: product.garantia,
+            devolucion: product.devolucion,
+            image: product.image,
+            connectivity: product.connectivity || null,
+            description: product.description,
+            category: product.category,
+          },
+        }}
+        className="block"
+      >
+        <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-3 cursor-pointer hover:-translate-y-1 h-full">
+          <div className="w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-xs">
+            <img
+              src={product.image}
+              alt={product.title}
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
           </div>
-          <span className="text-xs text-gray-500 ml-1">
-            ({product.reviewCount.toLocaleString()})
-          </span>
-        </div>
-        <div className="flex items-center space-x-1">
-          {product.originalPrice && (
-            <span className="text-xs text-gray-500 line-through">
-              {formatPrice(product.originalPrice)}
+          <div
+            className={`inline-block px-2 py-1 rounded-full text-xs font-medium text-white mb-1 ${product.categoryColor}`}
+          >
+            {product.category}
+          </div>
+          <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-2 leading-tight">
+            {product.title}
+          </h3>
+          <div className="flex items-center mb-1">
+            <div className="flex text-yellow-400">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-3 h-3 ${
+                    i < product.rating ? "fill-current" : ""
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-xs text-gray-500 ml-1">
+              ({product.reviewCount.toLocaleString()})
             </span>
-          )}
-          <span className="text-md font-bold text-blue-600">
-            {formatPrice(product.price)}
-          </span>
-          {product.discount > 0 && (
-            <span className="text-xs font-semibold text-red-600">
-              {product.discount}% OFF
+          </div>
+          <div className="flex items-center space-x-1">
+            {product.originalPrice && (
+              <span className="text-xs text-gray-500 line-through">
+                {formatPrice(product.originalPrice)}
+              </span>
+            )}
+            <span className="text-md font-bold text-blue-600">
+              {formatPrice(product.price)}
             </span>
-          )}
-          <span className="text-xs text-gray-500">
-            {product.condicion === "Nuevo" ? "Nuevo" : "Usado"}
-          </span>
+            {product.discount > 0 && (
+              <span className="text-xs font-semibold text-red-600">
+                {product.discount}% OFF
+              </span>
+            )}
+            <span className="text-xs text-gray-500">
+              {product.condicion === "Nuevo" ? "Nuevo" : "Usado"}
+            </span>
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+      <button
+        onClick={() => toggleFavorite(product.id)}
+        className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-sm hover:shadow-md"
+      >
+        <FaHeart
+          className={`w-5 h-5 ${
+            favorites.includes(product.id) ? "text-red-500" : "text-gray-400"
+          }`}
+        />
+      </button>
+    </div>
   );
 
   return (
@@ -1072,12 +1174,13 @@ const BusquedaProducto = () => {
             </Link>
             <span className="mx-1">›</span>
             <span className="font-medium text-gray-900">
-              {getCategoryName(categoryFilter) || searchFilter ||"Todos los productos disponibles"}
+              {getCategoryName(categoryFilter) ||
+                searchFilter ||
+                "Todos los productos disponibles"}
             </span>
           </nav>
         </div>
       </div>
-
       <div className="max-w-7xl mx-auto px-4 py-4">
         {isLoading ? (
           <div className="text-center py-10">
@@ -1205,7 +1308,9 @@ const BusquedaProducto = () => {
                   resultados para{" "}
                   <strong>
                     "
-                    {getCategoryName(categoryFilter) || searchFilter ||"Todos los productos disponibles"}
+                    {getCategoryName(categoryFilter) ||
+                      searchFilter ||
+                      "Todos los productos disponibles"}
                     "
                   </strong>
                 </div>
@@ -1258,6 +1363,7 @@ const BusquedaProducto = () => {
         )}
       </div>
       <Footer />
+      <ToastContainer /> {/* Agregar ToastContainer para notificaciones */}
     </div>
   );
 };

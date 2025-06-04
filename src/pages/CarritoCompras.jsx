@@ -25,6 +25,7 @@ import VentanaEnvio from "../pages/VentanaEnvio";
 import VentanaPago from "../pages/VentanaPago";
 import { useCurrency } from "../CurrencyContext"; // Importamos el contexto de moneda
 import { toast } from "react-toastify";
+import { response } from "axios";
 
 const CarritoCompras = () => {
   // Obtenemos el contexto de moneda
@@ -198,8 +199,29 @@ const CarritoCompras = () => {
     }
   };
 
-  const saveForLater = (id) => {
+  const saveForLater = async (id) => {
     console.log("Producto guardado para después:", id);
+
+    try{
+      const id_usuario = localStorage.getItem("idusuario");
+      const respone = await fetch(`http://localhost:3001/api/favs/?userId=${id_usuario}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          id_producto: id,
+        }),
+      });
+      if (!respone.ok) {
+        const errorData = await respone.json();
+        console.error("Error al agregar a favoritos:", errorData);
+        throw new Error("Error al agregar a favoritos");
+      }
+    } catch (error) {
+      console.error("Error al agregar a favoritos:", error);
+    }
   };
 
   const buyNow = (id) => {
@@ -591,7 +613,7 @@ const CarritoCompras = () => {
                     Descubre nuestros increíbles productos y ofertas especiales
                   </p>
                   <button
-                    onClick={() => (window.location.href = "/productos")}
+                    onClick={() => (window.location.href = "/buscar")}
                     className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-200"
                   >
                     Explorar productos
@@ -685,7 +707,7 @@ const CarritoCompras = () => {
 
                                   <div className="flex items-center space-x-3">
                                     <button
-                                      onClick={() => saveForLater(item.id)}
+                                      onClick={() => saveForLater(item.id_producto)}
                                       className="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
                                     >
                                       <Heart size={16} className="mr-1" />

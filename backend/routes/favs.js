@@ -11,6 +11,6 @@ const {
 // DELETE /api/favs/:id_favorito → eliminar favorito
 router.get('/', getFavsItems);
 router.post('/', addToFavs);
-router.delete('/:id_favorito', removeFavsItem);
+router.delete('/', removeFavsItem);
 
 module.exports = router;

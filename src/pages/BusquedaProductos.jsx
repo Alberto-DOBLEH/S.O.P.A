@@ -649,13 +649,12 @@ const BusquedaProducto = () => {
       }
       const data = await response.json();
 
-      console.log("Datos obtenidos de la API:", data);
       const mappedProducts = data.map((product) => ({
         id: product.id_producto,
         title: product.nombre,
         brand: product.marca || "Genérico",
-        type: product.categoría.split(" ")[0].toLowerCase(),
-        category: product.categoría,
+        type: product.categoria.split(" ")[0].toLowerCase(),
+        category: product.categoria,
         categoryColor: product.color
           ? `bg-${product.color.toLowerCase()}-500`
           : "bg-gray-500",
@@ -745,7 +744,7 @@ const BusquedaProducto = () => {
         reviewCount: parseInt(product.conteo_reseñas) || 0,
         image: product.imagen,
         stock: parseInt(product.stock) || 0,
-        description: product.descripción || "Sin descripción, tilín",
+        description: product.descripción || "Sin descripción",
         quantity: 1,
         numeroVentas: parseInt(product.conteo_vendidos) || 0,
         condicion: product.NU || "Nuevo",
@@ -850,23 +849,21 @@ const BusquedaProducto = () => {
 
   const filteredProducts = useMemo(() => {
     let filtered = allProducts;
+
     if (categoryFilter) {
       filtered = filtered.filter(
         (product) =>
-          product.category.toLowerCase() === categoryFilter.toLowerCase()
+          product.category && product.category.toLowerCase() === categoryFilter.toLowerCase()
       );
     }
-<<<<<<< HEAD
-=======
     
->>>>>>> e88a89447fe69379f4017849387c03a14db379e7
     if (searchFilter) {
       const searchTerm = searchFilter.toLowerCase();
       filtered = filtered.filter(
         (product) =>
-          product.title.toLowerCase().includes(searchTerm) ||
-          product.brand.toLowerCase().includes(searchTerm) ||
-          product.type.toLowerCase().includes(searchTerm)
+          (product.title && product.title.toLowerCase().includes(searchTerm)) ||
+          (product.brand && product.brand.toLowerCase().includes(searchTerm)) ||
+          (product.type && product.type.toLowerCase().includes(searchTerm))
       );
     }
     if (selectedFilters.brands.length > 0) {
@@ -927,6 +924,7 @@ const BusquedaProducto = () => {
           );
       }
     }
+
     return filtered;
   }, [
     allProducts,
@@ -1011,8 +1009,12 @@ const BusquedaProducto = () => {
       className="block"
     >
       <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-3 cursor-pointer hover:-translate-y-1 h-full">
-        <div className="w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-3xl">
-          {product.image}
+        <div className="w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-xs">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          />
         </div>
         <div
           className={`inlinebytes-block px-2 py-1 rounded-full text-xs font-medium text-white mb-1 ${product.categoryColor}`}

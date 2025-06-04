@@ -283,10 +283,58 @@ const VerArticulo = () => {
     });
   };
 
-  const toggleFavoritos = () => {
+  const toggleFavoritos = async () => {
     setEnFavoritos(!enFavoritos);
+    if (!enFavoritos) {
+      await agregarAFavoritos(producto.id);
+    } else {
+      await eliminarFavoritos(producto.id);
+    }
+
     toast.info(!enFavoritos ? "Agregado a favoritos" : "Removido de favoritos");
   };
+  
+  //Funciones Favoritos
+  const agregarAFavoritos = async (id) => {
+    console.log("Agregando a favoritos:", id);
+    try{
+      const id_usuario = localStorage.getItem("idusuario");
+      await fetch(`http://localhost:3001/api/favs/?userId=${id_usuario}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          id_producto: id,
+        }),
+      });
+
+      navigate("/favoritos");
+    } catch (error) {
+      console.error("Error al agregar a favoritos:", error);
+    }
+  }
+
+  const eliminarFavoritos = async (id) => {
+    console.log("Eliminando de favoritos:", id);
+    try{
+      const id_usuario = localStorage.getItem("idusuario");
+      fetch(`http://localhost:3001/api/favs/?userId=${id_usuario}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          id_producto: id,
+        }),
+      });
+
+    } catch (error) {
+      console.error("Error al eliminar de favoritos:", error);
+    }
+  }
 
   const renderEstrellas = (calificacion) => {
     const estrellas = [];
@@ -464,23 +512,6 @@ const VerArticulo = () => {
                   </button>
                 </div>
                 ) : null}  
-                <div className="flex justify-between mt-6 md:hidden">
-                  <button
-                    onClick={toggleFavoritos}
-                    className="flex items-center text-gray-700 hover:text-gray-900"
-                  >
-                    {enFavoritos ? (
-                      <FaHeart className="text-red-500 mr-2" />
-                    ) : (
-                      <FaHeart className="text-gray-400 mr-2" />
-                    )}
-                    <span>{enFavoritos ? "Guardado" : "Guardar"}</span>
-                  </button>
-                  <button className="flex items-center text-gray-700 hover:text-gray-900">
-                    <FaShare className="text-gray-400 mr-2" />
-                    <span>Compartir</span>
-                  </button>
-                </div>
               </div>
 
               {/* Información del producto */}

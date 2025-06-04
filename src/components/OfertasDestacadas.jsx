@@ -158,9 +158,8 @@ const OfertasDestacadas = () => {
         return;
       }
 
-      console.log("Producto encontrado:", productoId);
       const id_usuario = localStorage.getItem("idusuario");
-      const response = await fetch(`http://localhost:3001/api/carrito/?userId=${id_usuario}`, {
+      await fetch(`http://localhost:3001/api/carrito/?userId=${id_usuario}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -171,10 +170,6 @@ const OfertasDestacadas = () => {
           cantidad: 1,
         }),
       });
-      if (!response.ok) {
-        throw new Error("Error al agregar al carrito");
-      }
-      const data = await response.json();
       toast.success(`✅ ${producto.title} agregado al carrito`);
 
     }catch (error) {

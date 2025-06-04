@@ -430,7 +430,7 @@ const VerArticulo = () => {
                   </button>
                 </li>
                 <li className="flex items-center">
-                  <span className="mx-2 text-gray-400/80">></span>
+                  <span className="mx-2 text-gray-400/80">&gt</span>
                   <button
                     onClick={() =>
                       navigate(`/categoria/${producto.categoria.toLowerCase()}`)
@@ -441,7 +441,7 @@ const VerArticulo = () => {
                   </button>
                 </li>
                 <li className="flex items-center">
-                  <span className="mx-2 text-gray-400/80">></span>
+                  <span className="mx-2 text-gray-400/80">&gt</span>
                   <span className="text-gray-800/90 font-medium truncate max-w-[160px] md:max-w-[240px]">
                     {producto.titulo || producto.title}
                   </span>

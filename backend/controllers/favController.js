@@ -1,16 +1,14 @@
-const e = require("express");
-const db = require("../db");
-const { get } = require("../routes/favs");
 
-// Obtener favoritos del usuario por id
+const db = require("../db");
+
 // Obtener ítems del carrito del usuario autenticado
 const getFavsItems = (req, res) => {
   const userId = req.userId;
   db.query(
-    `SELECT f.id_favorito, p.id_producto, p.nombre, p.precio, p.imagen
-     FROM favoritos f
-     JOIN productos p ON f.id_producto = p.id_producto
-     WHERE f.id_usuario = ?`,
+    `SELECT *
+    FROM productos p
+    JOIN favoritos f ON f.id_producto = p.id_producto
+    WHERE f.id_usuario = ?`,
     [userId],
     (err, results) => {
       if (err) return res.status(500).json({ error: "Error al obtener carrito" });

@@ -67,7 +67,7 @@ const login = (req, res) => {
       if (err) return res.status(500).send("Error en la verificación");
       if (!result) return res.status(401).send("Contraseña incorrecta");
 
-      const token = jwt.sign({ id_usuario: user.id_usuario }, process.env.JWT_SECRET, { expiresIn: "2h" });
+      const token = jwt.sign({ id_usuario: user.id_usuario }, process.env.JWT_SECRET, { expiresIn: "5h" });
 
       res.status(200).json({
         mensaje: "Inicio de sesión exitoso",

@@ -457,7 +457,7 @@ const ArticulosMasVendidos = () => {
           product.conteo_reseñas || Math.floor(Math.random() * 1000) + 100,
         image: product.imagen,
         connectivity: product.connectivity || null,
-        description: product.descripcion || "Sin descripción, tilín",
+        description: product.descripcion || "Sin descripción",
         quantity: product.conteo_vendidos || 1,
         stock: product.stock || 10,
         tiempoRestante: product.tiempoRestante || "Sin límite",
@@ -597,8 +597,8 @@ const ArticulosMasVendidos = () => {
 
   const formatearNumeroVentas = (numero) => {
     return numero >= 1000
-      ? `${(numero / 1000).toFixed(1)}K vendidos, tilín`
-      : `${numero} vendidos, tilín`;
+      ? `${(numero / 1000).toFixed(1)}K vendidos`
+      : `${numero} vendidos`;
   };
 
   const EstrellaCalificacion = ({ rating }) => {
@@ -710,7 +710,7 @@ const ArticulosMasVendidos = () => {
                   </div>
                 )}
                 <span className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full z-10">
-                  {formatearNumeroVentas(producto.numeroVentas)}
+                  {formatearNumeroVentas(producto.quantity)}
                 </span>
                 <div className="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
                   <img
@@ -737,7 +737,7 @@ const ArticulosMasVendidos = () => {
                     <BsPatchCheck
                       className="text-blue-500"
                       size={16}
-                      title="Vendedor verificado, tilín"
+                      title="Vendedor verificado"
                     />
                   )}
                 </div>

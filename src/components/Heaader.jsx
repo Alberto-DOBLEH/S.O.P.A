@@ -338,7 +338,16 @@ const Header = () => {
   ];
 
   // 🎯 COMPONENTE: Barra de búsqueda mejorada
-  const SearchBar = () => (
+  const SearchBar = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log("Buscando:", searchTerm);
+    // Aquí puedes hacer una búsqueda o redirigir
+  };
+
+  return (
     <form
       onSubmit={handleSearch}
       className="relative flex w-full max-w-3xl mx-auto"
@@ -359,7 +368,7 @@ const Header = () => {
       </button>
     </form>
   );
-
+};
   return (
     <header className="w-full relative">
       {/* 🎨 BARRA PRINCIPAL CON LOGO, BÚSQUEDA Y ACCIONES */}

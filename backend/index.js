@@ -43,6 +43,7 @@ const productosRoutes = require("./routes/products");
 const ventasRoutes    = require("./routes/ventas");
 // ➕ Importa el router de carrito
 const cartRoutes = require("./routes/cart");
+const favsRoutes = require("./routes/favs");
 
 // ———————————————————————————————————————————————
 // 🗺️ Cambio: Prefijo /api/auth para separar las rutas de autenticación
@@ -56,6 +57,7 @@ app.use("/api/ventas",    verifyToken, ventasRoutes);
 // ———————————————————————————————————————————————
 // 🔧 Nueva ruta protegida para carrito:
 app.use("/api/carrito",   verifyToken, cartRoutes);
+app.use("/api/favs",      verifyToken, favsRoutes);
 // backend/index.js
 app.use("/uploads", express.static("uploads"));
 

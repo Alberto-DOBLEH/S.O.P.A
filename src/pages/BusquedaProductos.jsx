@@ -856,6 +856,10 @@ const BusquedaProducto = () => {
           product.category.toLowerCase() === categoryFilter.toLowerCase()
       );
     }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> e88a89447fe69379f4017849387c03a14db379e7
     if (searchFilter) {
       const searchTerm = searchFilter.toLowerCase();
       filtered = filtered.filter(
@@ -941,6 +945,7 @@ const BusquedaProducto = () => {
       priceRanges: [],
       categories: [],
     });
+
     setPriceRange({ min: "", max: "" });
   };
 
@@ -976,7 +981,7 @@ const BusquedaProducto = () => {
         ))}
       </div>
     </div>
-  );
+  );  
 
   const ProductCard = ({ product }) => (
     <Link
@@ -1065,7 +1070,7 @@ const BusquedaProducto = () => {
             </Link>
             <span className="mx-1">›</span>
             <span className="font-medium text-gray-900">
-              {getCategoryName(categoryFilter) || "Todo lo que quieras, tilín"}
+              {getCategoryName(categoryFilter) || searchFilter ||"Todos los productos disponibles"}
             </span>
           </nav>
         </div>
@@ -1198,8 +1203,7 @@ const BusquedaProducto = () => {
                   resultados para{" "}
                   <strong>
                     "
-                    {getCategoryName(categoryFilter) ||
-                      "Todo lo que quieras, tilín"}
+                    {getCategoryName(categoryFilter) || searchFilter ||"Todos los productos disponibles"}
                     "
                   </strong>
                 </div>

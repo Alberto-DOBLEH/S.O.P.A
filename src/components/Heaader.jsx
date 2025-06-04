@@ -344,6 +344,7 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Buscando:", searchTerm);
+    navigate(`/buscar?q=${encodeURIComponent(searchTerm)}`);
     // Aquí puedes hacer una búsqueda o redirigir
   };
 

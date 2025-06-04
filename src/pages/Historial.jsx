@@ -10,10 +10,45 @@ import {
 } from "lucide-react";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
+import { use } from "react";
 const Historial = () => {
   const [pedidos, setPedidos] = useState([]);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const [mostrarDetalle, setMostrarDetalle] = useState(false);
+
+  const cargarPedidos = async () => {
+    try {
+      const idusuario = localStorage.getItem("idusuario");
+      const response = await fetch(
+        `http://localhost:3001/api/ventas/usuario/${idusuario}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Error al cargar los pedidos");
+      }
+
+      const data = await response.json();
+
+      const datosprocesados = data.map((item) => ({
+        ...item,
+        total: parseFloat(item.total), // convierte el string a número decimal
+      }));
+
+      setPedidos(datosprocesados);
+    } catch (error) {
+      console.error("Error al cargar los pedidos:", error);
+    }
+  };
+
+  useEffect(() => {
+    cargarPedidos();
+  }, []);
 
   // Productos de ejemplo
   const productosEjemplo = [
@@ -85,13 +120,6 @@ const Historial = () => {
     };
   };
 
-  // Inicializar pedidos
-  useEffect(() => {
-    const pedidosIniciales = Array(8)
-      .fill()
-      .map(() => generarPedido());
-    setPedidos(pedidosIniciales);
-  }, []);
 
   const getEstadoColor = (estado) => {
     switch (estado) {
@@ -243,7 +271,9 @@ const Historial = () => {
                 </div>
               </div>
 
+              
               {/* Cliente */}
+              {pedidoSeleccionado.cliente && (
               <div className="border-t pt-4">
                 <div className="flex items-center space-x-3 mb-3">
                   <User className="w-5 h-5 text-blue-600" />
@@ -254,8 +284,10 @@ const Historial = () => {
                 <p className="text-gray-700">{pedidoSeleccionado.cliente}</p>
                 <p className="text-gray-600">{pedidoSeleccionado.email}</p>
               </div>
+              )}
 
               {/* Dirección */}
+              {pedidoSeleccionado.direccion && (
               <div className="border-t pt-4">
                 <div className="flex items-center space-x-3 mb-3">
                   <MapPin className="w-5 h-5 text-blue-600" />
@@ -265,6 +297,7 @@ const Historial = () => {
                 </div>
                 <p className="text-gray-700">{pedidoSeleccionado.direccion}</p>
               </div>
+              )}
 
               {/* Productos */}
               <div className="border-t pt-4">
@@ -288,10 +321,10 @@ const Historial = () => {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-gray-800">
-                          ${(producto.precio * producto.cantidad).toFixed(2)}
+                          ${(producto.precio_unitario * producto.cantidad).toFixed(2)}
                         </p>
                         <p className="text-sm text-gray-600">
-                          ${producto.precio.toFixed(2)} c/u
+                          ${producto.precio_unitario.toFixed(2)} c/u
                         </p>
                       </div>
                     </div>

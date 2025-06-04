@@ -423,6 +423,15 @@ const ArticulosMasVendidos = () => {
   const [carrito, setCarrito] = useState([]);
   const navigate = useNavigate();
   const { currency, formatPrice } = useCurrency();
+  const [IsAutenticated, setIsAuthenticated] = useState(false);
+  
+  useEffect(() => {
+      const usuario = localStorage.getItem("usuario");
+      if (usuario) {
+        setIsAuthenticated(true);
+      }
+  }, []);
+
 
   const obtenerMayoresVendidos = async () => {
     try {
@@ -430,7 +439,6 @@ const ArticulosMasVendidos = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
@@ -524,7 +532,6 @@ const ArticulosMasVendidos = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           id_producto: productoId,
@@ -755,6 +762,7 @@ const ArticulosMasVendidos = () => {
                 </div>
 
                 <div className="flex justify-between">
+                  {IsAutenticated && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -764,13 +772,19 @@ const ArticulosMasVendidos = () => {
                   >
                     Comprar Ya
                   </button>
+                  )}
                   {producto.discount > 0 && (
                     <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                       -{producto.discount}% OFF
                     </span>
                   )}
                 </div>
-
+                {!IsAutenticated && (
+                  <div className="text-red-500 text-sm mb-2">
+                    Inicia sesión para agregar al carrito
+                  </div>
+                )}
+                {IsAutenticated && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -781,6 +795,7 @@ const ArticulosMasVendidos = () => {
                   <FaShoppingCart className="mr-2" />
                   Agregar al carrito
                 </button>
+                )}
               </div>
             </div>
           ))}

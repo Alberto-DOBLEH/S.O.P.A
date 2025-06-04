@@ -47,8 +47,8 @@ const BusquedaProducto = () => {
         id: product.id_producto,
         title: product.nombre,
         brand: product.marca || "Genérico",
-        type: product.categoría, // Derivado de categoría
-        category: product.categoría,
+        type: product.categoria, // Derivado de categoría
+        category: product.categoria,
         categoryColor: product.color
           ? `bg-${product.color.toLowerCase()}-500`
           : "bg-gray-500",
@@ -163,7 +163,7 @@ const BusquedaProducto = () => {
 
   const filteredProducts = useMemo(() => {
     let filtered = allProducts;
-    
+
     if (categoryFilter) {
       filtered = filtered.filter(
         (product) =>

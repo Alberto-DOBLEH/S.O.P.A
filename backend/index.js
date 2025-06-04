@@ -51,7 +51,7 @@ app.use("/api/auth", authRoutes);
 
 // ———————————————————————————————————————————————
 // 🛡️ Cambio: Proteger rutas de productos y ventas con el middleware verifyToken
-app.use("/api/productos", verifyToken, productosRoutes);
+app.use("/api/productos", productosRoutes);
 app.use("/api/ventas",    verifyToken, ventasRoutes);
 // ———————————————————————————————————————————————
 // 🔧 Nueva ruta protegida para carrito:

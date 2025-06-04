@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-
+import { backgroundImage } from "../assets/imagenes/imagenes";
 const Tarjeta = ({ setCurrentStep }) => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,6 +88,15 @@ const Tarjeta = ({ setCurrentStep }) => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
       <main className="max-w-3xl mx-auto px-4 py-8 flex-grow">
         <div className="bg-white p-6 rounded-lg shadow-md">

@@ -1,65 +1,3 @@
-// import React from "react";
-// import Header from "../components/Heaader";
-// import Footer from "../components/Footer";
-// import { useNavigate } from "react-router-dom";
-// import { FaClock } from "react-icons/fa"; // Ícono para "Coming Soon"
-// import {
-//   Cristina,
-//   dobleh2023,
-//   guillem,
-//   Julia,
-// } from "../assets/imagenes/imagenesslider";
-
-// const Soporte = () => {
-//   const navigate = useNavigate();
-
-//   const autores = [
-//     {
-//       nombre: "Luis Alberto Hernandez Hernandez",
-//       alias: "Dobhe H",
-//       fotoPerfil: dobleh2023,
-//       correo: "luis.alberto.hdez.hdez245@gmail.com",
-//       github: "https://github.com/Alberto-DOBLEH",
-//     },
-//     {
-//       nombre: "Guillermo Enrique Ayala Castro",
-//       alias: "Guillem",
-//       fotoPerfil: guillem,
-//       correo: "guillermoayalawas@gmail.com",
-//       github: "https://github.com/GuillermoEAC",
-//     },
-//     {
-//       nombre: "Julio Cesar Lugo Franco",
-//       alias: "Stepro",
-//       fotoPerfil: Julia,
-//       correo: "stepro61831@gmail.com",
-//       github: "https://github.com/JulioCfy5",
-//     },
-//     {
-//       nombre: "Cristhian Manuel Marquez Verdugo",
-//       alias: "Furry facktos",
-//       fotoPerfil: Cristina,
-//       correo: "cristianverdugo965@gmail.com",
-//       github: "https://github.com/cristhianM965",
-//     },
-//   ];
-
-//   const navigateTo = {
-//     home: () => navigate("/"),
-//   };
-
-//   const perfilAutor = {};
-
-//   return (
-//     <div className="bg-gray-50 min-h-screen flex flex-col">
-//       <Header />
-
-//       <Footer />
-//     </div>
-//   );
-// };
-
-// export default Soporte;
 import React from "react";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
@@ -71,7 +9,7 @@ import {
   guillem,
   Julia,
 } from "../assets/imagenes/imagenesslider";
-
+import { backgroundImage } from "../assets/imagenes/imagenes";
 const Soporte = () => {
   const navigate = useNavigate();
 
@@ -112,6 +50,15 @@ const Soporte = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 py-8 flex-grow">

@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
 import { useCurrency } from "../CurrencyContext"; // Importar el contexto
-
+import { backgroundImage } from "../assets/imagenes/imagenes";
 const Configuracion = () => {
   const { currency, changeCurrency } = useCurrency();
 
@@ -21,6 +21,15 @@ const Configuracion = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
       <main className="container mx-auto py-8 px-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">

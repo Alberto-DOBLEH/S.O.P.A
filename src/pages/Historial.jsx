@@ -11,6 +11,7 @@ import {
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
 import { use } from "react";
+import { backgroundImage } from "../assets/imagenes/imagenes";
 const Historial = () => {
   const [pedidos, setPedidos] = useState([]);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
@@ -120,7 +121,6 @@ const Historial = () => {
     };
   };
 
-
   const getEstadoColor = (estado) => {
     switch (estado) {
       case "Pendiente":
@@ -148,6 +148,15 @@ const Historial = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       {/* Header estilo SOFA */}
       <Header />
       {/* Navegación */}
@@ -271,32 +280,33 @@ const Historial = () => {
                 </div>
               </div>
 
-              
               {/* Cliente */}
               {pedidoSeleccionado.cliente && (
-              <div className="border-t pt-4">
-                <div className="flex items-center space-x-3 mb-3">
-                  <User className="w-5 h-5 text-blue-600" />
-                  <h4 className="font-semibold text-gray-800">
-                    Información del Cliente
-                  </h4>
+                <div className="border-t pt-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <User className="w-5 h-5 text-blue-600" />
+                    <h4 className="font-semibold text-gray-800">
+                      Información del Cliente
+                    </h4>
+                  </div>
+                  <p className="text-gray-700">{pedidoSeleccionado.cliente}</p>
+                  <p className="text-gray-600">{pedidoSeleccionado.email}</p>
                 </div>
-                <p className="text-gray-700">{pedidoSeleccionado.cliente}</p>
-                <p className="text-gray-600">{pedidoSeleccionado.email}</p>
-              </div>
               )}
 
               {/* Dirección */}
               {pedidoSeleccionado.direccion && (
-              <div className="border-t pt-4">
-                <div className="flex items-center space-x-3 mb-3">
-                  <MapPin className="w-5 h-5 text-blue-600" />
-                  <h4 className="font-semibold text-gray-800">
-                    Dirección de Entrega
-                  </h4>
+                <div className="border-t pt-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <MapPin className="w-5 h-5 text-blue-600" />
+                    <h4 className="font-semibold text-gray-800">
+                      Dirección de Entrega
+                    </h4>
+                  </div>
+                  <p className="text-gray-700">
+                    {pedidoSeleccionado.direccion}
+                  </p>
                 </div>
-                <p className="text-gray-700">{pedidoSeleccionado.direccion}</p>
-              </div>
               )}
 
               {/* Productos */}
@@ -321,7 +331,10 @@ const Historial = () => {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-gray-800">
-                          ${(producto.precio_unitario * producto.cantidad).toFixed(2)}
+                          $
+                          {(
+                            producto.precio_unitario * producto.cantidad
+                          ).toFixed(2)}
                         </p>
                         <p className="text-sm text-gray-600">
                           ${producto.precio_unitario.toFixed(2)} c/u

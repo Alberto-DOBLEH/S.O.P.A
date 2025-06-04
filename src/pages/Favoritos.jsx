@@ -4,32 +4,34 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
-
+import { backgroundImage } from "../assets/imagenes/imagenes";
 const Favoritos = () => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   const loadFavorites = async () => {
     setLoading(true);
-    
+
     try {
       const idusuario = localStorage.getItem("idusuario");
-      const response = await fetch(`http://localhost:3001/api/favs/?userId=${idusuario}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:3001/api/favs/?userId=${idusuario}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Error al cargar los favoritos");
       }
       const data = await response.json();
       setFavorites(data);
       setLoading(false);
-    }catch (err) {
+    } catch (err) {
       console.error("Error al cargar los favoritos:", err);
     }
   };
@@ -38,16 +40,19 @@ const Favoritos = () => {
   }, []);
 
   const removeFavorite = async (id) => {
-    try{
+    try {
       const idusuario = localStorage.getItem("idusuario");
-        const response = await fetch(`http://localhost:3001/api/favs/?userId=${idusuario}`, {
+      const response = await fetch(
+        `http://localhost:3001/api/favs/?userId=${idusuario}`,
+        {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        body: JSON.stringify({ id_producto: id }),
-      });
+          body: JSON.stringify({ id_producto: id }),
+        }
+      );
       if (!response.ok) {
         toast.error("Error al eliminar el favorito");
         return;
@@ -103,7 +108,17 @@ const Favoritos = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
+
       <main className="max-w-7xl mx-auto px-4 py-8 flex-grow">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">Tus Favoritos</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -162,13 +177,9 @@ const Favoritos = () => {
                   )}
                 </div>
                 {product.nuevo_usado === "N" ? (
-                <div className="text-xs text-gray-500 mb-2">
-                  Nuevo
-                </div>
+                  <div className="text-xs text-gray-500 mb-2">Nuevo</div>
                 ) : (
-                <div className="text-xs text-gray-500 mb-2">
-                  Usado
-                </div>
+                  <div className="text-xs text-gray-500 mb-2">Usado</div>
                 )}
                 <button
                   onClick={() => removeFavorite(product.id_producto)}

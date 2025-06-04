@@ -3,7 +3,8 @@ import Header from "../components/Layout/Header";
 import Button from "../components/UI/Button";
 import Input from "../components/UI/input";
 import { toast } from "react-toastify";
-
+import { backgroundImage } from "../assets/imagenes/imagenes";
+import Footer from "../components/Footer";
 const VentaArticulo = () => {
   const [imagen, setImagen] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -29,25 +30,60 @@ const VentaArticulo = () => {
       return;
     }
 
-    // Aquí podrías enviar los datos a tu backend si ya tienes configurado
-    console.log({ titulo, precio, estado, descripcion, tipo, envio, categoria });
+    // Aqui enviar los datos del backend si ya tienes configurado
+    console.log({
+      titulo,
+      precio,
+      estado,
+      descripcion,
+      tipo,
+      envio,
+      categoria,
+    });
     toast.success("Artículo publicado con éxito");
   };
 
   return (
     <>
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
       <div className="flex flex-col items-center bg-[#eaf6ff] min-h-screen py-10 px-6">
         <div className="bg-white rounded-lg shadow-lg w-full max-w-7xl p-6">
-          <h2 className="text-2xl font-bold text-center mb-6">Publicar artículo</h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <h2 className="text-2xl font-bold text-center mb-6">
+            Publicar artículo
+          </h2>
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
             {/* Columna izquierda */}
             <div className="space-y-3">
               <label className="block font-semibold">Añadir fotos</label>
-              <input type="file" accept="image/*" onChange={handleImagenChange} />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImagenChange}
+              />
 
-              <Input placeholder="Título" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
-              <Input placeholder="Precio" value={precio} type="number" onChange={(e) => setPrecio(e.target.value)} />
+              <Input
+                placeholder="Título"
+                value={titulo}
+                onChange={(e) => setTitulo(e.target.value)}
+              />
+              <Input
+                placeholder="Precio"
+                value={precio}
+                type="number"
+                onChange={(e) => setPrecio(e.target.value)}
+              />
 
               <select
                 value={categoria}
@@ -92,17 +128,27 @@ const VentaArticulo = () => {
             {/* Columna central (Vista previa) */}
             <div className="flex justify-center items-center bg-yellow-100 border rounded-md h-[400px]">
               {preview ? (
-                <img src={preview} alt="Vista previa" className="max-h-full max-w-full object-contain" />
+                <img
+                  src={preview}
+                  alt="Vista previa"
+                  className="max-h-full max-w-full object-contain"
+                />
               ) : (
-                <p className="text-center text-gray-500">Vista previa de las imágenes</p>
+                <p className="text-center text-gray-500">
+                  Vista previa de las imágenes
+                </p>
               )}
             </div>
 
             {/* Columna derecha (resumen y publicar) */}
             <div className="flex flex-col justify-between">
               <div>
-                <h3 className="text-lg font-semibold mb-2">Detalles del artículo</h3>
-                <label className="block text-sm font-medium mb-1">Descripción</label>
+                <h3 className="text-lg font-semibold mb-2">
+                  Detalles del artículo
+                </h3>
+                <label className="block text-sm font-medium mb-1">
+                  Descripción
+                </label>
                 <textarea
                   placeholder="Describe el artículo..."
                   value={descripcion}
@@ -118,6 +164,7 @@ const VentaArticulo = () => {
           </form>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

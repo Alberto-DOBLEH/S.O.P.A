@@ -151,7 +151,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
-
+import { backgroundImage } from "../assets/imagenes/imagenes";
 const Cupones = () => {
   const [cupones, setCupones] = useState([]);
 
@@ -219,6 +219,15 @@ const Cupones = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-8">

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   User,
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
+import { backgroundImage } from "../assets/imagenes/imagenes";
 
 const Perfil = () => {
   // Estados para la información del usuario
@@ -187,6 +187,15 @@ const Perfil = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
 
       <main className="container mx-auto py-8 px-4">
@@ -229,7 +238,11 @@ const Perfil = () => {
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Mail size={20} className="mr-2 text-blue-600" />
-                    {userInfo.correo === "" ? (<p>{userInfo.correo}</p>) : (<p>Ingrese un correo</p>)}
+                    {userInfo.correo === "" ? (
+                      <p>{userInfo.correo}</p>
+                    ) : (
+                      <p>Ingrese un correo</p>
+                    )}
                   </div>
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
                     <h3 className="font-bold text-lg text-gray-900 mb-2 flex items-center">

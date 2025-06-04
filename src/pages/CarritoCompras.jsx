@@ -6,13 +6,13 @@ import {
   ShoppingCart as CartIcon,
   ChevronRight,
   MapPin,
-//  Edit3,
+  //  Edit3,
   Check,
   X,
-//  Star,
+  //  Star,
   Truck,
   Shield,
-//  ArrowLeft,
+  //  ArrowLeft,
   Heart,
   Gift,
   Tag,
@@ -26,14 +26,14 @@ import VentanaPago from "../pages/VentanaPago";
 import { useCurrency } from "../CurrencyContext"; // Importamos el contexto de moneda
 import { toast } from "react-toastify";
 import { response } from "axios";
-
+import { backgroundImage } from "../assets/imagenes/imagenes";
 const CarritoCompras = () => {
   // Obtenemos el contexto de moneda
   const { currency, conversionRate } = useCurrency();
   console.log("Currency:", currency, "Conversion Rate:", conversionRate); // Debug log to verify values
 
   // *** INTERRUPTOR MANUAL PARA TESTING ***
-//  const [hasItems, setHasItems] = useState(true);
+  //  const [hasItems, setHasItems] = useState(true);
 
   // Estados principales
   const [cartItems, setCartItems] = useState([]);
@@ -42,7 +42,6 @@ const CarritoCompras = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [aprobarCompra, setAprobarCompra] = useState(false);
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-
 
   // Estados para información de envío
   const [direccion, setDireccion] = useState({
@@ -158,20 +157,17 @@ const CarritoCompras = () => {
 
     try {
       const idusuario = localStorage.getItem("idusuario");
-      fetch(
-        `http://localhost:3001/api/carrito/${id}?userId=${idusuario}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({ cantidad: nuevaCantidad }),
-        }
-      );
+      fetch(`http://localhost:3001/api/carrito/${id}?userId=${idusuario}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ cantidad: nuevaCantidad }),
+      });
 
       await delay(500);
-      
+
       await fetchCart(); // Refrescar el carrito después de actualizar
     } catch (error) {
       console.error("Error al actualizar cantidad:", error);
@@ -182,16 +178,13 @@ const CarritoCompras = () => {
     const idusuario = localStorage.getItem("idusuario");
 
     try {
-      fetch(
-        `http://localhost:3001/api/carrito/${id}?userId=${idusuario}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      fetch(`http://localhost:3001/api/carrito/${id}?userId=${idusuario}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       await delay(200);
 
       await fetchCart(); // Refrescar el carrito después de eliminar
@@ -203,18 +196,21 @@ const CarritoCompras = () => {
   const saveForLater = async (id) => {
     console.log("Producto guardado para después:", id);
 
-    try{
+    try {
       const id_usuario = localStorage.getItem("idusuario");
-      const respone = await fetch(`http://localhost:3001/api/favs/?userId=${id_usuario}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          id_producto: id,
-        }),
-      });
+      const respone = await fetch(
+        `http://localhost:3001/api/favs/?userId=${id_usuario}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            id_producto: id,
+          }),
+        }
+      );
       if (!respone.ok) {
         const errorData = await respone.json();
         console.error("Error al agregar a favoritos:", errorData);
@@ -530,6 +526,15 @@ const CarritoCompras = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
       <main className="container mx-auto py-8 px-4">
         {showSuccess ? (
@@ -708,7 +713,9 @@ const CarritoCompras = () => {
 
                                   <div className="flex items-center space-x-3">
                                     <button
-                                      onClick={() => saveForLater(item.id_producto)}
+                                      onClick={() =>
+                                        saveForLater(item.id_producto)
+                                      }
                                       className="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
                                     >
                                       <Heart size={16} className="mr-1" />

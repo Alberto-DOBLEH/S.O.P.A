@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
@@ -291,7 +290,7 @@ const VerArticulo = () => {
     });
   };
 
-//Funciones de favoritos
+  //Funciones de favoritos
   const toggleFavoritos = async () => {
     setEnFavoritos(!enFavoritos);
     if (!enFavoritos) {
@@ -305,18 +304,21 @@ const VerArticulo = () => {
 
   const agregarAFavoritos = async (id) => {
     console.log("Agregando a favoritos:", id);
-    try{
+    try {
       const id_usuario = localStorage.getItem("idusuario");
-      const response = await fetch(`http://localhost:3001/api/favs/?userId=${id_usuario}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          id_producto: id,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:3001/api/favs/?userId=${id_usuario}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            id_producto: id,
+          }),
+        }
+      );
       if (response.status === 400) {
         toast.error("El producto ya está en favoritos");
         return;
@@ -327,11 +329,11 @@ const VerArticulo = () => {
     } catch (error) {
       console.error("Error al agregar a favoritos:", error);
     }
-  }
+  };
 
   const eliminarFavoritos = async (id) => {
     console.log("Eliminando de favoritos:", id);
-    try{
+    try {
       const id_usuario = localStorage.getItem("idusuario");
       fetch(`http://localhost:3001/api/favs/?userId=${id_usuario}`, {
         method: "DELETE",
@@ -343,11 +345,10 @@ const VerArticulo = () => {
           id_producto: id,
         }),
       });
-
     } catch (error) {
       console.error("Error al eliminar de favoritos:", error);
     }
-  }
+  };
 
   const renderEstrellas = (calificacion) => {
     const estrellas = [];
@@ -410,6 +411,15 @@ const VerArticulo = () => {
 
   return (
     <>
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
       <div className="relative w-full">
         <img

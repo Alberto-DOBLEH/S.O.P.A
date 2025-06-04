@@ -3,7 +3,7 @@ import Header from "../components/Heaader";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { FaClock } from "react-icons/fa"; // Ícono para "Coming Soon"
-
+import { backgroundImage } from "../assets/imagenes/imagenes";
 const Notificationes = () => {
   const navigate = useNavigate();
 
@@ -13,6 +13,15 @@ const Notificationes = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
       <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
         <img alt="Flor decorativa" className="absolute left-0 w-1/3 md:w-1/4" />

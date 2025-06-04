@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import Header from "../components/Heaader";
 import Footer from "../components/Footer";
-
+import { backgroundImage } from "../assets/imagenes/imagenes";
 const Pedido = () => {
   const [pedido, setPedido] = useState(null);
   const [estadoActual, setEstadoActual] = useState(0);
@@ -90,6 +90,15 @@ const Pedido = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header estilo SOFA */}
+      <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
+        <img
+          src={backgroundImage}
+          alt="Flor decorativa de fondo"
+          className="absolute left-0 w-1/3 md:w-1/4"
+          loading="lazy"
+        />
+      </div>
+
       <Header />
 
       <div className="container mx-auto px-6 py-8 max-w-4xl">

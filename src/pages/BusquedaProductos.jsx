@@ -171,8 +171,6 @@ const BusquedaProducto = () => {
           product.category.toLowerCase() === categoryFilter.toLowerCase()
       );
     }
-
-    console.log("searchFilter:", searchFilter);
     
     if (searchFilter) {
       const searchTerm = searchFilter.toLowerCase();
@@ -261,6 +259,7 @@ const BusquedaProducto = () => {
       priceRanges: [],
       categories: [],
     });
+
     setPriceRange({ min: "", max: "" });
   };
 
@@ -296,7 +295,7 @@ const BusquedaProducto = () => {
         ))}
       </div>
     </div>
-  );
+  );  
 
   const ProductCard = ({ product }) => (
     <Link to={`/producto/${product.id}`} className="block">
@@ -364,7 +363,7 @@ const BusquedaProducto = () => {
             </Link>
             <span className="mx-1">›</span>
             <span className="font-medium text-gray-900">
-              {getCategoryName(categoryFilter) || "Todo lo que quieras, tilín"}
+              {getCategoryName(categoryFilter) || searchFilter ||"Todos los productos disponibles"}
             </span>
           </nav>
         </div>
@@ -497,8 +496,7 @@ const BusquedaProducto = () => {
                   resultados para{" "}
                   <strong>
                     "
-                    {getCategoryName(categoryFilter) ||
-                      "Todo lo que quieras, tilín"}
+                    {getCategoryName(categoryFilter) || searchFilter ||"Todos los productos disponibles"}
                     "
                   </strong>
                 </div>

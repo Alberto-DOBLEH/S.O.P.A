@@ -35,6 +35,9 @@ const Perfil = () => {
     fotoPerfilFile: null,
   });
   const [showEditModal, setShowEditModal] = useState(false);
+  const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
+  const [mostrarDetalle, setMostrarDetalle] = useState(false);
+
 
   // Estado para el historial de pedidos
   const [pedidos, setPedidos] = useState([]);
@@ -114,6 +117,31 @@ const Perfil = () => {
   // Cerrar el modal de edición
   const cerrarModalEdicion = () => {
     setShowEditModal(false);
+  };
+
+  const getEstadoColor = (estado) => {
+    switch (estado) {
+      case "Pendiente":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "Aprobado":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "Camino":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case "Entregado":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
+
+  const verDetalle = (pedido) => {
+    setPedidoSeleccionado(pedido);
+    setMostrarDetalle(true);
+  };
+
+  const cerrarDetalle = () => {
+    setMostrarDetalle(false);
+    setPedidoSeleccionado(null);
   };
 
   // Manejar cambios en el formulario, incluyendo la imagen
@@ -244,21 +272,6 @@ const Perfil = () => {
                       <p>Ingrese un correo</p>
                     )}
                   </div>
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
-                    <h3 className="font-bold text-lg text-gray-900 mb-2 flex items-center">
-                      <MapPin className="mr-2 text-blue-600" size={20} />
-                      Dirección Principal
-                    </h3>
-                    <p className="text-gray-700">
-                      {userInfo.direccionPrincipal.calle},{" "}
-                      {userInfo.direccionPrincipal.ciudad},{" "}
-                      {userInfo.direccionPrincipal.estado}{" "}
-                      {userInfo.direccionPrincipal.codigoPostal}
-                    </p>
-                    <p className="text-gray-600 mt-1">
-                      {userInfo.direccionPrincipal.pais}
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
@@ -293,22 +306,44 @@ const Perfil = () => {
                               .join(", ")}
                           </p>
                           <div className="flex items-center mt-2">
-                            <span
-                              className={`text-sm font-medium px-2 py-1 rounded-full ${
-                                pedido.estado === "Aprobado"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-yellow-100 text-yellow-800"
-                              }`}
-                            >
-                              {pedido.estado}
-                            </span>
+                            {pedido.estado === "A" && ( 
+                              <span
+                                className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Aprobado")}`}
+                              >
+                                Aprobado
+                              </span>
+                              )}
+                              {pedido.estado === "P" && ( 
+                              <span
+                                className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Pendiente")}`}
+                              >
+                                Pendiente
+                              </span>
+                              )}
+                              {pedido.estado === "C" && ( 
+                              <span
+                                className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Camino")}`}
+                              >
+                                En Camino
+                              </span>
+                              )}
+                              {pedido.estado === "E" && ( 
+                              <span
+                                className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Entregado")}`}
+                              >
+                                Entregado
+                              </span>
+                            )}
                           </div>
                         </div>
                         <div className="flex items-center space-x-3">
                           <p className="font-bold text-gray-900">
                             ${pedido.total.toFixed(2)}
                           </p>
-                          <button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105">
+                          <button 
+                          onClick={() => verDetalle(pedido)}
+                          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105"
+                          >
                             Ver Detalles
                           </button>
                         </div>
@@ -393,79 +428,6 @@ const Perfil = () => {
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <h3 className="font-medium text-gray-800">
-                    Dirección Principal
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Calle y Número
-                      </label>
-                      <input
-                        type="text"
-                        name="direccionPrincipal.calle"
-                        value={editUserInfo.direccionPrincipal.calle}
-                        onChange={manejarCambio}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                        placeholder="Calle y número"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Ciudad
-                      </label>
-                      <input
-                        type="text"
-                        name="direccionPrincipal.ciudad"
-                        value={editUserInfo.direccionPrincipal.ciudad}
-                        onChange={manejarCambio}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                        placeholder="Ciudad"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Estado
-                      </label>
-                      <input
-                        type="text"
-                        name="direccionPrincipal.estado"
-                        value={editUserInfo.direccionPrincipal.estado}
-                        onChange={manejarCambio}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                        placeholder="Estado"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Código Postal
-                      </label>
-                      <input
-                        type="text"
-                        name="direccionPrincipal.codigoPostal"
-                        value={editUserInfo.direccionPrincipal.codigoPostal}
-                        onChange={manejarCambio}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                        placeholder="Código postal"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        País
-                      </label>
-                      <input
-                        type="text"
-                        name="direccionPrincipal.pais"
-                        value={editUserInfo.direccionPrincipal.pais}
-                        onChange={manejarCambio}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                        placeholder="País"
-                      />
-                    </div>
-                  </div>
-                </div>
-
                 <div className="flex gap-3 pt-4">
                   <button
                     onClick={guardarCambios}
@@ -486,6 +448,162 @@ const Perfil = () => {
             </div>
           </div>
         )}
+        {/* Modal de detalle */}
+          {mostrarDetalle && pedidoSeleccionado && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div className="p-6 border-b">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-2xl font-bold text-gray-800">
+                      Detalle del Pedido
+                    </h3>
+                    <button
+                      onClick={cerrarDetalle}
+                      className="text-gray-500 hover:text-gray-700 text-2xl"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+    
+                <div className="p-6 space-y-6">
+                  {/* Info básica */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium text-gray-500">
+                        Número de Pedido
+                      </label>
+                      <p className="text-lg font-bold text-gray-800">
+                        {pedidoSeleccionado.id_venta}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-500">
+                        Fecha
+                      </label>
+                      <p className="text-lg text-gray-800">
+                        {pedidoSeleccionado.fecha}
+                      </p>
+                    </div>
+                  </div>
+    
+                  {/* Cliente */}
+                  {pedidoSeleccionado.cliente && (
+                    <div className="border-t pt-4">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <User className="w-5 h-5 text-blue-600" />
+                        <h4 className="font-semibold text-gray-800">
+                          Información del Cliente
+                        </h4>
+                      </div>
+                      <p className="text-gray-700">{pedidoSeleccionado.cliente}</p>
+                      <p className="text-gray-600">{pedidoSeleccionado.email}</p>
+                    </div>
+                  )}
+    
+                  {/* Dirección */}
+                  {pedidoSeleccionado.direccion && (
+                    <div className="border-t pt-4">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <MapPin className="w-5 h-5 text-blue-600" />
+                        <h4 className="font-semibold text-gray-800">
+                          Dirección de Entrega
+                        </h4>
+                      </div>
+                      <p className="text-gray-700">
+                        {pedidoSeleccionado.direccion}
+                      </p>
+                    </div>
+                  )}
+    
+                  {/* Productos */}
+                  <div className="border-t pt-4">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <Package className="w-5 h-5 text-blue-600" />
+                      <h4 className="font-semibold text-gray-800">Productos</h4>
+                    </div>
+                    <div className="space-y-3">
+                      {pedidoSeleccionado.productos.map((producto, idx) => (
+                        <div
+                          key={idx}
+                          className="flex justify-between items-center bg-gray-50 p-3 rounded-lg"
+                        >
+                          <div>
+                            <p className="font-medium text-gray-800">
+                              {producto.nombre}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Cantidad: {producto.cantidad}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-gray-800">
+                              $
+                              {(
+                                producto.precio_unitario * producto.cantidad
+                              ).toFixed(2)}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              ${producto.precio_unitario.toFixed(2)} c/u
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+    
+                  {/* Total */}
+                  <div className="border-t pt-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xl font-semibold text-gray-800">
+                        Total del Pedido:
+                      </span>
+                      <span className="text-2xl font-bold text-blue-600">
+                        ${pedidoSeleccionado.total.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+    
+                  {/* Estado */}
+                  <div className="border-t pt-4">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-gray-800">
+                        Estado Actual:
+                      </span>
+                      {pedidoSeleccionado.estado === "A" && ( 
+                      <span
+                        className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Aprobado")}`}
+                      >
+                        Aprobado
+                      </span>
+                      )}
+                      {pedidoSeleccionado.estado === "P" && ( 
+                      <span
+                        className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Pendiente")}`}
+                      >
+                        Pendiente
+                      </span>
+                      )}
+                      {pedidoSeleccionado.estado === "C" && ( 
+                      <span
+                        className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Camino")}`}
+                      >
+                        En Camino
+                      </span>
+                      )}
+                      {pedidoSeleccionado.estado === "E" && ( 
+                      <span
+                        className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Entregado")}`}
+                      >
+                        Entregado
+                      </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
       </main>
 
       <Footer />

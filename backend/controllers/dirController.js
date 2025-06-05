@@ -10,20 +10,20 @@ const crearDireccion = (req, res) => {
     ciudad,
     codigo_postal,
     pais,
-    colonia
+    estado
   } = req.body;
 
   const query = `
-    INSERT INTO direcciones (id_usuario, calle, no_ext, no_interior, ciudad, codigo_postal, pais, colonia)
+    INSERT INTO direcciones (id_usuario, calle, no_ext, no_interior, ciudad, codigo_postal, pais, estado)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     query,
-    [id_usuario, calle, no_ext, no_interior, ciudad, codigo_postal, pais, colonia],
+    [id_usuario, calle, no_ext, no_interior, ciudad, codigo_postal, pais, estado],
     (err, result) => {
       if (err) {
-        console.error("❌ Error SQL al insertar dirección:", err);
+        console.error("Error SQL al insertar dirección:", err);
         return res.status(500).json({ error: "Error al crear dirección" });
       }
       res.status(201).json({ message: "Dirección creada correctamente" });

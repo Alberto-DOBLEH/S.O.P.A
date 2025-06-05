@@ -59,7 +59,7 @@ app.use("/api/ventas",    verifyToken, ventasRoutes);
 // 🔧 Nueva ruta protegida para carrito:
 app.use("/api/carrito",   verifyToken, cartRoutes);
 app.use("/api/favs",      verifyToken, favsRoutes);
-app.use('/api/direcciones', direccionRoutes);
+app.use('/api/direcciones', verifyToken, direccionRoutes);
 
 // backend/index.js
 app.use("/uploads", express.static("uploads"));

@@ -125,9 +125,9 @@ const Historial = () => {
     switch (estado) {
       case "Pendiente":
         return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "Procesando":
+      case "Aprobado":
         return "bg-blue-100 text-blue-800 border-blue-200";
-      case "Enviado":
+      case "Camino":
         return "bg-purple-100 text-purple-800 border-purple-200";
       case "Entregado":
         return "bg-green-100 text-green-800 border-green-200";
@@ -206,13 +206,34 @@ const Historial = () => {
                       <span className="text-gray-600">{pedido.fecha}</span>
                     </div>
                   </div>
+                  {pedido.estado === "A" && ( 
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium border ${getEstadoColor(
-                      pedido.estado
-                    )}`}
+                    className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Aprobado")}`}
                   >
-                    {pedido.estado}
+                    Aprobado
                   </span>
+                  )}
+                  {pedido.estado === "P" && ( 
+                  <span
+                    className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Pendiente")}`}
+                  >
+                    Pendiente
+                  </span>
+                  )}
+                  {pedido.estado === "C" && ( 
+                  <span
+                    className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Camino")}`}
+                  >
+                    En Camino
+                  </span>
+                  )}
+                  {pedido.estado === "E" && ( 
+                  <span
+                    className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Entregado")}`}
+                  >
+                    Entregado
+                  </span>
+                  )}
                 </div>
 
                 <div className="mb-4">
@@ -363,13 +384,34 @@ const Historial = () => {
                   <span className="font-semibold text-gray-800">
                     Estado Actual:
                   </span>
+                  {pedidoSeleccionado.estado === "A" && ( 
                   <span
-                    className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor(
-                      pedidoSeleccionado.estado
-                    )}`}
+                    className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Aprobado")}`}
                   >
-                    {pedidoSeleccionado.estado}
+                    Aprobado
                   </span>
+                  )}
+                  {pedidoSeleccionado.estado === "P" && ( 
+                  <span
+                    className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Pendiente")}`}
+                  >
+                    Pendiente
+                  </span>
+                  )}
+                  {pedidoSeleccionado.estado === "C" && ( 
+                  <span
+                    className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Camino")}`}
+                  >
+                    En Camino
+                  </span>
+                  )}
+                  {pedidoSeleccionado.estado === "E" && ( 
+                  <span
+                    className={`px-4 py-2 rounded-full font-medium border ${getEstadoColor("Entregado")}`}
+                  >
+                    Entregado
+                  </span>
+                  )}
                 </div>
               </div>
             </div>

@@ -45,11 +45,11 @@ const CarritoCompras = () => {
 
   // Estados para información de envío
   const [direccion, setDireccion] = useState({
-    calle: "Calle Constitución",
-    ciudad: "Culiacán",
-    estado: "Sinaloa",
-    codigoPostal: "81893",
-    pais: "México",
+    calle: "",
+    ciudad: "",
+    estado: "",
+    codigoPostal: "",
+    pais: "",
   });
 
   // Estados para gestión de direcciones
@@ -88,6 +88,7 @@ const CarritoCompras = () => {
   // Simular carga inicial del carrito
   useEffect(() => {
     fetchCart();
+    fetchAddresses();
   }, []);
 
   // Funciones del carrito
@@ -119,33 +120,126 @@ const CarritoCompras = () => {
 
       setCartItems(datosprocesados);
 
-      // Datos de ejemplo para direcciones
-      setSavedAddresses([
-        {
-          id: 1,
-          street: "Calle Constitución 123",
-          city: "Culiacán",
-          state: "Sinaloa",
-          zipCode: "81893",
-          country: "México",
-          isDefault: true,
-        },
-        {
-          id: 2,
-          street: "Av. Álvaro Obregón 456",
-          city: "Culiacán",
-          state: "Sinaloa",
-          zipCode: "80020",
-          country: "México",
-          isDefault: false,
-        },
-      ]);
     } catch (error) {
       console.error("Error al cargar carrito:", error);
     } finally {
       setLoading(false);
     }
   };
+// Funciones de direcciones
+  const fetchAddresses = async () => {
+    try{
+      const idusuario = localStorage.getItem("idusuario");
+      const response = await fetch( `http://localhost:3001/api/direcciones/${idusuario}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al cargar direcciones");
+      }
+
+      const data = await response.json();
+      console.log("Direcciones cargadas:", data);
+
+      setSavedAddresses(
+        data.map((direcciones) => ({
+          id: direcciones.id_direccion,
+          street: `${direcciones.calle} ${direcciones.no_ext}`,
+          city: direcciones.ciudad,
+          state: direcciones.estado,
+          zipCode: direcciones.codigo_postal,
+          country: direcciones.pais,
+        }))
+      );
+    }catch (error) {
+      console.error("Error al cargar direcciones:", error);
+    }
+  };
+
+  const saveNewAddress = async () => {
+
+    console.log("Validando dirección:", newAddress);
+
+    if (
+      !newAddress.street ||
+      !newAddress.city ||
+      !newAddress.zipCode ||
+      !newAddress.state
+    ) {
+      toast.error("Por favor, completa todos los campos de la dirección.");
+      return;
+    }
+
+    // Separar calle y número exterior
+    let calle = newAddress.street.trim();
+    let num_ext = "";
+
+    // Esta expresión busca el último número al final del string
+    const match = calle.match(/^(.*)\s+(\d+)([A-Za-z]?)$/);
+      if (match) {
+        calle = match[1].trim(); // nombre de la calle
+        num_ext = (match[2] + match[3]).trim(); // número exterior (puede incluir letra, como 2005B)
+      }
+
+      try {
+        const idusuario = localStorage.getItem("idusuario");
+        const response = await fetch( `http://localhost:3001/api/direcciones/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+              id_usuario: idusuario,
+              calle: calle,
+              no_ext: num_ext,
+              no_interior: "",
+              ciudad: newAddress.city,
+              estado: newAddress.state,
+              codigo_postal: newAddress.zipCode,
+              pais: newAddress.country || "México",
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Error al agregar dirección");
+        }
+
+        toast.success("Dirección agregada correctamente");
+
+        await fetchAddresses();
+
+      } catch (error) {
+        console.error("Error al agregar dirección:", error);
+        toast.error("Ocurrió un error al agregar la dirección");
+      }
+    };
+
+  const deleteAddress = async (addressId) => {
+    console.log("Eliminando dirección:", addressId);
+
+    try {
+      await fetch(`http://localhost:3001/api/direcciones/${addressId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      toast.success("Dirección eliminada correctamente");
+      await fetchAddresses(); // Refrescar la lista de direcciones
+    }catch (error) {
+      console.error("Error al eliminar dirección:", error);
+      toast.error("Ocurrió un error al eliminar la dirección");
+    }
+  };
+
 
   const actualizarCantidad = async (id, nuevaCantidad) => {
     console.log(
@@ -296,17 +390,15 @@ const CarritoCompras = () => {
       city: "",
       state: "",
       zipCode: "",
-      country: "México",
+      country: "",
       isDefault: false,
     });
   };
 
   const selectAddress = (address) => {
-    if (address.isDefault) {
-      setSavedAddresses((prev) =>
-        prev.map((addr) => ({ ...addr, isDefault: addr.id === address.id }))
-      );
-    }
+
+    console.log("Seleccionando dirección:", address);
+
     setDireccion({
       calle: address.street,
       ciudad: address.city,
@@ -315,49 +407,6 @@ const CarritoCompras = () => {
       pais: address.country,
     });
     closeAddressModal();
-  };
-
-  const saveNewAddress = () => {
-    if (!newAddress.street || !newAddress.city || !newAddress.zipCode) return;
-
-    const addressToSave = {
-      ...newAddress,
-      id: Date.now(),
-    };
-
-    if (addressToSave.isDefault) {
-      setSavedAddresses((prev) =>
-        prev.map((addr) => ({ ...addr, isDefault: false }))
-      );
-    }
-
-    setSavedAddresses((prev) => [...prev, addressToSave]);
-
-    if (addressToSave.isDefault) {
-      setDireccion({
-        calle: addressToSave.street,
-        ciudad: addressToSave.city,
-        estado: addressToSave.state,
-        codigoPostal: addressToSave.zipCode,
-        pais: addressToSave.country,
-      });
-    }
-
-    closeAddressModal();
-  };
-
-  const deleteAddress = (addressId) => {
-    setSavedAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
-    if (savedAddresses.find((addr) => addr.id === addressId)?.isDefault) {
-      setSavedAddresses((prev) =>
-        prev.length > 0
-          ? prev.map((addr, index) => ({
-              ...addr,
-              isDefault: index === 0,
-            }))
-          : prev
-      );
-    }
   };
 
   //Validacion de tarjetas
@@ -1114,27 +1163,6 @@ const CarritoCompras = () => {
                                 placeholder="81893"
                               />
                             </div>
-                          </div>
-
-                          <div className="flex items-center">
-                            <input
-                              type="checkbox"
-                              id="isDefault"
-                              checked={newAddress.isDefault}
-                              onChange={(e) =>
-                                setNewAddress({
-                                  ...newAddress,
-                                  isDefault: e.target.checked,
-                                })
-                              }
-                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                            />
-                            <label
-                              htmlFor="isDefault"
-                              className="ml-2 block text-sm text-gray-700"
-                            >
-                              Establecer como dirección predeterminada
-                            </label>
                           </div>
 
                           <div className="flex gap-3 pt-4">
